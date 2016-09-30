@@ -25,23 +25,29 @@ except:
     exit()
 
 class StartScreen(Screen):
+
     def __init__(self, sm, **kwargs):
         super(StartScreen, self).__init__(**kwargs)
         self.sm = sm
+        self.arduino = arduino
 
         # Constantly read for rfid
         refresh_time = 1  # poll arduino at this rate
-        Clock.schedule_interval(self.read_rfid, refresh_time)
+        self.event = Clock.schedule_interval(self.read_rfid, refresh_time)
 
     def read_rfid(self, event):
         next_line = arduino.readline()
-        if next_line != "":
-            player_1 = next_line
+
+        if len(next_line) >= 8:
+            print "Player 1: " + next_line
+            self.sm.get_screen("player_screen").player_1 = next_line
+            self.event.cancel()
             # TODO send player_1 to server with request log_in and terminal name
+            # If request to log in times out call self.event and return
+            # otherwise:
             self.open_player()
 
     def open_player(self):
-        arduino.close()
         self.sm.transition = SlideTransition(direction="left")
         self.sm.current = "player_screen"
 

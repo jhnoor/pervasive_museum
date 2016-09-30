@@ -17,34 +17,36 @@ CURRENT_PATH = os.path.dirname(__file__)
 KV_PATH = os.path.join(CURRENT_PATH, 'playerscreen.kv')
 Builder.load_file(KV_PATH)
 
-# Arduino hook
-try:
-    arduino = serial.Serial('COM6', 9600, timeout=0)
-except:
-    print "Failed to connect"
-    exit()
-
 class PlayerScreen(Screen):
+
+    # Players
+    global player_1
+    global player_2
+
     def __init__(self, sm, **kwargs):
         super(PlayerScreen, self).__init__(**kwargs)
         self.sm = sm
+        self.arduino = self.sm.get_screen("start_screen").arduino
 
         # Constantly read for rfid
         refresh_time = 1  # poll arduino at this rate
-        Clock.schedule_interval(self.read_rfid, refresh_time)
+        self.event = Clock.schedule_interval(self.read_rfid, refresh_time)
 
     def read_rfid(self, event):
-        next_line = arduino.readline()
-        if next_line != "":
-            player_2 = next_line
+        next_line = self.arduino.readline()
+
+        if len(next_line) >= 8 and next_line != self.player_1:
+            print "Player 2: "+next_line
+            self.player_2 = next_line
+            self.event.cancel()
             # TODO send player_2 to server with request log_in and terminal name
+            # If request to log in times out call self.event and return
+            # otherwise:
             self.open_menu()
 
     def open_menu(self):
-        arduino.close() # close connection, start in next screen
         self.sm.transition = SlideTransition(direction="left")
         self.sm.current = "menu_screen"
-
 
 
 class PlayerScreenBtn(Button):
