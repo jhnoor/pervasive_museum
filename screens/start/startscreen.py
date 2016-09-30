@@ -1,16 +1,15 @@
-import os
-import serial
+import os, serial, config
 
 from kivy.lang import Builder
-
 from kivy.uix.screenmanager import Screen, SlideTransition
-
-# For the app
 from kivy.app import App
 from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.popup import Popup
+from kivy.uix.label import Label
 from kivy.clock import Clock
+from kivy.network.urlrequest import UrlRequest
+
 
 CURRENT_PATH = os.path.dirname(__file__)
 
@@ -30,6 +29,7 @@ class StartScreen(Screen):
         super(StartScreen, self).__init__(**kwargs)
         self.sm = sm
         self.arduino = arduino
+        print "init startscreen"
 
         # Constantly read for rfid
         refresh_time = 1  # poll arduino at this rate
@@ -42,15 +42,30 @@ class StartScreen(Screen):
             print "Player 1: " + next_line
             self.sm.get_screen("player_screen").player_1 = next_line
             self.event.cancel()
-            # TODO send player_1 to server with request log_in and terminal name
-            # If request to log in times out call self.event and return
-            # otherwise:
-            self.open_player()
+
+            self.ids.start_screen_bottom_box_id.add_widget(Label(text="Logger deg inn! Vent"))
+            request = UrlRequest(config.api['base_url']+"users/", on_success=self.success, on_error=self.error,
+                       req_headers=config.headers, debug=True)
+            request.wait(delay=0.5)
+
 
     def open_player(self):
         self.sm.transition = SlideTransition(direction="left")
         self.sm.current = "player_screen"
 
+    def success(self, request, result):
+        print "Success!"
+        print request
+        print "Result:"
+        print result
+        # TODO create models for the api
+        self.open_player()
+
+    def error(self, request, error):
+        print type(error)
+        print error
+        refresh_time = 1  # poll arduino at this rate
+        self.event = Clock.schedule_interval(self.read_rfid, refresh_time)
 
 
 class StartScreenBtn(Button):

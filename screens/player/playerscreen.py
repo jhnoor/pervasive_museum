@@ -27,6 +27,8 @@ class PlayerScreen(Screen):
         super(PlayerScreen, self).__init__(**kwargs)
         self.sm = sm
         self.arduino = self.sm.get_screen("start_screen").arduino
+        self.player_1 = ""
+        print "init playerscreen"
 
         # Constantly read for rfid
         refresh_time = 1  # poll arduino at this rate
@@ -35,7 +37,7 @@ class PlayerScreen(Screen):
     def read_rfid(self, event):
         next_line = self.arduino.readline()
 
-        if len(next_line) >= 8 and next_line != self.player_1:
+        if len(next_line) >= 8 and self.player_1 != "":
             print "Player 2: "+next_line
             self.player_2 = next_line
             self.event.cancel()

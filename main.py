@@ -14,6 +14,7 @@ from screens.versus.versusgamescreen import VersusGameScreen
 
 
 class MuseumGameApp(App):
+    test = "Wow"
 
     def build(self):
         sm = ScreenManager()
