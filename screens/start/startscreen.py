@@ -31,22 +31,23 @@ class StartScreen(Screen):
         self.arduino = arduino
         print "init startscreen"
 
-        # Constantly read for rfid
+    def on_enter(self):
         refresh_time = 1  # poll arduino at this rate
         self.event = Clock.schedule_interval(self.read_rfid, refresh_time)
 
     def read_rfid(self, event):
         next_line = arduino.readline()
+        print next_line
+        print "next_line too short" if len(next_line) < 8 else "next_line should pass!"
 
         if len(next_line) >= 8:
             print "Player 1: " + next_line
             self.sm.get_screen("player_screen").player_1 = next_line
             self.event.cancel()
 
-            self.ids.start_screen_bottom_box_id.add_widget(Label(text="Logger deg inn! Vent"))
-            request = UrlRequest(config.api['base_url']+"users/", on_success=self.success, on_error=self.error,
-                       req_headers=config.headers, debug=True)
-            request.wait(delay=0.5)
+            self.ids.log_id.add_widget(Label(text="Logger deg inn! Vent", id="logger_deg_inn_id"))
+            request = UrlRequest(config.api['base_url']+ config.api['end_url'], on_success=self.success, on_error=self.error,
+                                 req_headers=config.headers)
 
 
     def open_player(self):
@@ -62,10 +63,12 @@ class StartScreen(Screen):
         self.open_player()
 
     def error(self, request, error):
+        print "Error"
         print type(error)
         print error
-        refresh_time = 1  # poll arduino at this rate
-        self.event = Clock.schedule_interval(self.read_rfid, refresh_time)
+        self.ids.log_id.add_widget(Label(text="Nettverksfeil: "+str(error), id="feil_id"))
+        print self.ids.log_id.children
+        self.on_enter()
 
 
 class StartScreenBtn(Button):

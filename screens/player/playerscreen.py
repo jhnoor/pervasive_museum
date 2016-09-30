@@ -30,12 +30,13 @@ class PlayerScreen(Screen):
         self.player_1 = ""
         print "init playerscreen"
 
-        # Constantly read for rfid
+    def on_enter(self):
         refresh_time = 1  # poll arduino at this rate
         self.event = Clock.schedule_interval(self.read_rfid, refresh_time)
 
     def read_rfid(self, event):
         next_line = self.arduino.readline()
+        print next_line
 
         if len(next_line) >= 8 and self.player_1 != "":
             print "Player 2: "+next_line
