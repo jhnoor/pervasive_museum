@@ -21,7 +21,7 @@ Builder.load_file(KV_PATH)
 try:
     arduino = serial.Serial('COM6', 9600, timeout=0)
 except:
-    print "Failed to connect"
+    print "No arduino detected, please connect to COM6"
     exit()
 
 class StartScreen(Screen):

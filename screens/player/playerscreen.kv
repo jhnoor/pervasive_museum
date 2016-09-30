@@ -7,6 +7,14 @@
             orientation: 'vertical'
             padding: 10
 
+            # background
+            canvas.before:
+                Color:
+                    rgba: (0.30, 0.24, 0.24, 1)
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
             Label:
                 id: player_1_username_label
                 font_size: '%s sp' % (self.width*.05)
@@ -23,15 +31,24 @@
                     font_size: '%s sp' % (self.width*.1)
 
 
-                Label:
-                    text: "ready btn"
+                Button:
+                    text: "Klar"
+                    color: (0,0,0,1)
                     font_size: '%s sp' % (self.width*.1)
+                    background_normal: "images/background_normal_white.png"
+                    background_color: (0.48, 0.91, 0.78, 1)
+                    size_hint_y: 1
 
-                Label:
-                    text: "cancel btn"
+                Button:
+                    text: "Kanseller"
+                    color: (0,0,0,1)
                     font_size: '%s sp' % (self.width*.1)
+                    background_normal: "images/background_normal_white.png"
+                    background_color: (0.93, 0.04, 0.26, 1)
+                    size_hint_y: 1
 
             BoxLayout:
+                orientation: 'horizontal'
                 padding: 30
                 spacing: 30
 
@@ -40,19 +57,27 @@
                     max: 1000
                     value: 250
 
+            Label:
+                font_size: '%s sp' % (self.width*.03)
+                text: "Power-ups"
+
+            BoxLayout:
+                orientation: 'horizontal'
+                padding: 10
+                spacing: 10
+
+
+
+            Label:
+                font_size: '%s sp' % (self.width*.03)
+                text: "Troféer"
+
+
             BoxLayout:
                 padding: 10
                 spacing: 10
 
-                Label:
-                    text: "Power-ups"
 
-            BoxLayout:
-                padding: 10
-                spacing: 10
-
-                Label:
-                    text: "Troféer"
 
 
         # Player 2 box - default not logged in
