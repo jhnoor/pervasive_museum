@@ -1,0 +1,44 @@
+<MenuScreen>
+    canvas.before:
+        Color:
+            rgba: (0.18, 0.77, 0.71, 1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10, 2
+        spacing: 10
+
+        Label:
+            font_size: '%s sp' % (self.width*.05)
+            text: "[b][color=ff9f1c]Velg spillmodus[/color][/b]"
+            markup: True
+            halign: 'center'
+            valign: 'middle'
+            size_hint_y: 1
+
+
+        GridLayout:
+            rows: 2
+            padding: 30
+            spacing: 30
+            size_hint_y: 5
+
+            Button:
+                text: "[color=000]Coop[/color]"
+                markup: True
+                font_size: '%s sp' % (self.width*.04)
+                on_release: root.open_coop()
+                background_normal: "images/background_normal_white.png"
+                background_color: (0.80, 0.95, 0.94, 1)
+                size_hint_y: 1
+
+            Button:
+                text: '[color=000]Versus[/color]'
+                markup: True
+                font_size: '%s sp' % (self.width*.04)
+                on_release: root.open_versus()
+                background_normal: "images/background_normal_white.png"
+                background_color: (0.80, 0.95, 0.94, 1)
+                size_hint_y: 1

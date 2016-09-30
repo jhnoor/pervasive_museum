@@ -1,0 +1,108 @@
+import kivy
+
+kivy.require('1.9.1')
+import serial
+import copy
+
+from kivy.app import App
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.label import Label
+from kivy.network.urlrequest import UrlRequest
+from kivy.clock import Clock
+
+sm = ScreenManager()
+
+rfid = ""
+player_1_UID = ""
+player_2_UID = ""
+
+class LoginScreen(GridLayout):
+    def __init__(self, **kwargs):
+        super(LoginScreen, self).__init__(**kwargs)
+        # Row one has image, row two has label text
+        # Defined in kv file
+        self.rows = 2
+
+        # Constantly read for rfid
+        refresh_time = 1 # poll arduino at this rate
+        Clock.schedule_interval(self.read_rfid, refresh_time)
+
+    # Constantly polls the rfid chip and assigns to player_1_UID and player_2_UID
+    def read_rfid(self, event):
+        global player_1_UID, player_2_UID # Use as globals
+
+        if player_1_UID == "":
+            next_line = arduino.readline()
+            if next_line != "":
+                player_1_UID = next_line
+                print "Player 1 logged in " + player_1_UID
+                # clear all widgets
+                self.clear_widgets()
+                # add login to right side and profile widget to left
+                self.cols = 2
+
+                self.add_widget(Label(text="Player 2, login"))
+                self.add_widget(Label(text="NOW2"))
+                self.add_widget(Label(text="NOW3"))
+                self.add_widget(Label(text="NOW4"))
+
+
+                # TODO trigger event that changes the layout
+        elif player_2_UID == "":
+            next_line = arduino.readline()
+            if next_line not in [player_1_UID, ""]:
+                player_2_UID = next_line
+                print "Player 2 logged in " + player_2_UID
+                # TODO trigger event that changes screen to main menu
+        else:
+            next_line = arduino.readline()
+            if next_line not in [player_1_UID, player_2_UID, ""]:
+                print "A third player is trying to enter! "+next_line
+                # TODO handle a third card scanned midgame
+
+
+
+class MainApp(App):
+    '''This is the main class of your app.
+       Define any app wide entities here.
+       This class can be accessed anywhere inside the kivy app as,
+       in python::
+
+         app = App.get_running_app()
+         print (app.title)
+
+       in kv language::
+
+         on_release: print(app.title)
+       Name of the .kv file that is auto-loaded is derived from the name
+       of this class::
+
+         MainApp = main.kv
+         MainClass = mainclass.kv
+
+       The App part is auto removed and the whole name is lowercased.
+    '''
+
+    def build(self):
+        '''Your app will be build from here.
+           Return your root widget here.
+        '''
+        print('build running')
+        login_screen = LoginScreen()
+        return login_screen
+
+    def on_pause(self):
+        '''This is necessary to allow your app to be paused on mobile os.
+           refer http://kivy.org/docs/api-kivy.app.html#pause-mode .
+        '''
+        return True
+
+if __name__ == '__main__':
+    try:
+        arduino = serial.Serial('COM6', 9600, timeout=0)
+    except:
+        print "Failed to connect"
+        exit()
+    MainApp().run()
+
