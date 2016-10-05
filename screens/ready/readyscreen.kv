@@ -1,8 +1,82 @@
-<PlayerScreen>
+<ReadyScreen>
     GridLayout:
         cols: 2
 
         # Player 1 box - show users profile
+        BoxLayout:
+            id: player_1_box_id
+            orientation: 'vertical'
+            padding: 10
+
+            # background
+            canvas.before:
+                Color:
+                    rgba: (0.30, 0.24, 0.24, 1)
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            Label:
+                id: player_1_username_label
+                font_size: '%s sp' % (self.width*.05)
+                text: "[b][color=cbf3f0]Player[/color]1[/b]"
+                markup: True
+
+            BoxLayout:
+                orientation: 'horizontal'
+                padding: 30
+                spacing: 30
+
+                Label:
+                    text: "here comes icon"
+                    font_size: '%s sp' % (self.width*.1)
+
+
+                Button:
+                    text: "Klar"
+                    color: (0,0,0,1)
+                    font_size: '%s sp' % (self.width*.1)
+                    background_normal: "images/background_normal_white.png"
+                    background_color: (0.48, 0.91, 0.78, 1)
+                    size_hint_y: 1
+
+                Button:
+                    text: "Kanseller"
+                    color: (1,1,1,1)
+                    font_size: '%s sp' % (self.width*.1)
+                    background_normal: "images/background_normal_white.png"
+                    background_color: (0.93, 0.04, 0.26, 1)
+                    size_hint_y: 1
+
+            BoxLayout:
+                orientation: 'horizontal'
+                padding: 30
+                spacing: 30
+
+                # XP bar
+                ProgressBar:
+                    max: 1000
+                    value: 250
+
+            Label:
+                font_size: '%s sp' % (self.width*.03)
+                text: "Power-ups"
+
+            BoxLayout:
+                orientation: 'horizontal'
+                padding: 10
+                spacing: 10
+
+
+
+            Label:
+                font_size: '%s sp' % (self.width*.03)
+                text: "Troféer"
+
+
+            BoxLayout:
+                padding: 10
+                spacing: 10
         BoxLayout:
             id: player_1_box_id
             orientation: 'vertical'
@@ -77,51 +151,3 @@
             BoxLayout:
                 padding: 10
                 spacing: 10
-
-
-
-
-        # Player 2 box - default not logged in
-        BoxLayout:
-            id: player_2_box_id
-            orientation: 'vertical'
-            # background
-            canvas.before:
-                Color:
-                    rgba: (0.18, 0.77, 0.71, 1)
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
-            BoxLayout:
-                orientation: 'vertical'
-
-                Label:
-                    font_size: '%s sp' % (self.width*.1)
-                    text: "[b][color=cbf3f0]Pe[/color]Muse[/b]"
-                    markup: True
-                    size_hint_y: 4
-
-                BoxLayout:
-                    orientation: 'vertical'
-                    padding: 30
-                    spacing: 30
-                    size_hint_y: 3
-
-                    Image:
-                        id: rfid_image_id
-                        source: 'images/rfid_login.png'
-                        halign: 'center'
-                        size_hint_y: 4
-
-                    Label:
-                        text: 'Skann rfid brikken din'
-                        font_size: '%s sp' % (self.width*.05)
-                        #on_press: root.open_menu()
-                        background_color: (0.80, 0.95, 0.94, 0.5)
-
-                BoxLayout:
-                    id: log_id
-                    orientation: 'vertical'
-                    padding: 1
-                    padding: 1
-                    spacing: 1

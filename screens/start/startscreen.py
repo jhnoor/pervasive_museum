@@ -10,7 +10,6 @@ from kivy.uix.label import Label
 from kivy.clock import Clock
 from kivy.network.urlrequest import UrlRequest
 
-
 CURRENT_PATH = os.path.dirname(__file__)
 
 KV_PATH = os.path.join(CURRENT_PATH, 'startscreen.kv')
@@ -23,8 +22,8 @@ except:
     print "No arduino detected, please connect to COM6"
     exit()
 
-class StartScreen(Screen):
 
+class StartScreen(Screen):
     def __init__(self, sm, **kwargs):
         super(StartScreen, self).__init__(**kwargs)
         self.sm = sm
@@ -36,38 +35,56 @@ class StartScreen(Screen):
         self.event = Clock.schedule_interval(self.read_rfid, refresh_time)
 
     def read_rfid(self, event):
-        next_line = arduino.readline()
-        print next_line
-        print "next_line too short" if len(next_line) < 8 else "next_line should pass!"
+        read_uid = str(arduino.readline()).strip()
+        print read_uid
+        print "read_uid must be 8 characters" if len(read_uid) != 8 else "read_uid ok"
 
-        if len(next_line) >= 8:
-            print "Player 1: " + next_line
-            self.sm.get_screen("player_screen").player_1 = next_line
+        if len(read_uid) == 8:
+            print "UID 1: " + read_uid
+            self.sm.get_screen("player_screen").uid_1 = read_uid
             self.event.cancel()
 
             self.ids.log_id.add_widget(Label(text="Logger deg inn! Vent", id="logger_deg_inn_id"))
-            request = UrlRequest(config.api['base_url']+ config.api['end_url'], on_success=self.success, on_error=self.error,
-                                 req_headers=config.headers)
+            request = config.request(config.GET_BADGES(), 'GET')
+            if request.status_code == 200:
+                self.success(request, read_uid)  # Request successful, now check if badge is valid
+            else:
+                self.error(request.status_code, request.json())
 
+    def open_player(self, result):
+        if result['active_player'] is None:
+            request = config.request(config.POST_NEW_PLAYER(result['id']), 'GET', data={'data': 'None'}) # TODO should be post
+            if request.status_code == 200:
+                print "New player: "
+                active_player = request.json()
+                print "player_"+str(active_player)
+            else:
+                self.error(request.status_code, "Failed to post new player")
+                return
+        else:
+            active_player = result['active_player']
 
-    def open_player(self):
+        request = config.request(config.GET_PLAYERS(active_player), 'GET')
+        self.sm.get_screen("player_screen").player_1 = request.json()
+        print self.sm.get_screen("player_screen").player_1
+
         self.sm.transition = SlideTransition(direction="left")
         self.sm.current = "player_screen"
 
-    def success(self, request, result):
+    def success(self, request, uid):
         print "Success!"
-        print request
-        print "Result:"
-        print result
-        # TODO create models for the api
-        self.open_player()
+        data = request.json()
 
-    def error(self, request, error):
-        print "Error"
-        print type(error)
-        print error
-        self.ids.log_id.add_widget(Label(text="Nettverksfeil: "+str(error), id="feil_id"))
-        print self.ids.log_id.children
+        for result in data['results']:
+            if result['uid'] == uid:
+                self.open_player(result)  # UID is valid, now open player for badge
+                return
+
+        self.error(404, "Brikke '" + uid + "' ikke funnet!")
+
+    def error(self, status_code, data):
+        print "Error: " + str(status_code)
+        self.ids.log_id.add_widget(Label(text="Nettverksfeil: " + str(data), id="feil_id"))
         self.on_enter()
 
 
@@ -82,10 +99,9 @@ class StartScreenBtn(Button):
         btnclose = Button(text="Close", size_hint_y=None, size_hint_x=1)
         content.add_widget(my_main_app)
         content.add_widget(btnclose)
-        popup = Popup(content=content, title="my_app", size_hint=(1,1), auto_dismiss=False)
+        popup = Popup(content=content, title="my_app", size_hint=(1, 1), auto_dismiss=False)
         btnclose.bind(on_release=popup.dismiss)
         popup.open()
-
 
 
 class StartScreenApp(App):
@@ -97,7 +113,6 @@ class StartScreenApp(App):
 
     def on_resume(self):
         pass
-
 
 
 if __name__ == '__main__':
