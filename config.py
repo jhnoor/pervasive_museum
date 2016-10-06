@@ -7,6 +7,7 @@ api = dict(
 
 DEFAULT_ADD_XP = 200
 
+STATIC = 'static/'
 BADGES = 'badges/'
 PLAYERS = 'players/'
 TROPHIES = 'trophies/'
@@ -26,6 +27,9 @@ def request(request_method, request_verb, **kwargs):
     elif request_verb == 'DELETE':
         return requests.delete(url)
 
+
+def filename_to_url(icon_filename):
+    return api['base_url']+STATIC+str(icon_filename)
 
 # GET
 def GET_BADGES(badge_pk=''):

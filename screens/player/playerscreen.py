@@ -11,6 +11,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.clock import Clock
+from player import Player
 
 CURRENT_PATH = os.path.dirname(__file__)
 
@@ -29,7 +30,6 @@ class PlayerScreen(Screen):
         super(PlayerScreen, self).__init__(**kwargs)
         self.sm = sm
         self.arduino = self.sm.get_screen("start_screen").arduino
-        print "init playerscreen"
 
     def on_enter(self):
         refresh_time = 1  # poll arduino at this rate
@@ -39,13 +39,11 @@ class PlayerScreen(Screen):
         read_uid = str(self.arduino.readline()).strip()
         print read_uid
 
-        if len(read_uid) == 8 and self.uid_1 != read_uid and self.player_1 is not None:
-            # Player 1 is logged in with the first badge
+        if len(read_uid) == 8 and self.player_1.badge_uid != read_uid:
             print "UID 2: " + read_uid
             self.uid_2 = read_uid
             self.event.cancel()
 
-            print self.ids
             self.ids.log_id.add_widget(Label(text="Logger deg inn! Vent", id="logger_deg_inn_id"))
             request = config.request(config.GET_BADGES(), 'GET')
             if request.status_code == 200:
@@ -55,21 +53,21 @@ class PlayerScreen(Screen):
 
 
 
-    def open_ready(self, result): # TODO DRY this
+    def open_ready(self, result, uid): # TODO DRY this
         if result['active_player'] is None:
-            request = config.request(config.POST_NEW_PLAYER(result['id']), 'GET', data={'data': 'None'}) # TODO should be post
+            request = config.request(config.POST_NEW_PLAYER(result['id']), 'POST', data={'data': 'None'})
             if request.status_code == 200:
                 print "New player: "
-                active_player = request.json()
-                print "player_"+str(active_player)
+                active_player_pk = request.json()
+                print "player_"+str(active_player_pk)
             else:
                 self.error(request.status_code, "Failed to post new player")
                 return
         else:
-            active_player = result['active_player']
+            active_player_pk = result['active_player']
 
-        request = config.request(config.GET_PLAYERS(active_player), 'GET')
-        self.player_2 = request.json()
+        request = config.request(config.GET_PLAYERS(active_player_pk), 'GET')
+        self.player_2 = Player(request.json(), uid)
         print self.player_2
 
         self.sm.transition = NoTransition()
@@ -81,7 +79,7 @@ class PlayerScreen(Screen):
 
         for result in data['results']:
             if result['uid'] == uid:
-                self.open_ready(result)  # UID is valid, now show player on player screen
+                self.open_ready(result, uid)  # UID is valid, now show player on player screen
                 return
 
         self.error(404, "Brikke '" + uid + "' ikke funnet!")

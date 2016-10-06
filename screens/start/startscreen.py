@@ -9,6 +9,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.clock import Clock
 from kivy.network.urlrequest import UrlRequest
+from player import Player
 
 CURRENT_PATH = os.path.dirname(__file__)
 
@@ -24,10 +25,12 @@ except:
 
 
 class StartScreen(Screen):
+
     def __init__(self, sm, **kwargs):
         super(StartScreen, self).__init__(**kwargs)
         self.sm = sm
         self.arduino = arduino
+        self.uid_1 = ""
         print "init startscreen"
 
     def on_enter(self):
@@ -41,32 +44,33 @@ class StartScreen(Screen):
 
         if len(read_uid) == 8:
             print "UID 1: " + read_uid
-            self.sm.get_screen("player_screen").uid_1 = read_uid
+            self.uid_1 = read_uid
             self.event.cancel()
 
             self.ids.log_id.add_widget(Label(text="Logger deg inn! Vent", id="logger_deg_inn_id"))
             request = config.request(config.GET_BADGES(), 'GET')
             if request.status_code == 200:
-                self.success(request, read_uid)  # Request successful, now check if badge is valid
+                self.success(request, self.uid_1)  # Request successful, now check if badge is valid
             else:
                 self.error(request.status_code, request.json())
 
-    def open_player(self, result):
+    def open_player(self, result, uid):
         if result['active_player'] is None:
-            request = config.request(config.POST_NEW_PLAYER(result['id']), 'GET', data={'data': 'None'}) # TODO should be post
+            request = config.request(config.POST_NEW_PLAYER(result['id']), 'POST', data={'data': 'None'}) # TODO should be post
             if request.status_code == 200:
                 print "New player: "
-                active_player = request.json()
-                print "player_"+str(active_player)
+                active_player_pk = request.json()
+                print active_player_pk
             else:
                 self.error(request.status_code, "Failed to post new player")
                 return
         else:
-            active_player = result['active_player']
+            active_player_pk = result['active_player']
 
-        request = config.request(config.GET_PLAYERS(active_player), 'GET')
-        self.sm.get_screen("player_screen").player_1 = request.json()
-        print self.sm.get_screen("player_screen").player_1
+        request = config.request(config.GET_PLAYERS(active_player_pk), 'GET')
+        player = Player(request.json(), uid)
+        print player
+        self.sm.get_screen("player_screen").player_1 = player
 
         self.sm.transition = SlideTransition(direction="left")
         self.sm.current = "player_screen"
@@ -77,7 +81,7 @@ class StartScreen(Screen):
 
         for result in data['results']:
             if result['uid'] == uid:
-                self.open_player(result)  # UID is valid, now open player for badge
+                self.open_player(result, uid)  # UID is valid, now open player for badge
                 return
 
         self.error(404, "Brikke '" + uid + "' ikke funnet!")
