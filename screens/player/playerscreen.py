@@ -12,14 +12,32 @@ from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.clock import Clock
 from player import Player
+from kivy.properties import StringProperty, NumericProperty, ListProperty, ObjectProperty
 
 CURRENT_PATH = os.path.dirname(__file__)
 
 KV_PATH = os.path.join(CURRENT_PATH, 'playerscreen.kv')
 Builder.load_file(KV_PATH)
 
+class Player1Screen(BoxLayout):
+    pass
+
+class Player2Screen(BoxLayout):
+    pass
+
 
 class PlayerScreen(Screen):
+    # Kivy properties
+    player_1_name = StringProperty() # TODO objectproperty?
+    player_1_icon_url = StringProperty()
+    player_1_xp = NumericProperty()
+    player_1_level = StringProperty()
+    player_1_progress = NumericProperty()
+    player_1_trophies = ListProperty([])
+    player_1_powerups = ListProperty([])
+
+    powerup_color = ListProperty(config.colors['grey'])
+
     # Players
     global player_1
     global player_2
@@ -34,6 +52,12 @@ class PlayerScreen(Screen):
     def on_enter(self):
         refresh_time = 1  # poll arduino at this rate
         self.event = Clock.schedule_interval(self.read_rfid, refresh_time)
+
+        # Fill in player_data
+        self.player_1_name = self.player_1.name
+        self.player_1_icon_url = self.player_1.icon_url
+        self.player_1_progress = config.get_level_progress_percentage(self.player_1.level, self.player_1.xp)
+        self.player_1_level = str(self.player_1.level)
 
     def read_rfid(self, event):
         read_uid = str(self.arduino.readline()).strip()

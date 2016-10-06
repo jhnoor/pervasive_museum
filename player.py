@@ -1,10 +1,15 @@
 import config
 from pprint import pprint
+from kivy.event import EventDispatcher
+from kivy.properties import StringProperty, NumericProperty, ListProperty
+# TODO create trophy and powerup models as well and inhertic eventdispatcher
 
+class Player(EventDispatcher):
+    name = StringProperty('')
+    icon_url = StringProperty('')
+    # TODO fill in rest
 
-class Player():
     def __init__(self, player, badge_uid):
-
         self.name = player['name']
         self.icon_url = config.filename_to_url(player['icon_filename'])
         self.badge_uid = badge_uid

@@ -8,6 +8,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.clock import Clock
+from kivy.properties import ListProperty
 from kivy.network.urlrequest import UrlRequest
 from player import Player
 
@@ -25,6 +26,7 @@ except:
 
 
 class StartScreen(Screen):
+    bg = ListProperty(config.colors['brand'])
 
     def __init__(self, sm, **kwargs):
         super(StartScreen, self).__init__(**kwargs)

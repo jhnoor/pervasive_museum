@@ -17,9 +17,9 @@
                     size: self.size
 
             Label:
-                id: player_1_username_label
+                id: player_1_name_id
                 font_size: '%s sp' % (self.width*.05)
-                text: "[b][color=cbf3f0]Player1[/color][/b]"
+                text: root.player_1_name
                 markup: True
 
             BoxLayout:
@@ -27,10 +27,9 @@
                 padding: 30
                 spacing: 30
 
-                Label:
-                    text: "here comes icon"
-                    font_size: '%s sp' % (self.width*.1)
-
+                AsyncImage:
+                    source: root.player_1_icon_url
+                    size: 128, 128
 
                 Button:
                     text: "Klar"
@@ -49,36 +48,81 @@
                     size_hint_y: 1
 
             BoxLayout:
-                orientation: 'horizontal'
+                orientation: 'vertical'
                 padding: 30
                 spacing: 30
 
+                Label:
+                    font_size: '%s sp' % (self.width*.05)
+                    text: "Level "+root.player_1_level
+
                 # XP bar
                 ProgressBar:
-                    max: 1000
-                    value: 250
+                    max: 100
+                    value: root.player_1_progress
 
             Label:
                 font_size: '%s sp' % (self.width*.03)
                 text: "Power-ups"
 
             BoxLayout:
-                orientation: 'horizontal'
-                padding: 10
-                spacing: 10
+                orientation: 'vertical'
+                spacing: 3
 
+                Label:
+                    font_size: '%s sp' % (self.width*.03)
+                    text: "pow1"
+                    canvas.before:
+                        Color:
+                            rgba: root.powerup_color
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
 
+                Label:
+                    font_size: '%s sp' % (self.width*.03)
+                    text: "pow2"
+                    canvas.before:
+                        Color:
+                            rgba: root.powerup_color
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                Label:
+                    font_size: '%s sp' % (self.width*.03)
+                    text: "pow3"
+                    canvas.before:
+                        Color:
+                            rgba: root.powerup_color
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
 
             Label:
                 font_size: '%s sp' % (self.width*.03)
                 text: "Troféer"
 
 
+
             BoxLayout:
-                padding: 10
-                spacing: 10
+                orientation: 'horizontal'
+                padding: 4
+                spacing: 4
 
+                # Three types of powerups
 
+                Label:
+                    font_size: '%s sp' % (self.width*.05)
+                    text: "tro1"
+
+                Label:
+                    font_size: '%s sp' % (self.width*.05)
+                    text: "tro2"
+
+                Label:
+                    font_size: '%s sp' % (self.width*.05)
+                    text: "tro3"
 
 
         # Player 2 box - default not logged in

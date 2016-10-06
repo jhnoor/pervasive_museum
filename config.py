@@ -5,6 +5,15 @@ api = dict(
     end_url=""
 )
 
+colors = dict(
+    brand=[0.18, 0.77, 0.71, 1],
+    red=[0.93, 0.04, 0.26, 1],
+    green=[0.48, 0.91, 0.78, 1],
+    blue=[0.72, 0.88, 1.00, 1],
+    grey=[0.87, 0.91, 0.95, 1],
+    dark_bg=[0.30, 0.24, 0.24, 1],
+)
+
 DEFAULT_ADD_XP = 200
 
 STATIC = 'static/'
@@ -13,6 +22,9 @@ PLAYERS = 'players/'
 TROPHIES = 'trophies/'
 POWERUPS = 'powerups/'
 
+
+def get_level_progress_percentage(level, xp):
+    return 30 #TODO calculate based on xp and level
 
 def request(request_method, request_verb, **kwargs):
     url = api['base_url'] + request_method + api['end_url']
