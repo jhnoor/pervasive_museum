@@ -1,42 +1,50 @@
-import os, serial, config
-
 from kivy.lang import Builder
-
 from kivy.uix.screenmanager import Screen, NoTransition
 
+import config
 # For the app
 from kivy.app import App
-from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.popup import Popup
+from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
 from kivy.clock import Clock
 from player import Player
-from kivy.properties import StringProperty, NumericProperty, ListProperty, ObjectProperty
+from arduino import arduino
+from kivy.properties import StringProperty, NumericProperty, ListProperty
 
-CURRENT_PATH = os.path.dirname(__file__)
+Builder.load_file(config.KV_PATH('screens/player/playerscreen.kv'))
 
-KV_PATH = os.path.join(CURRENT_PATH, 'playerscreen.kv')
-Builder.load_file(KV_PATH)
 
-class Player1Screen(BoxLayout):
-    pass
+class StartScreenLayout(BoxLayout):
+    background_color = ListProperty(config.colors['brand'])
 
-class Player2Screen(BoxLayout):
-    pass
+
+class PlayerBoxLayout(BoxLayout):
+    background_color = ListProperty(config.colors['contrast_brand'])
+    ready_color = ListProperty(config.colors['green'])
+    cancel_color = ListProperty(config.colors['red'])
+    powerup_color = ListProperty(config.colors['grey'])
+
+    player_name = StringProperty()  # TODO objectproperty?
+    player_icon_url = StringProperty()
+    player_xp = NumericProperty()
+    player_level = StringProperty()
+    player_progress = NumericProperty()
+    player_trophies = ListProperty([])
+    player_powerups = ListProperty([])
+
+    def __init__(self, player, **kwargs):
+        super(PlayerBoxLayout, self).__init__(**kwargs)
+        self.player_name = player.name
+        self.player_icon_url = player.icon_url
+        self.player_progress = config.get_level_progress_percentage(player.level, player.xp)
+        self.player_level = str(player.level)
 
 
 class PlayerScreen(Screen):
     # Kivy properties
-    player_1_name = StringProperty() # TODO objectproperty?
-    player_1_icon_url = StringProperty()
-    player_1_xp = NumericProperty()
-    player_1_level = StringProperty()
-    player_1_progress = NumericProperty()
-    player_1_trophies = ListProperty([])
-    player_1_powerups = ListProperty([])
+    background_color = ListProperty(config.colors['brand'])
 
-    powerup_color = ListProperty(config.colors['grey'])
 
     # Players
     global player_1
@@ -47,20 +55,22 @@ class PlayerScreen(Screen):
     def __init__(self, sm, **kwargs):
         super(PlayerScreen, self).__init__(**kwargs)
         self.sm = sm
-        self.arduino = self.sm.get_screen("start_screen").arduino
 
     def on_enter(self):
         refresh_time = 1  # poll arduino at this rate
         self.event = Clock.schedule_interval(self.read_rfid, refresh_time)
 
         # Fill in player_data
-        self.player_1_name = self.player_1.name
-        self.player_1_icon_url = self.player_1.icon_url
-        self.player_1_progress = config.get_level_progress_percentage(self.player_1.level, self.player_1.xp)
-        self.player_1_level = str(self.player_1.level)
+        player_1_boxlayout = PlayerBoxLayout(self.player_1)
+
+        # Add start widgets to box
+        main_layout = GridLayout(cols=2)
+        main_layout.add_widget(player_1_boxlayout)
+        main_layout.add_widget(StartScreenLayout())
+        self.add_widget(main_layout)
 
     def read_rfid(self, event):
-        read_uid = str(self.arduino.readline()).strip()
+        read_uid = str(arduino.readline()).strip()
         print read_uid
 
         if len(read_uid) == 8 and self.player_1.badge_uid != read_uid:
@@ -75,15 +85,13 @@ class PlayerScreen(Screen):
             else:
                 self.error(request.status_code, request.json())
 
-
-
-    def open_ready(self, result, uid): # TODO DRY this
+    def open_ready(self, result, uid):  # TODO DRY this
         if result['active_player'] is None:
             request = config.request(config.POST_NEW_PLAYER(result['id']), 'POST', data={'data': 'None'})
             if request.status_code == 200:
                 print "New player: "
                 active_player_pk = request.json()
-                print "player_"+str(active_player_pk)
+                print "player_" + str(active_player_pk)
             else:
                 self.error(request.status_code, "Failed to post new player")
                 return
@@ -112,22 +120,6 @@ class PlayerScreen(Screen):
         print "Error: " + str(status_code)
         self.ids.log_id.add_widget(Label(text="Nettverksfeil: " + str(data), id="feil_id"))
         self.on_enter()
-
-
-class PlayerScreenBtn(Button):
-    def __init__(self, **kwargs):
-        super(PlayerScreenBtn, self).__init__(self, **kwargs)
-        self.bind(on_press=self.callback)
-
-    def callback(self, instance):
-        content = BoxLayout(orientation="vertical")
-        my_main_app = PlayerScreen("dummy_screen_monitor")
-        btnclose = Button(text="Close", size_hint_y=None, size_hint_x=1)
-        content.add_widget(my_main_app)
-        content.add_widget(btnclose)
-        popup = Popup(content=content, title="my_app", size_hint=(1, 1), auto_dismiss=False)
-        btnclose.bind(on_release=popup.dismiss)
-        popup.open()
 
 
 class PlayerScreenApp(App):

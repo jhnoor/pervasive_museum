@@ -1,4 +1,15 @@
+import os
+
 import requests
+
+CURRENT_PATH = os.path.dirname(__file__)
+
+
+def KV_PATH(kv_file):
+    return os.path.join(CURRENT_PATH, kv_file)
+
+
+port = "COM3"
 
 api = dict(
     base_url="http://127.0.0.1:8000/",
@@ -7,11 +18,11 @@ api = dict(
 
 colors = dict(
     brand=[0.18, 0.77, 0.71, 1],
+    contrast_brand=[0.015, 0.050, 0.078, 1],
     red=[0.93, 0.04, 0.26, 1],
     green=[0.48, 0.91, 0.78, 1],
     blue=[0.72, 0.88, 1.00, 1],
     grey=[0.87, 0.91, 0.95, 1],
-    dark_bg=[0.30, 0.24, 0.24, 1],
 )
 
 DEFAULT_ADD_XP = 200

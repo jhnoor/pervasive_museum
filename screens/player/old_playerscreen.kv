@@ -1,0 +1,171 @@
+<PlayerScreen>
+    GridLayout:
+        cols: 2
+
+        # Player 1 box - show users profile
+        BoxLayout:
+            id: player_1_box_id
+            orientation: 'vertical'
+            padding: 10
+
+            # background
+            canvas.before:
+                Color:
+                    rgba: (0.30, 0.24, 0.24, 1)
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            Label:
+                id: player_1_name_id
+                font_size: '%s sp' % (self.width*.05)
+                text: root.player_1_name
+                markup: True
+
+            BoxLayout:
+                orientation: 'horizontal'
+                padding: 30
+                spacing: 30
+
+                AsyncImage:
+                    source: root.player_1_icon_url
+                    size: 128, 128
+
+                Button:
+                    text: "Klar"
+                    color: (0,0,0,1)
+                    font_size: '%s sp' % (self.width*.1)
+                    background_normal: "images/background_normal_white.png"
+                    background_color: (0.48, 0.91, 0.78, 1)
+                    size_hint_y: 1
+
+                Button:
+                    text: "Kanseller"
+                    color: (1,1,1,1)
+                    font_size: '%s sp' % (self.width*.1)
+                    background_normal: "images/background_normal_white.png"
+                    background_color: (0.93, 0.04, 0.26, 1)
+                    size_hint_y: 1
+
+            BoxLayout:
+                orientation: 'vertical'
+                padding: 30
+                spacing: 30
+
+                Label:
+                    font_size: '%s sp' % (self.width*.05)
+                    text: "Level "+root.player_1_level
+
+                # XP bar
+                ProgressBar:
+                    max: 100
+                    value: root.player_1_progress
+
+            Label:
+                font_size: '%s sp' % (self.width*.03)
+                text: "Power-ups"
+
+            BoxLayout:
+                orientation: 'vertical'
+                spacing: 3
+
+                Label:
+                    font_size: '%s sp' % (self.width*.03)
+                    text: "pow1"
+                    canvas.before:
+                        Color:
+                            rgba: root.powerup_color
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                Label:
+                    font_size: '%s sp' % (self.width*.03)
+                    text: "pow2"
+                    canvas.before:
+                        Color:
+                            rgba: root.powerup_color
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+                Label:
+                    font_size: '%s sp' % (self.width*.03)
+                    text: "pow3"
+                    canvas.before:
+                        Color:
+                            rgba: root.powerup_color
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+
+            Label:
+                font_size: '%s sp' % (self.width*.03)
+                text: "Troféer"
+
+
+
+            BoxLayout:
+                orientation: 'horizontal'
+                padding: 4
+                spacing: 4
+
+                # Three types of powerups
+
+                Label:
+                    font_size: '%s sp' % (self.width*.05)
+                    text: "tro1"
+
+                Label:
+                    font_size: '%s sp' % (self.width*.05)
+                    text: "tro2"
+
+                Label:
+                    font_size: '%s sp' % (self.width*.05)
+                    text: "tro3"
+
+
+        # Player 2 box - default not logged in
+        BoxLayout:
+            id: player_2_box_id
+            orientation: 'vertical'
+            # background
+            canvas.before:
+                Color:
+                    rgba: (0.18, 0.77, 0.71, 1)
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            BoxLayout:
+                orientation: 'vertical'
+
+                Label:
+                    font_size: '%s sp' % (self.width*.1)
+                    text: "[b][color=cbf3f0]Pe[/color]Muse[/b]"
+                    markup: True
+                    size_hint_y: 4
+
+                BoxLayout:
+                    orientation: 'vertical'
+                    padding: 30
+                    spacing: 30
+                    size_hint_y: 3
+
+                    Image:
+                        id: rfid_image_id
+                        source: 'images/rfid_login.png'
+                        halign: 'center'
+                        size_hint_y: 4
+
+                    Label:
+                        text: 'Skann rfid brikken din'
+                        font_size: '%s sp' % (self.width*.05)
+                        #on_press: root.open_menu()
+                        background_color: (0.80, 0.95, 0.94, 0.5)
+
+                BoxLayout:
+                    id: log_id
+                    orientation: 'vertical'
+                    padding: 1
+                    padding: 1
+                    spacing: 1

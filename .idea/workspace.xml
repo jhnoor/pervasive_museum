@@ -2,13 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a7a63fd5-3594-44e3-8f3b-69c5a9bbd7db" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/screens/player/old_playerscreen.kv" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/screens/ready/readyscreen.kv" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/screens/ready/readyscreen.py" afterPath="" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/screens/ready/__init__.py" afterPath="$PROJECT_DIR$/arduino.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/pervasive_museum.iml" afterPath="$PROJECT_DIR$/.idea/pervasive_museum.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config.py" afterPath="$PROJECT_DIR$/config.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/player.py" afterPath="$PROJECT_DIR$/player.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/requirements.txt" afterPath="$PROJECT_DIR$/requirements.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screens/player/playerscreen.kv" afterPath="$PROJECT_DIR$/screens/player/playerscreen.kv" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screens/player/playerscreen.py" afterPath="$PROJECT_DIR$/screens/player/playerscreen.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screens/start/startscreen.kv" afterPath="$PROJECT_DIR$/screens/start/startscreen.kv" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screens/start/startscreen.py" afterPath="$PROJECT_DIR$/screens/start/startscreen.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screens/versus/versusgamescreen.py" afterPath="$PROJECT_DIR$/screens/versus/versusgamescreen.py" />
     </list>
     <ignored path="pervasive_museum.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -20,31 +26,41 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/pervasive_museum$main.coverage" NAME="main Coverage Results" MODIFIED="1476203020570" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/pervasive_museum$startscreen.coverage" NAME="startscreen Coverage Results" MODIFIED="1475232345544" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/screens/start" />
-    <SUITE FILE_PATH="coverage/pervasive_museum$main.coverage" NAME="main Coverage Results" MODIFIED="1475765164227" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="CreatePatchCommitExecutor">
-    <option name="PATCH_PATH" value="" />
+    <option name="PATCH_PATH" value="C:\Users\jama_\Programming\pervasive_museum" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
     <favorites_list name="pervasive_museum" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.58405465">
+    <splitter split-orientation="horizontal" split-proportion="0.4613512">
       <split-first>
-        <leaf>
-          <file leaf-file-name="playerscreen.py" pinned="false" current-in-tab="true">
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file leaf-file-name="playerscreen.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/screens/player/playerscreen.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="450">
-                  <caret line="57" column="48" selection-start-line="57" selection-start-column="48" selection-end-line="57" selection-end-column="48" />
+                <state relative-caret-position="1155">
+                  <caret line="72" column="0" selection-start-line="72" selection-start-column="0" selection-end-line="72" selection-end-column="0" />
                   <folding>
-                    <element signature="e#0#25#0" expanded="true" />
-                    <element signature="e#1821#2457#0" expanded="false" />
-                    <element signature="e#4495#4646#0" expanded="false" />
+                    <element signature="e#0#29#0" expanded="true" />
+                    <element signature="e#4322#4473#0" expanded="false" />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="ReadUID.ino" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/ReadUID.ino">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="0">
+                  <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -52,14 +68,9 @@
           <file leaf-file-name="startscreen.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/screens/start/startscreen.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="525">
-                  <caret line="27" column="26" selection-start-line="27" selection-start-column="26" selection-end-line="28" selection-end-column="45" />
-                  <folding>
-                    <element signature="e#0#25#0" expanded="true" />
-                    <element signature="e#1008#1128#0" expanded="false" />
-                    <element signature="e#3313#3902#0" expanded="false" />
-                    <element signature="e#3936#4086#0" expanded="false" />
-                  </folding>
+                <state relative-caret-position="378">
+                  <caret line="19" column="20" selection-start-line="19" selection-start-column="20" selection-end-line="19" selection-end-column="20" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -67,11 +78,11 @@
         </leaf>
       </split-first>
       <split-second>
-        <leaf>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file leaf-file-name="player.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/player.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="275">
+                <state relative-caret-position="231">
                   <caret line="11" column="42" selection-start-line="11" selection-start-column="42" selection-end-line="11" selection-end-column="42" />
                   <folding>
                     <element signature="e#0#13#0" expanded="true" />
@@ -83,8 +94,8 @@
           <file leaf-file-name="config.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/config.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="425">
-                  <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+                <state relative-caret-position="357">
+                  <caret line="23" column="31" selection-start-line="23" selection-start-column="31" selection-end-line="23" selection-end-column="31" />
                   <folding />
                 </state>
               </provider>
@@ -93,8 +104,8 @@
           <file leaf-file-name="startscreen.kv" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/screens/start/startscreen.kv">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="29">
-                  <caret line="3" column="9" selection-start-line="3" selection-start-column="9" selection-end-line="3" selection-end-column="9" />
+                <state relative-caret-position="42">
+                  <caret line="2" column="18" selection-start-line="0" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
@@ -103,8 +114,18 @@
           <file leaf-file-name="playerscreen.kv" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/screens/player/playerscreen.kv">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="329">
-                  <caret line="79" column="29" selection-start-line="79" selection-start-column="29" selection-end-line="79" selection-end-column="29" />
+                <state relative-caret-position="2709">
+                  <caret line="129" column="18" selection-start-line="129" selection-start-column="18" selection-end-line="129" selection-end-column="18" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="old_playerscreen.kv" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/screens/player/old_playerscreen.kv">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="21">
+                  <caret line="1" column="4" selection-start-line="1" selection-start-column="4" selection-end-line="2" selection-end-column="15" />
                   <folding />
                 </state>
               </provider>
@@ -135,23 +156,26 @@
         <option value="$PROJECT_DIR$/screens/coop/coopscreen.kv" />
         <option value="$PROJECT_DIR$/screens/coop/coopgamescreen.kv" />
         <option value="$PROJECT_DIR$/screens/coop/coopgamescreen.py" />
-        <option value="$PROJECT_DIR$/screens/versus/versusgamescreen.py" />
         <option value="$PROJECT_DIR$/screens/menu/menuscreen.py" />
         <option value="$PROJECT_DIR$/screens/menu/menuscreen.kv" />
-        <option value="$PROJECT_DIR$/requirements.txt" />
         <option value="$PROJECT_DIR$/deserialize.py" />
         <option value="$PROJECT_DIR$/networking.py" />
         <option value="$PROJECT_DIR$/screens/player/ready_screen.kv" />
         <option value="$PROJECT_DIR$/screens/ready/readyscreen.py" />
         <option value="$PROJECT_DIR$/screens/ready/readyscreen.kv.py" />
         <option value="$PROJECT_DIR$/screens/ready/readyscreen.kv" />
-        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/player.py" />
-        <option value="$PROJECT_DIR$/config.py" />
         <option value="$PROJECT_DIR$/screens/start/startscreen.kv" />
+        <option value="$PROJECT_DIR$/requirements.txt" />
+        <option value="$PROJECT_DIR$/arduino.py" />
+        <option value="$PROJECT_DIR$/screens/player/old_playerscreen.kv" />
+        <option value="$PROJECT_DIR$/kv_player.py" />
         <option value="$PROJECT_DIR$/screens/start/startscreen.py" />
-        <option value="$PROJECT_DIR$/screens/player/playerscreen.py" />
+        <option value="$PROJECT_DIR$/screens/versus/versusgamescreen.py" />
+        <option value="$PROJECT_DIR$/config.py" />
         <option value="$PROJECT_DIR$/screens/player/playerscreen.kv" />
+        <option value="$PROJECT_DIR$/screens/player/playerscreen.py" />
+        <option value="$PROJECT_DIR$/main.py" />
       </list>
     </option>
   </component>
@@ -162,10 +186,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-2568" />
-    <option name="y" value="-208" />
-    <option name="width" value="2576" />
-    <option name="height" value="1416" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1936" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -221,6 +245,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="screens" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pervasive_museum" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pervasive_museum" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="screens" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="versus" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -587,7 +629,14 @@
       <option name="project" value="LOCAL" />
       <updated>1475260753365</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Now we're using kivy correctly">
+      <created>1476204155524</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1476204155524</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -600,18 +649,18 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-2568" y="-208" width="2576" height="1416" extended-state="6" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12758346" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.124200426" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32924962" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27891892" sideWeight="0.5042644" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32924962" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27357754" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27891892" sideWeight="0.49573562" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25565082" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25460455" sideWeight="0.49573562" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39969373" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -635,52 +684,24 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <MESSAGE value="deleting old files" />
     <MESSAGE value="login functional, no server communication yet. Interscreen communication functional" />
     <MESSAGE value="Starting on api calls" />
     <MESSAGE value="Proof of concept networking, but for some reason a request takes 20 seconds to fulfill..." />
     <MESSAGE value="Networking works, and is blazingly fast as well!" />
-    <option name="LAST_COMMIT_MESSAGE" value="Networking works, and is blazingly fast as well!" />
+    <MESSAGE value="Now we're using kivy correctly" />
+    <option name="LAST_COMMIT_MESSAGE" value="Now we're using kivy correctly" />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="7" />
+      <option name="time" value="8" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/screens/menu/menuscreen.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="50">
-          <caret line="12" column="33" selection-start-line="12" selection-start-column="33" selection-end-line="12" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/screens/start/startscreen.kv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="575">
-          <caret line="23" column="26" selection-start-line="23" selection-start-column="26" selection-end-line="23" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main-kv.txt" />
-    <entry file="file://$PROJECT_DIR$/screens/coop/coopgamescreen.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="9" column="43" selection-start-line="9" selection-start-column="43" selection-end-line="9" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/screens/coop/coopgamescreen.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="325">
@@ -693,12 +714,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="50">
           <caret line="12" column="40" selection-start-line="12" selection-start-column="40" selection-end-line="12" selection-end-column="40" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-            <element signature="e#1008#1128#0" expanded="false" />
-            <element signature="e#3313#3902#0" expanded="false" />
-            <element signature="e#3936#4086#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -757,24 +773,11 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.kv" />
-    <entry file="file://$USER_HOME$/Downloads/ImagesTrainer-master/ImagesTrainer-master/speffzkeyboard.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/Downloads/ImagesTrainer-master/ImagesTrainer-master/speffzkeyboard.py" />
     <entry file="file://$PROJECT_DIR$/screens/coop/coopgamescreen.kv">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="100">
           <caret line="4" column="14" selection-start-line="4" selection-start-column="14" selection-end-line="4" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/screens/versus/versusgamescreen.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="8" column="34" selection-start-line="8" selection-start-column="34" selection-end-line="8" selection-end-column="34" />
         </state>
       </provider>
     </entry>
@@ -859,19 +862,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Temp/nav_logo242.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/requirements.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="9" selection-start-line="0" selection-start-column="9" selection-end-line="0" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Temp/nav_logo242.png" />
     <entry file="file://$PROJECT_DIR$/deserialize.py" />
     <entry file="file://$PROJECT_DIR$/networking.py" />
     <entry file="file://$PROJECT_DIR$/screens/player/ready_screen.kv" />
@@ -917,17 +908,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
+    <entry file="file://$PROJECT_DIR$/requirements.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="13" column="43" selection-start-line="13" selection-start-column="43" selection-end-line="13" selection-end-column="43" />
+        <state relative-caret-position="21">
+          <caret line="1" column="8" selection-start-line="1" selection-start-column="8" selection-end-line="1" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/arduino.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="42">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/screens/versus/versusgamescreen.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="6" column="51" selection-start-line="6" selection-start-column="51" selection-end-line="6" selection-end-column="51" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/player.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
+        <state relative-caret-position="231">
           <caret line="11" column="42" selection-start-line="11" selection-start-column="42" selection-end-line="11" selection-end-column="42" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
@@ -935,54 +942,103 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/screens/start/startscreen.py">
+    <entry file="file://$PROJECT_DIR$/config.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="525">
-          <caret line="27" column="26" selection-start-line="27" selection-start-column="26" selection-end-line="28" selection-end-column="45" />
-          <folding>
-            <element signature="e#0#25#0" expanded="true" />
-            <element signature="e#1008#1128#0" expanded="false" />
-            <element signature="e#3313#3902#0" expanded="false" />
-            <element signature="e#3936#4086#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="357">
+          <caret line="23" column="31" selection-start-line="23" selection-start-column="31" selection-end-line="23" selection-end-column="31" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config.py">
+    <entry file="file://$PROJECT_DIR$/screens/player/old_playerscreen.kv">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+        <state relative-caret-position="21">
+          <caret line="1" column="4" selection-start-line="1" selection-start-column="4" selection-end-line="2" selection-end-column="15" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/screens/start/startscreen.kv">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="29">
-          <caret line="3" column="9" selection-start-line="3" selection-start-column="9" selection-end-line="3" selection-end-column="9" />
+        <state relative-caret-position="42">
+          <caret line="2" column="18" selection-start-line="0" selection-start-column="0" selection-end-line="44" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/screens/player/playerscreen.kv">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="329">
-          <caret line="79" column="29" selection-start-line="79" selection-start-column="29" selection-end-line="79" selection-end-column="29" />
+        <state relative-caret-position="2709">
+          <caret line="129" column="18" selection-start-line="129" selection-start-column="18" selection-end-line="129" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kv_player.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="5" column="50" selection-start-line="5" selection-start-column="50" selection-end-line="5" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="20" column="61" selection-start-line="20" selection-start-column="61" selection-end-line="20" selection-end-column="61" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/screens/start/startscreen.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="19" column="20" selection-start-line="19" selection-start-column="20" selection-end-line="19" selection-end-column="20" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/screens/player/playerscreen.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="57" column="48" selection-start-line="57" selection-start-column="48" selection-end-line="57" selection-end-column="48" />
+        <state relative-caret-position="1155">
+          <caret line="72" column="0" selection-start-line="72" selection-start-column="0" selection-end-line="72" selection-end-column="0" />
           <folding>
-            <element signature="e#0#25#0" expanded="true" />
-            <element signature="e#1821#2457#0" expanded="false" />
-            <element signature="e#4495#4646#0" expanded="false" />
+            <element signature="e#0#29#0" expanded="true" />
+            <element signature="e#4322#4473#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Now_we_re_using_kivy_correctly.patch">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-34220">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ReadUID.ino">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
   </component>
 </project>
