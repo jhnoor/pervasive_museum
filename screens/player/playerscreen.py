@@ -12,19 +12,14 @@ from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.popup import Popup
+from kivy.uix.modalview import ModalView
 from kivy.uix.button import Button
+from kivy.uix.label import Label
 from kivy.clock import Clock
 from player import Player
 from kivy.properties import StringProperty, NumericProperty, ListProperty
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), 'playerscreen.kv'))
-
-# TODO make players global
-players_glob = []
-
-
-class ReadyPopup(Popup):
-    pass
 
 
 class StartScreenBoxLayout(BoxLayout):
@@ -38,6 +33,7 @@ class PlayerBoxLayout(BoxLayout):
     cancel_color = ListProperty(config.colors['red'])
     powerup_color = ListProperty(config.colors['grey'])
     is_ready = False
+    ready_button_text = StringProperty("Klar?")
 
     name = StringProperty()  # TODO objectproperty?
     uid = StringProperty()
@@ -58,29 +54,20 @@ class PlayerBoxLayout(BoxLayout):
         self.background_color = config.colors['player2_bg'] if player2_bg else config.colors['player1_bg']
 
     # TODO call parent instead of polling this flag?
-    def ready(self):
-        self.is_ready = True
-
-        content = Button(text='Tilbake!')
-        self.ready_popup = ReadyPopup(
-            title=str(self.name) + " venter på andre spiller!", content=content,
-        )
-        """
-            size_hint: (None, None),
-            pos: self.pos,
-            #pos_hint: self.,
-            size: (self.width, self.height),
-            background_color: (0, 0, 0, 0),
-            auto_dismiss: False
-        """
-
-        content.bind(on_press=self.cancel)
-        self.ready_popup.open()
+    def toggle_ready(self):
+        if self.is_ready:
+            self.is_ready = False
+            self.ready_button_text = "Klar?"
+            self.ready_color = config.colors['green']
+        else:
+            self.is_ready = True
+            self.ready_button_text = "Venter på andre spiller"
+            self.ready_color = config.colors['grey']
 
     def cancel(self, *args):
         self.is_ready = False
-        if hasattr(self, "ready_popup"):
-            self.ready_popup.dismiss()
+        if hasattr(self, "ready_modal_view"):
+            self.ready_modal_view.dismiss()
         else:
             self.parent.parent.remove_player(self)  # parent.parent because of Gridlayout
 
@@ -106,8 +93,6 @@ class PlayerScreen(Screen):
         self.event = Clock.schedule_interval(self.read_rfid, refresh_time)
 
     def read_rfid(self, event):
-        # TODO delete
-        print self.players
         read_uid = str(config.arduino.readline()).strip()
         print "player_screen: " + read_uid
 
@@ -163,7 +148,7 @@ class PlayerScreen(Screen):
     def success(self, request, uid):
         print "Success!"
         data = request.json()
-
+        self.start_screen_layout.msg = ""
         for result in data['results']:
             if result['uid'] == uid:
                 self.add_player(result, uid)  # UID is valid, now show player on player screen

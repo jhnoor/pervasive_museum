@@ -30,12 +30,12 @@
             height: dp(80)  # The fixed height you want
 
         Button:
-            text: "Klar"
+            text: root.ready_button_text
             color: (0,0,0,1)
             font_size: '%s sp' % (self.width*.1)
             background_normal: "images/background_normal_white.png"
             background_color: root.ready_color
-            on_press: root.ready()
+            on_press: root.toggle_ready()
             size_hint_y: 1
 
         Button:
