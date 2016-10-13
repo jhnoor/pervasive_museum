@@ -37,7 +37,7 @@ class MuseumGameApp(App):
         pass
 
     def on_stop(self):
-        config.request(config.PUT_SET_OFFLINE(config.current_terminal), "PUT", data={'data': 'None'})
+        config.request(config.PUT_SET_OFFLINE(config.current_terminal.id), "PUT", data={'data': 'None'})
 
 
     def success(self, request):
@@ -50,6 +50,7 @@ class MuseumGameApp(App):
                 config.request(config.PUT_SET_ONLINE(config.current_terminal.id), "PUT", data={'data': 'None'})
                 print "success setting "+str(config.current_terminal)
                 return
+        print "No available terminals! Deactivate using Django Rest framework interface"
         self.stop()
 
     def error(self, request):

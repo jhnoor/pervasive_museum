@@ -25,26 +25,9 @@ class MenuScreen(Screen):
         self.sm.transition = SlideTransition(direction="left")
         self.sm.current = "versus_game_screen"
 
-
-class MenuScreenBtn(Button):
-    def __init__(self, **kwargs):
-        super(MenuScreenBtn, self).__init__(self, **kwargs)
-        self.bind(on_press=self.callback)
-
-    def callback(self, instance):
-        content = BoxLayout(orientation="vertical")
-        my_main_app = MenuScreen("dummy_screen_monitor")
-        btnclose = Button(text="Close", size_hint_y=None, size_hint_x=1)
-        content.add_widget(my_main_app)
-        content.add_widget(btnclose)
-        popup = Popup(content=content, title="my_app", size_hint=(1, 1), auto_dismiss=False)
-        btnclose.bind(on_release=popup.dismiss)
-        popup.open()
-
-
 class MenuScreenApp(App):
     def build(self):
-        return MenuScreenBtn(text='open my app')
+        pass
 
     def on_pause(self):
         return True

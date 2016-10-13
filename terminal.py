@@ -2,6 +2,8 @@ import config
 from pprint import pprint
 
 class Terminal():
+    questions = []
+
     def __init__(self, terminal):
         self.id = terminal['id']
         self.questions = terminal['questions']

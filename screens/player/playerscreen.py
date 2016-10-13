@@ -51,9 +51,8 @@ class PlayerBoxLayout(BoxLayout):
         self.icon_url = player.icon_url
         self.progress = config.get_level_progress_percentage(player.level, player.xp)
         self.level = str(player.level)
-        self.background_color = config.colors['player2_bg'] if player2_bg else config.colors['player1_bg']
+        self.background_color = config.colors['player1_bg'] if player2_bg else config.colors['player2_bg']
 
-    # TODO call parent instead of polling this flag?
     def toggle_ready(self):
         if self.is_ready:
             self.is_ready = False
@@ -91,6 +90,10 @@ class PlayerScreen(Screen):
     def on_enter(self):
         refresh_time = 1  # poll arduino at this rate
         self.event = Clock.schedule_interval(self.read_rfid, refresh_time)
+
+    def on_leave(self, *args):
+        print "Leaving playerscreen!"
+        self.event.cancel()
 
     def read_rfid(self, event):
         read_uid = str(config.arduino.readline()).strip()
@@ -164,7 +167,7 @@ class PlayerScreen(Screen):
     def poll_players_ready(self, event):
         if len(self.players) == 2 and all(player.is_ready for player in self.players):
             self.sm.transition = WipeTransition()
-            self.sm.current = "menu_screen"
+            self.sm.current = "coop_game_screen" # TODO set to menu_screen
 
 
 class PlayerScreenApp(App):

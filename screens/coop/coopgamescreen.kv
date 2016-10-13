@@ -1,6 +1,42 @@
-<CoopScreen>
-    BoxLayout:
-        orientation: 'vertical'
+<CoopGameScreen>
+    canvas.before:
+        Color:
+            rgba: root.background_color
+        Rectangle:
+            pos: self.pos
+            size: self.size
 
-        Label:
-            text: "Hi from coopgamescreen"
+<MainLayout>
+
+<TimeProgressBar>
+    max: root.max
+    value: root.value
+    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+<QuestionGrid>
+    cols: 3
+    size_hint: (1, 0.5)
+    pos_hint: {'top': 1}
+
+    canvas.before:
+        Color:
+            rgba: root.background_color
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    AsyncImage:
+        source: root.get_left_picture()
+        size_hint: (1, 1)
+        pos_hint: {'left': 1}
+
+    Label:
+        text: root.get_text()
+        size_hint: (1, 1)
+        font_size: '%s sp' % (self.width*.07)
+        pos_hint: {'top': 1}
+
+    AsyncImage:
+        source: root.get_right_picture()
+        size_hint: (1, 1)
+        pos_hint: {'right': 1}

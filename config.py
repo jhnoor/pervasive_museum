@@ -1,5 +1,5 @@
-import requests
-import serial
+import requests, serial
+from terminal import Terminal
 
 port = "COM3"
 # Arduino hook
@@ -14,6 +14,8 @@ api = dict(
     end_url=""
 )
 
+question_time_seconds = 30
+
 colors = dict(
     brand=[0.18, 0.77, 0.71, 1],
     player1_bg=[0.301, 0.239, 0.239, 1],
@@ -22,6 +24,7 @@ colors = dict(
     green=[0.48, 0.91, 0.78, 1],
     blue=[0.72, 0.88, 1.00, 1],
     grey=[0.87, 0.91, 0.95, 1],
+    orange=[1, 0.6, 0, 1],
 )
 
 DEFAULT_ADD_XP = 200
@@ -33,7 +36,7 @@ TROPHIES = 'trophies/'
 POWERUPS = 'powerups/'
 TERMINALS = 'terminals/'
 
-current_terminal = None
+current_terminal = Terminal
 
 
 def get_level_progress_percentage(level, xp):
