@@ -31,6 +31,9 @@ BADGES = 'badges/'
 PLAYERS = 'players/'
 TROPHIES = 'trophies/'
 POWERUPS = 'powerups/'
+TERMINALS = 'terminals/'
+
+current_terminal = None
 
 
 def get_level_progress_percentage(level, xp):
@@ -71,8 +74,16 @@ def GET_TROPHIES(trophy_pk=''):
 def GET_POWERUPS(powerup_pk=''):
     return POWERUPS + str(powerup_pk)
 
+def GET_TERMINALS(terminal_pk=''):
+    return TERMINALS + str(terminal_pk)
 
 # PUT
+def PUT_SET_ONLINE(terminal_pk):
+    return TERMINALS + str(terminal_pk) + '/set_online/'
+
+def PUT_SET_OFFLINE(terminal_pk):
+    return TERMINALS + str(terminal_pk) + '/set_offline/'
+
 def PUT_SET_XP(player_pk, xp):
     return PLAYERS + str(player_pk) + '/set_xp/' + str(xp)
 

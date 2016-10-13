@@ -6,14 +6,34 @@ from kivy.uix.screenmanager import Screen
 # For the app
 from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.progressbar import ProgressBar
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), 'coopgamescreen.kv'))
+
+
+
+class PlayerBoxLayout(BoxLayout):
+    pass
+
+class TimeProgressBar(ProgressBar):
+    pass
+
+# Three column grid that that has left_picture, question_text and right_picture
+class QuestionGrid(GridLayout):
+    pass
+
+class MainLayout(FloatLayout):
+    pass
+
 
 class CoopGameScreen(Screen):
     def __init__(self, sm, **kwargs):
         super(CoopGameScreen, self).__init__(**kwargs)
         self.sm = sm
+        self.main_layout = MainLayout() # This layout will contain everything
 
     #TODO game has started, do something
 
