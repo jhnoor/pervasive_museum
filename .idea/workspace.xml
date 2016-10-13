@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a7a63fd5-3594-44e3-8f3b-69c5a9bbd7db" name="Default" comment="Now we're using kivy correctly">
+    <list default="true" id="a7a63fd5-3594-44e3-8f3b-69c5a9bbd7db" name="Default" comment="Only using playerscreen now, wohoo">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/arduino.py" afterPath="$PROJECT_DIR$/arduino.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config.py" afterPath="$PROJECT_DIR$/config.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screens/coop/coopgamescreen.py" afterPath="$PROJECT_DIR$/screens/coop/coopgamescreen.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screens/menu/menuscreen.py" afterPath="$PROJECT_DIR$/screens/menu/menuscreen.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screens/player/playerscreen.kv" afterPath="$PROJECT_DIR$/screens/player/playerscreen.kv" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screens/player/playerscreen.py" afterPath="$PROJECT_DIR$/screens/player/playerscreen.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screens/start/startscreen.py" afterPath="$PROJECT_DIR$/screens/start/startscreen.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screens/versus/versusgamescreen.py" afterPath="$PROJECT_DIR$/screens/versus/versusgamescreen.py" />
     </list>
     <ignored path="pervasive_museum.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -43,9 +35,9 @@
             <entry file="file://$PROJECT_DIR$/screens/player/playerscreen.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="262">
-                  <caret line="116" column="42" selection-start-line="116" selection-start-column="42" selection-end-line="116" selection-end-column="42" />
+                  <caret line="116" column="0" selection-start-line="116" selection-start-column="0" selection-end-line="116" selection-end-column="0" />
                   <folding>
-                    <element signature="e#46#84#0" expanded="true" />
+                    <element signature="e#47#76#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -55,10 +47,8 @@
             <entry file="file://$PROJECT_DIR$/screens/start/startscreen.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="122">
-                  <caret line="13" column="33" selection-start-line="13" selection-start-column="33" selection-end-line="13" selection-end-column="33" />
-                  <folding>
-                    <element signature="e#47#71#0" expanded="true" />
-                  </folding>
+                  <caret line="14" column="33" selection-start-line="14" selection-start-column="33" selection-end-line="14" selection-end-column="33" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -66,8 +56,8 @@
           <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/main.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="483">
-                  <caret line="23" column="64" selection-start-line="23" selection-start-column="64" selection-end-line="23" selection-end-column="64" />
+                <state relative-caret-position="462">
+                  <caret line="22" column="64" selection-start-line="22" selection-start-column="64" selection-end-line="22" selection-end-column="64" />
                   <folding />
                 </state>
               </provider>
@@ -93,7 +83,7 @@
             <entry file="file://$PROJECT_DIR$/config.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="483">
-                  <caret line="23" column="1" selection-start-line="23" selection-start-column="1" selection-end-line="23" selection-end-column="1" />
+                  <caret line="24" column="1" selection-start-line="24" selection-start-column="1" selection-end-line="24" selection-end-column="1" />
                   <folding />
                 </state>
               </provider>
@@ -667,7 +657,14 @@
       <option name="project" value="LOCAL" />
       <updated>1476204222927</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Only using playerscreen now, wohoo">
+      <created>1476332860412</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1476332860412</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -690,7 +687,7 @@
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32829374" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32924962" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22786178" sideWeight="0.49573562" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22810811" sideWeight="0.49573562" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2537797" sideWeight="0.49573562" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -722,7 +719,8 @@
     <MESSAGE value="Proof of concept networking, but for some reason a request takes 20 seconds to fulfill..." />
     <MESSAGE value="Networking works, and is blazingly fast as well!" />
     <MESSAGE value="Now we're using kivy correctly" />
-    <option name="LAST_COMMIT_MESSAGE" value="Now we're using kivy correctly" />
+    <MESSAGE value="Only using playerscreen now, wohoo" />
+    <option name="LAST_COMMIT_MESSAGE" value="Only using playerscreen now, wohoo" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -731,7 +729,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/screens/start/startscreen.py</url>
-          <line>46</line>
+          <line>47</line>
           <option name="timeStamp" value="8" />
         </line-breakpoint>
       </breakpoints>
@@ -752,9 +750,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="50">
           <caret line="12" column="40" selection-start-line="12" selection-start-column="40" selection-end-line="12" selection-end-column="40" />
-          <folding>
-            <element signature="e#47#71#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -994,8 +990,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="483">
-          <caret line="23" column="64" selection-start-line="23" selection-start-column="64" selection-end-line="23" selection-end-column="64" />
+        <state relative-caret-position="462">
+          <caret line="22" column="64" selection-start-line="22" selection-start-column="64" selection-end-line="22" selection-end-column="64" />
           <folding />
         </state>
       </provider>
@@ -1003,17 +999,15 @@
     <entry file="file://$PROJECT_DIR$/screens/start/startscreen.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="122">
-          <caret line="13" column="33" selection-start-line="13" selection-start-column="33" selection-end-line="13" selection-end-column="33" />
-          <folding>
-            <element signature="e#47#71#0" expanded="true" />
-          </folding>
+          <caret line="14" column="33" selection-start-line="14" selection-start-column="33" selection-end-line="14" selection-end-column="33" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/config.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="483">
-          <caret line="23" column="1" selection-start-line="23" selection-start-column="1" selection-end-line="23" selection-end-column="1" />
+          <caret line="24" column="1" selection-start-line="24" selection-start-column="1" selection-end-line="24" selection-end-column="1" />
           <folding />
         </state>
       </provider>
@@ -1029,9 +1023,9 @@
     <entry file="file://$PROJECT_DIR$/screens/player/playerscreen.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="262">
-          <caret line="116" column="42" selection-start-line="116" selection-start-column="42" selection-end-line="116" selection-end-column="42" />
+          <caret line="116" column="0" selection-start-line="116" selection-start-column="0" selection-end-line="116" selection-end-column="0" />
           <folding>
-            <element signature="e#46#84#0" expanded="true" />
+            <element signature="e#47#76#0" expanded="true" />
           </folding>
         </state>
       </provider>

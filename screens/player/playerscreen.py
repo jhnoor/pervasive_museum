@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
+
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen, WipeTransition
 
 import config
-import os
-
 # For the app
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
@@ -114,7 +114,6 @@ class PlayerScreen(Screen):
         if len(read_uid) != 8:
             return
         elif any(player.uid == read_uid for player in self.players):  # if badge already registered
-            self.players[0].progress += 10
             self.start_screen_layout.msg = "Du er allerede innlogget"
         else:
             print "UID: " + read_uid
