@@ -1,7 +1,6 @@
 import os
 
 from kivy.lang import Builder
-
 from kivy.uix.screenmanager import Screen, SlideTransition
 
 # For the app
@@ -10,10 +9,7 @@ from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.popup import Popup
 
-CURRENT_PATH = os.path.dirname(__file__)
-
-KV_PATH = os.path.join(CURRENT_PATH, 'menuscreen.kv')
-Builder.load_file(KV_PATH)
+Builder.load_file(os.path.join(os.path.dirname(__file__), 'menuscreen.kv'))
 
 
 class MenuScreen(Screen):
@@ -45,6 +41,7 @@ class MenuScreenBtn(Button):
         btnclose.bind(on_release=popup.dismiss)
         popup.open()
 
+
 class MenuScreenApp(App):
     def build(self):
         return MenuScreenBtn(text='open my app')
@@ -54,6 +51,7 @@ class MenuScreenApp(App):
 
     def on_resume(self):
         pass
+
 
 if __name__ == '__main__':
     MenuScreenApp().run()

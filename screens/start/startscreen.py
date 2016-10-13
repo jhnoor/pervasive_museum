@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.lang import Builder
@@ -6,10 +9,10 @@ from kivy.uix.label import Label
 from kivy.uix.screenmanager import Screen, SlideTransition
 
 import config
-from arduino import arduino
+import os
 from player import Player
 
-Builder.load_file(config.KV_PATH('screens/start/startscreen.kv'))
+Builder.load_file(os.path.join(os.path.dirname(__file__), 'startscreen.kv'))
 
 
 class StartScreen(Screen):
@@ -26,8 +29,8 @@ class StartScreen(Screen):
         self.event = Clock.schedule_interval(self.read_rfid, refresh_time)
 
     def read_rfid(self, event):
-        read_uid = str(arduino.readline()).strip()
-        print read_uid
+        read_uid = str(config.arduino.readline()).strip()
+        print "from startscreen: " + read_uid
         print "read_uid must be 8 characters" if len(read_uid) != 8 else "read_uid ok"
 
         if len(read_uid) == 8:

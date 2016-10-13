@@ -1,19 +1,14 @@
 import os
 
 from kivy.lang import Builder
-
-from kivy.uix.screenmanager import Screen, SlideTransition
+from kivy.uix.screenmanager import Screen
 
 # For the app
-from kivy.app import App
 from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.popup import Popup
 
-CURRENT_PATH = os.path.dirname(__file__)
-
-KV_PATH = os.path.join(CURRENT_PATH, 'coopgamescreen.kv')
-Builder.load_file(KV_PATH)
+Builder.load_file(os.path.join(os.path.dirname(__file__), 'coopgamescreen.kv'))
 
 class CoopGameScreen(Screen):
     def __init__(self, sm, **kwargs):

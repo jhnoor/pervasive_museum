@@ -1,91 +1,131 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from kivy.lang import Builder
-from kivy.uix.screenmanager import Screen, NoTransition
+from kivy.uix.screenmanager import Screen, WipeTransition
 
 import config
+import os
+
 # For the app
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
-from kivy.uix.label import Label
+from kivy.uix.popup import Popup
+from kivy.uix.button import Button
 from kivy.clock import Clock
 from player import Player
-from arduino import arduino
 from kivy.properties import StringProperty, NumericProperty, ListProperty
 
-Builder.load_file(config.KV_PATH('screens/player/playerscreen.kv'))
+Builder.load_file(os.path.join(os.path.dirname(__file__), 'playerscreen.kv'))
+
+# TODO make players global
+players_glob = []
 
 
-class StartScreenLayout(BoxLayout):
+class ReadyPopup(Popup):
+    pass
+
+
+class StartScreenBoxLayout(BoxLayout):
     background_color = ListProperty(config.colors['brand'])
+    msg = StringProperty()
 
 
 class PlayerBoxLayout(BoxLayout):
-    background_color = ListProperty(config.colors['contrast_brand'])
+    background_color = ListProperty([])
     ready_color = ListProperty(config.colors['green'])
     cancel_color = ListProperty(config.colors['red'])
     powerup_color = ListProperty(config.colors['grey'])
+    is_ready = False
 
-    player_name = StringProperty()  # TODO objectproperty?
-    player_icon_url = StringProperty()
-    player_xp = NumericProperty()
-    player_level = StringProperty()
-    player_progress = NumericProperty()
-    player_trophies = ListProperty([])
-    player_powerups = ListProperty([])
+    name = StringProperty()  # TODO objectproperty?
+    uid = StringProperty()
+    icon_url = StringProperty()
+    xp = NumericProperty()
+    level = StringProperty()
+    progress = NumericProperty()
+    trophies = ListProperty([])
+    powerups = ListProperty([])
 
-    def __init__(self, player, **kwargs):
-        super(PlayerBoxLayout, self).__init__(**kwargs)
-        self.player_name = player.name
-        self.player_icon_url = player.icon_url
-        self.player_progress = config.get_level_progress_percentage(player.level, player.xp)
-        self.player_level = str(player.level)
+    def __init__(self, player, player2_bg):
+        super(PlayerBoxLayout, self).__init__()
+        self.name = player.name
+        self.uid = player.badge_uid
+        self.icon_url = player.icon_url
+        self.progress = config.get_level_progress_percentage(player.level, player.xp)
+        self.level = str(player.level)
+        self.background_color = config.colors['player2_bg'] if player2_bg else config.colors['player1_bg']
+
+    # TODO call parent instead of polling this flag?
+    def ready(self):
+        self.is_ready = True
+
+        content = Button(text='Tilbake!')
+        self.ready_popup = ReadyPopup(
+            title=str(self.name) + " venter på andre spiller!", content=content,
+        )
+        """
+            size_hint: (None, None),
+            pos: self.pos,
+            #pos_hint: self.,
+            size: (self.width, self.height),
+            background_color: (0, 0, 0, 0),
+            auto_dismiss: False
+        """
+
+        content.bind(on_press=self.cancel)
+        self.ready_popup.open()
+
+    def cancel(self, *args):
+        self.is_ready = False
+        if hasattr(self, "ready_popup"):
+            self.ready_popup.dismiss()
+        else:
+            self.parent.parent.remove_player(self)  # parent.parent because of Gridlayout
+
+
+class MainGridLayout(GridLayout):
+    pass
 
 
 class PlayerScreen(Screen):
-    # Kivy properties
     background_color = ListProperty(config.colors['brand'])
-
-
-    # Players
-    global player_1
-    global player_2
-    global uid_1
-    global uid_2
+    start_screen_layout = StartScreenBoxLayout()
+    main_grid_layout = MainGridLayout()
 
     def __init__(self, sm, **kwargs):
         super(PlayerScreen, self).__init__(**kwargs)
         self.sm = sm
+        self.main_grid_layout.add_widget(self.start_screen_layout)
+        self.add_widget(self.main_grid_layout)
+        self.players = []
 
     def on_enter(self):
         refresh_time = 1  # poll arduino at this rate
         self.event = Clock.schedule_interval(self.read_rfid, refresh_time)
 
-        # Fill in player_data
-        player_1_boxlayout = PlayerBoxLayout(self.player_1)
-
-        # Add start widgets to box
-        main_layout = GridLayout(cols=2)
-        main_layout.add_widget(player_1_boxlayout)
-        main_layout.add_widget(StartScreenLayout())
-        self.add_widget(main_layout)
-
     def read_rfid(self, event):
-        read_uid = str(arduino.readline()).strip()
-        print read_uid
+        # TODO delete
+        print self.players
+        read_uid = str(config.arduino.readline()).strip()
+        print "player_screen: " + read_uid
 
-        if len(read_uid) == 8 and self.player_1.badge_uid != read_uid:
-            print "UID 2: " + read_uid
-            self.uid_2 = read_uid
-            self.event.cancel()
-
-            self.ids.log_id.add_widget(Label(text="Logger deg inn! Vent", id="logger_deg_inn_id"))
+        if len(read_uid) != 8:
+            return
+        elif any(player.uid == read_uid for player in self.players):  # if badge already registered
+            self.players[0].progress += 10
+            self.start_screen_layout.msg = "Du er allerede innlogget"
+        else:
+            print "UID: " + read_uid
+            self.start_screen_layout.msg = "Logger deg inn! Vent"
             request = config.request(config.GET_BADGES(), 'GET')
             if request.status_code == 200:
                 self.success(request, read_uid)  # Request successful, now check if badge is valid
             else:
                 self.error(request.status_code, request.json())
 
-    def open_ready(self, result, uid):  # TODO DRY this
+    def add_player(self, result, uid):  # TODO DRY this
         if result['active_player'] is None:
             request = config.request(config.POST_NEW_PLAYER(result['id']), 'POST', data={'data': 'None'})
             if request.status_code == 200:
@@ -99,11 +139,27 @@ class PlayerScreen(Screen):
             active_player_pk = result['active_player']
 
         request = config.request(config.GET_PLAYERS(active_player_pk), 'GET')
-        self.player_2 = Player(request.json(), uid)
-        print self.player_2
+        self.players.append(PlayerBoxLayout(Player(request.json(), uid), (len(self.players) % 2 == 0)))
+        print self.players[-1]
 
-        self.sm.transition = NoTransition()
-        self.sm.current = "ready_screen"
+        self.refresh_main_grid_layout()
+
+        # Poll both players for ready or cancel changes
+        refresh_time = 1
+        self.event = Clock.schedule_interval(self.poll_players_ready, refresh_time)
+
+    def refresh_main_grid_layout(self):
+        self.main_grid_layout.clear_widgets()
+
+        for player in self.players:
+            self.main_grid_layout.add_widget(player)  # get last item in list
+
+        if len(self.players) < 2:
+            self.main_grid_layout.add_widget(self.start_screen_layout)
+
+    def remove_player(self, player):
+        self.players.remove(player)
+        self.refresh_main_grid_layout()
 
     def success(self, request, uid):
         print "Success!"
@@ -111,20 +167,25 @@ class PlayerScreen(Screen):
 
         for result in data['results']:
             if result['uid'] == uid:
-                self.open_ready(result, uid)  # UID is valid, now show player on player screen
+                self.add_player(result, uid)  # UID is valid, now show player on player screen
                 return
 
         self.error(404, "Brikke '" + uid + "' ikke funnet!")
 
     def error(self, status_code, data):
         print "Error: " + str(status_code)
-        self.ids.log_id.add_widget(Label(text="Nettverksfeil: " + str(data), id="feil_id"))
+        self.start_screen_layout.msg = "Nettverksfeil: " + str(data)
         self.on_enter()
+
+    def poll_players_ready(self, event):
+        if len(self.players) == 2 and all(player.is_ready for player in self.players):
+            self.sm.transition = WipeTransition()
+            self.sm.current = "menu_screen"
 
 
 class PlayerScreenApp(App):
     def build(self):
-        return PlayerScreenBtn(text="open my app")
+        pass
 
     def on_pause(self):
         return True

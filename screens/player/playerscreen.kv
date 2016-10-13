@@ -17,7 +17,7 @@
 
     Label:
         font_size: '%s sp' % (self.width*.05)
-        text: root.player_name
+        text: root.name
 
     BoxLayout:
         orientation: 'horizontal'
@@ -25,7 +25,7 @@
         spacing: 30
 
         AsyncImage:
-            source: root.player_icon_url
+            source: root.icon_url
             size_hint_y: None  # Tells the layout to ignore the size_hint in y dir
             height: dp(80)  # The fixed height you want
 
@@ -35,14 +35,16 @@
             font_size: '%s sp' % (self.width*.1)
             background_normal: "images/background_normal_white.png"
             background_color: root.ready_color
+            on_press: root.ready()
             size_hint_y: 1
 
         Button:
-            text: "Kanseller"
+            text: "Tilbake"
             color: (1,1,1,1)
             font_size: '%s sp' % (self.width*.1)
             background_normal: "images/background_normal_white.png"
             background_color: root.cancel_color
+            on_press: root.cancel()
             size_hint_y: 1
 
     BoxLayout:
@@ -52,12 +54,15 @@
 
         Label:
             font_size: '%s sp' % (self.width*.05)
-            text: "Level "+root.player_level
+            text: "Level "+root.level
 
         # XP bar
         ProgressBar:
             max: 100
-            value: root.player_progress
+            size_hint_x: 1
+            size_hint_y: 1
+            height: '48dp'
+            value: root.progress
 
     Label:
         font_size: '%s sp' % (self.width*.03)
@@ -123,7 +128,7 @@
             text: "tro3"
 
 
-<StartScreenLayout>:
+<StartScreenBoxLayout>:
     id: start_screen_id
     orientation: 'vertical'
 
@@ -157,10 +162,13 @@
             font_size: '%s sp' % (self.width*.05)
             background_color: (0.80, 0.95, 0.94, 0.5)
 
-    BoxLayout:
-        id: log_id
-        orientation: 'vertical'
-        padding: 1
-        padding: 1
-        spacing: 1
+        GridLayout:
+            id: grid_msgbox
+            rows: 1
+
+            Label:
+                text: root.msg
+
+<MainGridLayout>
+    cols: 2
 
