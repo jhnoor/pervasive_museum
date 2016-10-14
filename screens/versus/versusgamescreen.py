@@ -12,10 +12,11 @@ class VersusGameScreen(Screen):
         super(VersusGameScreen, self).__init__(**kwargs)
         self.sm = sm
 
-        # TODO game has started, do something
-
 
 class VersusGameScreenApp(App):
+    def build(self):
+        pass
+
     def on_pause(self):
         return True
 

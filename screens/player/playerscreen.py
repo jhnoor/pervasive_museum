@@ -52,6 +52,7 @@ class PlayerBoxLayout(BoxLayout):
         self.progress = config.get_level_progress_percentage(player.level, player.xp)
         self.level = str(player.level)
         self.background_color = config.colors['player1_bg'] if player2_bg else config.colors['player2_bg']
+        self.player_object = player
 
     def toggle_ready(self):
         if self.is_ready:
@@ -79,6 +80,7 @@ class PlayerScreen(Screen):
     background_color = ListProperty(config.colors['brand'])
     start_screen_layout = StartScreenBoxLayout()
     main_grid_layout = MainGridLayout()
+    events = []
 
     def __init__(self, sm, **kwargs):
         super(PlayerScreen, self).__init__(**kwargs)
@@ -89,11 +91,11 @@ class PlayerScreen(Screen):
 
     def on_enter(self):
         refresh_time = 1  # poll arduino at this rate
-        self.event = Clock.schedule_interval(self.read_rfid, refresh_time)
+        self.events.append(Clock.schedule_interval(self.read_rfid, refresh_time))
 
     def on_leave(self, *args):
         print "Leaving playerscreen!"
-        self.event.cancel()
+        map(lambda event: event.cancel(), self.events)
 
     def read_rfid(self, event):
         read_uid = str(config.arduino.readline()).strip()
@@ -133,7 +135,7 @@ class PlayerScreen(Screen):
 
         # Poll both players for ready or cancel changes
         refresh_time = 1
-        self.event = Clock.schedule_interval(self.poll_players_ready, refresh_time)
+        self.events.append(Clock.schedule_interval(self.poll_players_ready, refresh_time))
 
     def refresh_main_grid_layout(self):
         self.main_grid_layout.clear_widgets()
@@ -167,7 +169,8 @@ class PlayerScreen(Screen):
     def poll_players_ready(self, event):
         if len(self.players) == 2 and all(player.is_ready for player in self.players):
             self.sm.transition = WipeTransition()
-            self.sm.current = "coop_game_screen" # TODO set to menu_screen
+            self.sm.current = "menu_screen" # TODO set to menu_screen
+            print "Wow"
 
 
 class PlayerScreenApp(App):

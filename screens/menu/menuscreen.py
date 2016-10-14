@@ -1,13 +1,8 @@
 import os
 
+from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen, SlideTransition
-
-# For the app
-from kivy.app import App
-from kivy.uix.button import Button
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.popup import Popup
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), 'menuscreen.kv'))
 
@@ -25,10 +20,8 @@ class MenuScreen(Screen):
         self.sm.transition = SlideTransition(direction="left")
         self.sm.current = "versus_game_screen"
 
-class MenuScreenApp(App):
-    def build(self):
-        pass
 
+class MenuScreenApp(App):
     def on_pause(self):
         return True
 

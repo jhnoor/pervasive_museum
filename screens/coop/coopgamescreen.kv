@@ -6,12 +6,34 @@
             pos: self.pos
             size: self.size
 
-<MainLayout>
-
 <TimeProgressBar>
     max: root.max
     value: root.value
     pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+<PlayersGridLayout>
+    cols: 2
+    size_hint: (1, 0.2)
+    pos_hint: {'bottom': 1}
+
+    canvas.before:
+        Color:
+            rgba: root.background_color
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<PlayerLayout>
+    rows: 3
+    padding: 30, 10
+
+<PowerupGridLayout>
+    cols: root.cols
+
+<PlayerXpProgressBar>
+    max: 100 #Always get percentage from config method
+    value: root.value
+
 
 <QuestionGrid>
     cols: 3
@@ -25,18 +47,22 @@
             pos: self.pos
             size: self.size
 
-    AsyncImage:
+    ImageButton:
         source: root.get_left_picture()
         size_hint: (1, 1)
         pos_hint: {'left': 1}
+        on_press: root.left_pressed()
 
     Label:
         text: root.get_text()
-        size_hint: (1, 1)
+        size_hint_y: None
+        text_size: self.width, None
+        height: self.texture_size[1]
         font_size: '%s sp' % (self.width*.07)
         pos_hint: {'top': 1}
 
-    AsyncImage:
+    ImageButton:
         source: root.get_right_picture()
         size_hint: (1, 1)
         pos_hint: {'right': 1}
+        on_press: root.right_pressed()
