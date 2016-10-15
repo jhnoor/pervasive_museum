@@ -4,38 +4,30 @@
 
 <PlayersScoreGridLayout>
     cols: 2
+    spacing: (30, 30)
+    padding: (30, 30, 30, 30)
 
 <PlayerScoreBoxLayout>:
+    pos_hint: {'top': 1}
+    canvas.before:
+        Color:
+            rgba: root.background_color
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    AsyncImage:
+        source: root.icon_url
+        size_hint: (.8, 1)
+        pos_hint: {"right": .9, "top": 0.5}
+        #size_hint_y: None  # Tells the layout to ignore the size_hint in y dir
+        #height: dp(50)  # The fixed height you want
 
     Label:
-        text: "test"
+        text: root.name
+        font_size: '%s sp' % (self.width*.2)
         color: (0, 0, 0, 1)
         size_hint: (None, None)
-        pos_hint: {"right": .85, "top": 0.35}
-        canvas.before:
-            Color:
-                rgba: config.colors['grey']
-            Rectangle:
-                pos: self.pos
-                size: self.size
+        pos_hint: {"center_x": 0.5, "top": 1}
 
-    GridLayout:
-        cols: 2
-        spacing: 30
-        padding: 10
-        size_hint: (None, None)
-        pos_hint: {"center_x": 1, "top": 1}
-
-        AsyncImage:
-            source: root.icon_url
-            size_hint: (None, None)
-            pos_hint: {"left": 1,  "top": 0.8}
-            #size_hint_y: None  # Tells the layout to ignore the size_hint in y dir
-            height: dp(50)  # The fixed height you want
-
-        Label:
-            text: root.name
-            font_size: '%ssp' % (self.width*.1)
-            size_hint: (None, None)
-            pos_hint: {"right": 1,  "top": 0.8}
 

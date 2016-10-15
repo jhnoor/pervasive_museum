@@ -17,7 +17,7 @@ api = dict(
 )
 
 question_time_seconds = 1
-score_screen_time_seconds = 20
+score_screen_time_seconds = 600
 time_progressbar_height = 12
 xp_progressbar_height = 3
 

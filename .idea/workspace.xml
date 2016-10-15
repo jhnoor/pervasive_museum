@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a7a63fd5-3594-44e3-8f3b-69c5a9bbd7db" name="Default" comment="Two of three powerups functional!">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/screens/score/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/screens/score/scorescreen.kv" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/screens/score/scorescreen.py" />
+    <list default="true" id="a7a63fd5-3594-44e3-8f3b-69c5a9bbd7db" name="Default" comment="scorescreen being implemented">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config.py" afterPath="$PROJECT_DIR$/config.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screens/coop/coopgamescreen.kv" afterPath="$PROJECT_DIR$/screens/coop/coopgamescreen.kv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screens/coop/coopgamescreen.py" afterPath="$PROJECT_DIR$/screens/coop/coopgamescreen.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screens/menu/menuscreen.kv" afterPath="$PROJECT_DIR$/screens/menu/menuscreen.kv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screens/menu/menuscreen.py" afterPath="$PROJECT_DIR$/screens/menu/menuscreen.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screens/player/playerscreen.kv" afterPath="$PROJECT_DIR$/screens/player/playerscreen.kv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screens/player/playerscreen.py" afterPath="$PROJECT_DIR$/screens/player/playerscreen.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screens/score/scorescreen.kv" afterPath="$PROJECT_DIR$/screens/score/scorescreen.kv" />
     </list>
     <ignored path="pervasive_museum.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -27,7 +19,7 @@
   </component>
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/pervasive_museum$main.coverage" NAME="main Coverage Results" MODIFIED="1476538150129" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/pervasive_museum$main.coverage" NAME="main Coverage Results" MODIFIED="1476540267035" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/pervasive_museum$startscreen.coverage" NAME="startscreen Coverage Results" MODIFIED="1475232345544" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/screens/start" />
   </component>
   <component name="CreatePatchCommitExecutor">
@@ -44,8 +36,8 @@
           <file leaf-file-name="playerscreen.kv" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/screens/player/playerscreen.kv">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="228">
-                  <caret line="58" column="27" selection-start-line="58" selection-start-column="27" selection-end-line="58" selection-end-column="27" />
+                <state relative-caret-position="333">
+                  <caret line="45" column="13" selection-start-line="45" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
@@ -55,7 +47,7 @@
             <entry file="file://$PROJECT_DIR$/main.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="-42">
-                  <caret line="19" column="40" selection-start-line="19" selection-start-column="40" selection-end-line="19" selection-end-column="40" />
+                  <caret line="18" column="40" selection-start-line="18" selection-start-column="40" selection-end-line="18" selection-end-column="40" />
                   <folding />
                 </state>
               </provider>
@@ -64,10 +56,10 @@
           <file leaf-file-name="scorescreen.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/screens/score/scorescreen.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="455">
-                  <caret line="34" column="24" selection-start-line="34" selection-start-column="24" selection-end-line="34" selection-end-column="24" />
+                <state relative-caret-position="224">
+                  <caret line="20" column="20" selection-start-line="20" selection-start-column="4" selection-end-line="20" selection-end-column="20" />
                   <folding>
-                    <element signature="e#0#17#0" expanded="true" />
+                    <element signature="e#0#9#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -76,8 +68,8 @@
           <file leaf-file-name="scorescreen.kv" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/screens/score/scorescreen.kv">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="126">
-                  <caret line="7" column="9" selection-start-line="7" selection-start-column="9" selection-end-line="7" selection-end-column="9" />
+                <state relative-caret-position="287">
+                  <caret line="20" column="26" selection-start-line="20" selection-start-column="26" selection-end-line="20" selection-end-column="26" />
                   <folding />
                 </state>
               </provider>
@@ -92,18 +84,16 @@
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="-609">
                   <caret line="37" column="26" selection-start-line="37" selection-start-column="12" selection-end-line="37" selection-end-column="26" />
-                  <folding>
-                    <element signature="e#47#56#0" expanded="true" />
-                  </folding>
+                  <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="coopgamescreen.kv" pinned="false" current-in-tab="true">
+          <file leaf-file-name="coopgamescreen.kv" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/screens/coop/coopgamescreen.kv">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="210">
-                  <caret line="49" column="0" selection-start-line="49" selection-start-column="0" selection-end-line="84" selection-end-column="31" />
+                <state relative-caret-position="392">
+                  <caret line="73" column="32" selection-start-line="73" selection-start-column="32" selection-end-line="73" selection-end-column="32" />
                   <folding />
                 </state>
               </provider>
@@ -114,19 +104,19 @@
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="756">
                   <caret line="69" column="55" selection-start-line="69" selection-start-column="42" selection-end-line="69" selection-end-column="55" />
-                  <folding>
-                    <element signature="e#0#9#0" expanded="true" />
-                  </folding>
+                  <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="config.py" pinned="false" current-in-tab="false">
+          <file leaf-file-name="config.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/config.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-151">
-                  <caret line="53" column="27" selection-start-line="53" selection-start-column="27" selection-end-line="53" selection-end-column="27" />
-                  <folding />
+                <state relative-caret-position="399">
+                  <caret line="19" column="31" selection-start-line="19" selection-start-column="31" selection-end-line="19" selection-end-column="31" />
+                  <folding>
+                    <element signature="e#0#15#0" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -173,13 +163,13 @@
         <option value="$PROJECT_DIR$/screens/menu/menuscreen.kv" />
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/screens/menu/menuscreen.py" />
-        <option value="$PROJECT_DIR$/screens/coop/coopgamescreen.kv" />
         <option value="$PROJECT_DIR$/screens/coop/coopgamescreen.py" />
-        <option value="$PROJECT_DIR$/screens/score/scorescreen.kv" />
-        <option value="$PROJECT_DIR$/config.py" />
         <option value="$PROJECT_DIR$/screens/player/playerscreen.kv" />
         <option value="$PROJECT_DIR$/screens/player/playerscreen.py" />
         <option value="$PROJECT_DIR$/screens/score/scorescreen.py" />
+        <option value="$PROJECT_DIR$/screens/coop/coopgamescreen.kv" />
+        <option value="$PROJECT_DIR$/screens/score/scorescreen.kv" />
+        <option value="$PROJECT_DIR$/config.py" />
       </list>
     </option>
   </component>
@@ -711,7 +701,14 @@
       <option name="project" value="LOCAL" />
       <updated>1476509950206</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="scorescreen being implemented">
+      <created>1476538319960</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1476538319960</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -768,7 +765,8 @@
     <MESSAGE value="Now we're using kivy correctly" />
     <MESSAGE value="Only using playerscreen now, wohoo" />
     <MESSAGE value="Two of three powerups functional!" />
-    <option name="LAST_COMMIT_MESSAGE" value="Two of three powerups functional!" />
+    <MESSAGE value="scorescreen being implemented" />
+    <option name="LAST_COMMIT_MESSAGE" value="scorescreen being implemented" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1020,16 +1018,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="415">
           <caret line="29" column="24" selection-start-line="29" selection-start-column="24" selection-end-line="29" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-151">
-          <caret line="53" column="27" selection-start-line="53" selection-start-column="27" selection-end-line="53" selection-end-column="27" />
           <folding />
         </state>
       </provider>
@@ -1037,26 +1025,8 @@
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-42">
-          <caret line="19" column="40" selection-start-line="19" selection-start-column="40" selection-end-line="19" selection-end-column="40" />
+          <caret line="18" column="40" selection-start-line="18" selection-start-column="40" selection-end-line="18" selection-end-column="40" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/screens/player/playerscreen.kv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="58" column="27" selection-start-line="58" selection-start-column="27" selection-end-line="58" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/screens/score/scorescreen.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="455">
-          <caret line="34" column="24" selection-start-line="34" selection-start-column="24" selection-end-line="34" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#17#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1064,9 +1034,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-609">
           <caret line="37" column="26" selection-start-line="37" selection-start-column="12" selection-end-line="37" selection-end-column="26" />
-          <folding>
-            <element signature="e#47#56#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1074,6 +1042,22 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="756">
           <caret line="69" column="55" selection-start-line="69" selection-start-column="42" selection-end-line="69" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/screens/player/playerscreen.kv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="333">
+          <caret line="45" column="13" selection-start-line="45" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/screens/score/scorescreen.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="224">
+          <caret line="20" column="20" selection-start-line="20" selection-start-column="4" selection-end-line="20" selection-end-column="20" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
@@ -1082,16 +1066,26 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/screens/coop/coopgamescreen.kv">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="49" column="0" selection-start-line="49" selection-start-column="0" selection-end-line="84" selection-end-column="31" />
+        <state relative-caret-position="392">
+          <caret line="73" column="32" selection-start-line="73" selection-start-column="32" selection-end-line="73" selection-end-column="32" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="19" column="31" selection-start-line="19" selection-start-column="31" selection-end-line="19" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/screens/score/scorescreen.kv">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="7" column="9" selection-start-line="7" selection-start-column="9" selection-end-line="7" selection-end-column="9" />
+        <state relative-caret-position="287">
+          <caret line="20" column="26" selection-start-line="20" selection-start-column="26" selection-end-line="20" selection-end-column="26" />
           <folding />
         </state>
       </provider>
