@@ -16,14 +16,17 @@ api = dict(
     end_url=""
 )
 
-question_time_seconds = 30
+question_time_seconds = 1
+score_screen_time_seconds = 20
+time_progressbar_height = 12
+xp_progressbar_height = 3
 
 colors = dict(
     brand=[0.18, 0.77, 0.71, 1],
     player1_bg=[0.301, 0.239, 0.239, 1],
     player2_bg=[0.160, 0.211, 0.356, 1],
     red=[0.93, 0.04, 0.26, 1],
-    green=[0.48, 0.91, 0.78, 1],
+    green=[0.321, 1, 0.721, 1],
     blue=[0.72, 0.88, 1.00, 1],
     grey=[0.87, 0.91, 0.95, 1],
     light_grey=[0.6, 0.6, 0.6, 1],
@@ -49,7 +52,7 @@ def get_level_progress_percentage(level, xp):
 
 def request(request_method, request_verb, **kwargs):
     url = api['base_url'] + request_method + api['end_url']
-    print "config request: " + str(url) + ", verb: " + request_verb
+    print request_verb + ": " + str(url) + ", verb: " + request_verb
 
     if request_verb == 'GET':
         return requests.get(url)
@@ -59,6 +62,8 @@ def request(request_method, request_verb, **kwargs):
         return requests.post(url, data=kwargs['data'])
     elif request_verb == 'DELETE':
         return requests.delete(url)
+    else:
+        raise NotImplementedError("Verb " + request_verb + " unrecognized")
 
 
 def filename_to_url(icon_filename):
@@ -81,15 +86,19 @@ def GET_TROPHIES(trophy_pk=''):
 def GET_POWERUPS(powerup_pk=''):
     return POWERUPS + str(powerup_pk)
 
+
 def GET_TERMINALS(terminal_pk=''):
     return TERMINALS + str(terminal_pk)
+
 
 # PUT
 def PUT_SET_ONLINE(terminal_pk):
     return TERMINALS + str(terminal_pk) + '/set_online/'
 
+
 def PUT_SET_OFFLINE(terminal_pk):
     return TERMINALS + str(terminal_pk) + '/set_offline/'
+
 
 def PUT_SET_XP(player_pk, xp):
     return PLAYERS + str(player_pk) + '/set_xp/' + str(xp)

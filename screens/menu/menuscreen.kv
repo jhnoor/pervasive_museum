@@ -1,7 +1,9 @@
+#: import config config
+
 <MenuScreen>
     canvas.before:
         Color:
-            rgba: (0.18, 0.77, 0.71, 1)
+            rgba: config.colors['brand']
         Rectangle:
             pos: self.pos
             size: self.size

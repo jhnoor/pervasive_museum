@@ -1,7 +1,7 @@
 import os
 
 from kivy.lang import Builder
-from kivy.uix.screenmanager import Screen
+from kivy.uix.screenmanager import Screen, SlideTransition
 
 import config
 # For the app
@@ -18,6 +18,7 @@ from kivy.clock import Clock
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), 'coopgamescreen.kv'))
 
+ALLOWED_POWERUPS = ['Ice age', 'Double XP', 'Hint']
 
 class PowerupLayout(FloatLayout):
     name = StringProperty()
@@ -27,7 +28,8 @@ class PowerupLayout(FloatLayout):
 
     def __init__(self, powerup, **kwargs):
         super(PowerupLayout, self).__init__(**kwargs)
-        print powerup
+        if (powerup['name'] not in ALLOWED_POWERUPS):
+            raise ValueError("Powerup " + powerup['name'] + " not allowed")
 
         self.name = powerup['name']
         self.quantity = powerup['quantity']
@@ -98,8 +100,8 @@ class TimeProgressBar(ProgressBar):
         if self.value > 1:
             self.value -= 1
         else:
-            self.parent.parent.time_out()
             self.event.cancel()
+            self.parent.parent.time_out()
 
     def pause(self, seconds_to_pause):
         self.event.cancel()
@@ -199,13 +201,20 @@ class CoopGameScreen(Screen):
     def play(self):
         self.countdown_progressbar.countdown()
 
+    def score(self, player_scores):
+        self.sm.transition = SlideTransition()
+        self.sm.get_screen("score_screen").player_scores = player_scores
+        self.sm.current = "score_screen"
+
     # Question wasn't answered in time, no one gets points TODO different for versus
     def time_out(self):
         print "Time out!"
         # TODO go to scoring screen?
+        self.score({self.player_boxes[0]: False, self.player_boxes[1]: False})
 
     def allocate_points(self):
-        pass  # Allocate points and return none
+        """Allocate points and return none"""
+
 
     def use_powerup(self, player_powerup):
         """Powerup logic is defined below, feel free to add a powerup in the backend and define proper method

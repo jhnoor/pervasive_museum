@@ -4,7 +4,7 @@
 import os
 
 from kivy.lang import Builder
-from kivy.uix.screenmanager import Screen, WipeTransition
+from kivy.uix.screenmanager import Screen, SlideTransition
 
 import config
 # For the app
@@ -164,7 +164,7 @@ class PlayerScreen(Screen):
 
     def poll_players_ready(self, event):
         if len(self.players) == 2 and all(player.is_ready for player in self.players):
-            self.sm.transition = WipeTransition()
+            self.sm.transition = SlideTransition()
             self.sm.current = "menu_screen"
 
 

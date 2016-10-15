@@ -1,0 +1,41 @@
+#: import config config
+
+<ScoreScreen>
+
+<PlayersScoreGridLayout>
+    cols: 2
+
+<PlayerScoreBoxLayout>:
+
+    Label:
+        text: "test"
+        color: (0, 0, 0, 1)
+        size_hint: (None, None)
+        pos_hint: {"right": .85, "top": 0.35}
+        canvas.before:
+            Color:
+                rgba: config.colors['grey']
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+    GridLayout:
+        cols: 2
+        spacing: 30
+        padding: 10
+        size_hint: (None, None)
+        pos_hint: {"center_x": 1, "top": 1}
+
+        AsyncImage:
+            source: root.icon_url
+            size_hint: (None, None)
+            pos_hint: {"left": 1,  "top": 0.8}
+            #size_hint_y: None  # Tells the layout to ignore the size_hint in y dir
+            height: dp(50)  # The fixed height you want
+
+        Label:
+            text: root.name
+            font_size: '%ssp' % (self.width*.1)
+            size_hint: (None, None)
+            pos_hint: {"right": 1,  "top": 0.8}
+

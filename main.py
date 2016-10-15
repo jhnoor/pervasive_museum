@@ -1,6 +1,8 @@
 #!/usr/bin/kivy
 
-import kivy, config
+import kivy
+
+import config
 
 kivy.require('1.9.1')
 
@@ -9,8 +11,6 @@ from kivy.uix.screenmanager import ScreenManager
 
 from screens.player.playerscreen import PlayerScreen
 from screens.menu.menuscreen import MenuScreen
-from screens.coop.coopgamescreen import CoopGameScreen
-from screens.versus.versusgamescreen import VersusGameScreen
 from terminal import Terminal
 
 
@@ -26,8 +26,7 @@ class MuseumGameApp(App):
         sm = ScreenManager()
         sm.add_widget(PlayerScreen(sm, name="player_screen"))
         sm.add_widget(MenuScreen(sm, name="menu_screen"))
-        sm.add_widget(CoopGameScreen(sm, name="coop_game_screen"))
-        sm.add_widget(VersusGameScreen(sm, name="versus_game_screen"))
+
         return sm
 
     def on_pause(self):
