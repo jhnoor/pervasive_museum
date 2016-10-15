@@ -1,4 +1,6 @@
-import requests, serial
+import requests
+import serial
+
 from terminal import Terminal
 
 port = "COM3"
@@ -24,6 +26,7 @@ colors = dict(
     green=[0.48, 0.91, 0.78, 1],
     blue=[0.72, 0.88, 1.00, 1],
     grey=[0.87, 0.91, 0.95, 1],
+    light_grey=[0.6, 0.6, 0.6, 1],
     dark_grey=[0.2, 0.2, 0.2, 1],
     orange=[1, 0.6, 0, 1],
 )

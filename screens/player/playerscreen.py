@@ -11,10 +11,6 @@ import config
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
-from kivy.uix.popup import Popup
-from kivy.uix.modalview import ModalView
-from kivy.uix.button import Button
-from kivy.uix.label import Label
 from kivy.clock import Clock
 from player import Player
 from kivy.properties import StringProperty, NumericProperty, ListProperty
@@ -169,8 +165,7 @@ class PlayerScreen(Screen):
     def poll_players_ready(self, event):
         if len(self.players) == 2 and all(player.is_ready for player in self.players):
             self.sm.transition = WipeTransition()
-            self.sm.current = "menu_screen" # TODO set to menu_screen
-            print "Wow"
+            self.sm.current = "menu_screen"
 
 
 class PlayerScreenApp(App):

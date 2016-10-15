@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a7a63fd5-3594-44e3-8f3b-69c5a9bbd7db" name="Default" comment="Only using playerscreen now, wohoo">
+    <list default="true" id="a7a63fd5-3594-44e3-8f3b-69c5a9bbd7db" name="Default" comment="Two of three powerups functional!">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config.py" afterPath="$PROJECT_DIR$/config.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screens/coop/coopgamescreen.kv" afterPath="$PROJECT_DIR$/screens/coop/coopgamescreen.kv" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screens/coop/coopgamescreen.py" afterPath="$PROJECT_DIR$/screens/coop/coopgamescreen.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screens/player/playerscreen.kv" afterPath="$PROJECT_DIR$/screens/player/playerscreen.kv" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screens/player/playerscreen.py" afterPath="$PROJECT_DIR$/screens/player/playerscreen.py" />
     </list>
     <ignored path="pervasive_museum.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -18,7 +21,7 @@
   </component>
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/pervasive_museum$main.coverage" NAME="main Coverage Results" MODIFIED="1476494913170" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/pervasive_museum$main.coverage" NAME="main Coverage Results" MODIFIED="1476508996211" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/pervasive_museum$startscreen.coverage" NAME="startscreen Coverage Results" MODIFIED="1475232345544" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/screens/start" />
   </component>
   <component name="CreatePatchCommitExecutor">
@@ -29,82 +32,100 @@
     <favorites_list name="pervasive_museum" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="playerscreen.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/screens/player/playerscreen.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="373">
-              <caret line="91" column="23" selection-start-line="91" selection-start-column="23" selection-end-line="91" selection-end-column="23" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="versusgamescreen.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/screens/versus/versusgamescreen.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="coopgamescreen.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/screens/coop/coopgamescreen.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="32" column="67" selection-start-line="32" selection-start-column="67" selection-end-line="32" selection-end-column="67" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="567">
-              <caret line="27" column="54" selection-start-line="27" selection-start-column="43" selection-end-line="27" selection-end-column="54" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="config.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/config.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="273">
-              <caret line="16" column="24" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="26" />
-              <folding>
-                <element signature="e#0#23#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="terminal.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/terminal.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#13#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="coopgamescreen.kv" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/screens/coop/coopgamescreen.kv">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="458">
-              <caret line="91" column="10" selection-start-line="91" selection-start-column="10" selection-end-line="91" selection-end-column="10" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.60122323">
+      <split-first>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file leaf-file-name="playerscreen.kv" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/screens/player/playerscreen.kv">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="525">
+                  <caret line="46" column="67" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="67" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="playerscreen.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/screens/player/playerscreen.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="178">
+                  <caret line="149" column="24" selection-start-line="149" selection-start-column="24" selection-end-line="149" selection-end-column="24" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="versusgamescreen.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/screens/versus/versusgamescreen.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="336">
+                  <caret line="20" column="19" selection-start-line="20" selection-start-column="19" selection-end-line="20" selection-end-column="19" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="coopgamescreen.py" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/screens/coop/coopgamescreen.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="219">
+                  <caret line="223" column="13" selection-start-line="223" selection-start-column="13" selection-end-line="223" selection-end-column="13" />
+                  <folding>
+                    <element signature="e#0#13#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/main.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="567">
+                  <caret line="27" column="54" selection-start-line="27" selection-start-column="43" selection-end-line="27" selection-end-column="54" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="config.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/config.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="332">
+                  <caret line="28" column="29" selection-start-line="28" selection-start-column="29" selection-end-line="28" selection-end-column="29" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="terminal.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/terminal.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="105">
+                  <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+                  <folding>
+                    <element signature="e#0#13#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file leaf-file-name="coopgamescreen.kv" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/screens/coop/coopgamescreen.kv">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="521">
+                  <caret line="96" column="23" selection-start-line="96" selection-start-column="23" selection-end-line="96" selection-end-column="23" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -138,17 +159,17 @@
         <option value="$PROJECT_DIR$/screens/player/old_playerscreen.kv" />
         <option value="$PROJECT_DIR$/kv_player.py" />
         <option value="$PROJECT_DIR$/arduino.py" />
-        <option value="$PROJECT_DIR$/screens/player/playerscreen.kv" />
         <option value="$PROJECT_DIR$/screens/start/startscreen.py" />
         <option value="$PROJECT_DIR$/screens/versus/versusgamescreen.kv" />
         <option value="$PROJECT_DIR$/terminal.py" />
         <option value="$PROJECT_DIR$/main.py" />
-        <option value="$PROJECT_DIR$/screens/player/playerscreen.py" />
-        <option value="$PROJECT_DIR$/config.py" />
         <option value="$PROJECT_DIR$/screens/menu/menuscreen.py" />
         <option value="$PROJECT_DIR$/screens/versus/versusgamescreen.py" />
-        <option value="$PROJECT_DIR$/screens/coop/coopgamescreen.py" />
+        <option value="$PROJECT_DIR$/screens/player/playerscreen.py" />
+        <option value="$PROJECT_DIR$/screens/player/playerscreen.kv" />
+        <option value="$PROJECT_DIR$/config.py" />
         <option value="$PROJECT_DIR$/screens/coop/coopgamescreen.kv" />
+        <option value="$PROJECT_DIR$/screens/coop/coopgamescreen.py" />
       </list>
     </option>
   </component>
@@ -189,6 +210,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -295,8 +318,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -657,23 +678,23 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12739871" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32924962" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12846482" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32829374" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28324324" sideWeight="0.5042644" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32756758" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32924962" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32936078" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22678186" sideWeight="0.49573562" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22678186" sideWeight="0.49573562" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2508108" sideWeight="0.49573562" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39891893" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39848813" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32756758" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -697,7 +718,8 @@
     <MESSAGE value="Networking works, and is blazingly fast as well!" />
     <MESSAGE value="Now we're using kivy correctly" />
     <MESSAGE value="Only using playerscreen now, wohoo" />
-    <option name="LAST_COMMIT_MESSAGE" value="Only using playerscreen now, wohoo" />
+    <MESSAGE value="Two of three powerups functional!" />
+    <option name="LAST_COMMIT_MESSAGE" value="Two of three powerups functional!" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -719,9 +741,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -896,7 +915,7 @@
         <state relative-caret-position="189">
           <caret line="9" column="23" selection-start-line="9" selection-start-column="23" selection-end-line="9" selection-end-column="23" />
           <folding>
-            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#0#13#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -930,10 +949,49 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/screens/menu/menuscreen.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="441">
+          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/screens/versus/versusgamescreen.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="336">
+          <caret line="20" column="19" selection-start-line="20" selection-start-column="19" selection-end-line="20" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="567">
+          <caret line="27" column="54" selection-start-line="27" selection-start-column="43" selection-end-line="27" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/screens/player/playerscreen.kv">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="63">
-          <caret line="105" column="45" selection-start-line="105" selection-start-column="45" selection-end-line="105" selection-end-column="45" />
+        <state relative-caret-position="525">
+          <caret line="46" column="67" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="67" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="332">
+          <caret line="28" column="29" selection-start-line="28" selection-start-column="29" selection-end-line="28" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/screens/player/playerscreen.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="178">
+          <caret line="149" column="24" selection-start-line="149" selection-start-column="24" selection-end-line="149" selection-end-column="24" />
           <folding />
         </state>
       </provider>
@@ -948,63 +1006,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/screens/player/playerscreen.py">
+    <entry file="file://$PROJECT_DIR$/screens/coop/coopgamescreen.kv">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="373">
-          <caret line="91" column="23" selection-start-line="91" selection-start-column="23" selection-end-line="91" selection-end-column="23" />
+        <state relative-caret-position="521">
+          <caret line="96" column="23" selection-start-line="96" selection-start-column="23" selection-end-line="96" selection-end-column="23" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="567">
-          <caret line="27" column="54" selection-start-line="27" selection-start-column="43" selection-end-line="27" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/screens/menu/menuscreen.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="441">
-          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/screens/versus/versusgamescreen.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="273">
-          <caret line="16" column="24" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/screens/coop/coopgamescreen.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="32" column="67" selection-start-line="32" selection-start-column="67" selection-end-line="32" selection-end-column="67" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/screens/coop/coopgamescreen.kv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="458">
-          <caret line="91" column="10" selection-start-line="91" selection-start-column="10" selection-end-line="91" selection-end-column="10" />
-          <folding />
+        <state relative-caret-position="219">
+          <caret line="223" column="13" selection-start-line="223" selection-start-column="13" selection-end-line="223" selection-end-column="13" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

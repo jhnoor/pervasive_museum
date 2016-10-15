@@ -1,3 +1,5 @@
+#: import config config
+
 <PlayerScreen>
     canvas.before:
         Color:
@@ -77,7 +79,7 @@
             text: "pow1"
             canvas.before:
                 Color:
-                    rgba: root.powerup_color
+                    rgba: config.colors['light_grey']
                 Rectangle:
                     pos: self.pos
                     size: self.size
@@ -87,7 +89,7 @@
             text: "pow2"
             canvas.before:
                 Color:
-                    rgba: root.powerup_color
+                    rgba: config.colors['light_grey']
                 Rectangle:
                     pos: self.pos
                     size: self.size
@@ -97,7 +99,7 @@
             text: "pow3"
             canvas.before:
                 Color:
-                    rgba: root.powerup_color
+                    rgba: config.colors['light_grey']
                 Rectangle:
                     pos: self.pos
                     size: self.size

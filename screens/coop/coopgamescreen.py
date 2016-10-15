@@ -1,13 +1,13 @@
-import os, config
+import os
 
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
 
+import config
 # For the app
 from kivy.app import App
-from kivy.uix.button import Button, ButtonBehavior
+from kivy.uix.button import ButtonBehavior
 from kivy.uix.image import AsyncImage
-from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.progressbar import ProgressBar
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.floatlayout import FloatLayout
@@ -23,6 +23,7 @@ class PowerupLayout(FloatLayout):
     name = StringProperty()
     quantity = NumericProperty()
     icon_url = StringProperty()
+    id = NumericProperty()
 
     def __init__(self, powerup, **kwargs):
         super(PowerupLayout, self).__init__(**kwargs)
@@ -31,7 +32,15 @@ class PowerupLayout(FloatLayout):
         self.name = powerup['name']
         self.quantity = powerup['quantity']
         self.icon_url = config.filename_to_url(powerup['icon_url'])
-        # TODO
+        self.id = powerup['id']
+
+        self.ids.button_id.disabled = self.quantity <= 0  # Disable button if quantity is zero
+
+    def use_powerup(self):
+        # disable button since its used now (a powerup can only be used once) TODO maybe no powerups after first?
+        # also change color to show user this powerup is in play
+        self.ids.button_id.disabled = True
+        self.parent.parent.parent.parent.parent.use_powerup(self)
 
 
 class PowerupsGridLayout(GridLayout):
@@ -81,46 +90,66 @@ class TimeProgressBar(ProgressBar):
     def __init__(self, **kwargs):
         super(TimeProgressBar, self).__init__(**kwargs)
 
-    def countdown(self):
+    def countdown(self, dt=None):
         refresh_time = 1 / 100  # in seconds
         self.event = Clock.schedule_interval(self.decrement_clock, refresh_time)
 
-    def decrement_clock(self, event):
+    def decrement_clock(self, dt):
         if self.value > 1:
             self.value -= 1
         else:
             self.parent.parent.time_out()
             self.event.cancel()
 
+    def pause(self, seconds_to_pause):
+        self.event.cancel()
+        self.pause_event = Clock.schedule_once(self.countdown, seconds_to_pause)
+
 
 # Three column grid that that has left_picture, question_text and right_picture
 class QuestionGrid(GridLayout):
     background_color = config.colors['player1_bg']
+    questions = []
     current_index = 0
+    left_picture_url = StringProperty("")
+    right_picture_url = StringProperty("")
+    text = StringProperty("")
+    hint = StringProperty("")
 
     def __init__(self, **kwargs):
         super(QuestionGrid, self).__init__(**kwargs)
+        self.questions = config.current_terminal.questions
+        self.set_question_properties(self.questions[0])
+        print self.questions
 
     def next_question(self):
-        if len(config.current_terminal.questions) > self.current_index + 1:
+        if len(self.questions) > self.current_index + 2:  # TODO this is maybe wrong
             self.current_index += 1
+            self.set_question_properties(self.questions[self.current_index])
         else:
             return False
 
-    def get_left_picture(self):
-        return config.filename_to_url(config.current_terminal.questions[self.current_index]['left_picture_url'])
-
-    def get_right_picture(self):
-        return config.filename_to_url(config.current_terminal.questions[self.current_index]['right_picture_url'])
-
-    def get_text(self):
-        return config.current_terminal.questions[self.current_index]['text']
+    def set_question_properties(self, question):
+        self.left_picture_url = config.filename_to_url(question['left_picture_url'])
+        self.right_picture_url = config.filename_to_url(question['right_picture_url'])
+        self.text = question['text']
+        self.hint = question['hint']
 
     def left_pressed(self):
         print "Left button pressed"
 
     def right_pressed(self):
         print "Right button pressed"
+
+    def show_hint(self):
+        popup = Popup(
+            title='Hint',
+            content=Label(text=self.hint),
+            separator_color=config.colors['brand'],
+            size_hint=(None, None),
+            size=(400, 400)
+        )
+        popup.open()
 
 
 class MainLayout(FloatLayout):
@@ -131,6 +160,7 @@ class MainLayout(FloatLayout):
 class CoopGameScreen(Screen):
     background_color = config.colors['player2_bg']
     player_boxes = []
+    entered = False  # Screen previously entered flag
 
     def __init__(self, sm, **kwargs):
         super(CoopGameScreen, self).__init__(**kwargs)
@@ -138,11 +168,13 @@ class CoopGameScreen(Screen):
         self.main_layout = MainLayout()  # This layout will contain everything
         self.question_grid = QuestionGrid()
         self.countdown_progressbar = TimeProgressBar()
+        self.players_grid = PlayersGridLayout()  # This holds the two players layouts at the bottom
         self.player_layouts = []
 
-        self.players_grid = PlayersGridLayout()  # This holds the two players layouts at the bottom
-
     def on_enter(self, *args):
+        if self.entered:
+            return
+        self.entered = True
         self.player_boxes = self.sm.get_screen("player_screen").players
         self.player_layouts = [
             PlayerLayout(self.player_boxes[0].player_object),
@@ -170,9 +202,31 @@ class CoopGameScreen(Screen):
     # Question wasn't answered in time, no one gets points TODO different for versus
     def time_out(self):
         print "Time out!"
+        # TODO go to scoring screen?
 
     def allocate_points(self):
         pass  # Allocate points and return none
+
+    def use_powerup(self, player_powerup):
+        """Powerup logic is defined below, feel free to add a powerup in the backend and define proper method
+
+        Keyword argument:
+        player_powerup -- the powerup object with an id reference that can be used to update the server
+        """
+        if player_powerup.name == 'Ice age':
+            # Pause timer for half of question_time_seconds (e.g. 30 seconds / 2 = 15 seconds)
+            self.countdown_progressbar.pause(config.question_time_seconds / 2)
+        elif player_powerup.name == 'Hint':
+            # Popup a question_hint
+            self.question_grid.show_hint()
+        elif player_powerup.name == 'Double XP':
+            pass  # TODO when allocate_points is implemented
+        else:
+            print "Powerup not recognized!"
+            return  # Error
+
+        print "Used " + str(player_powerup.name)
+        player_powerup.quantity -= 1
 
 
 class CoopGameScreenApp(App):

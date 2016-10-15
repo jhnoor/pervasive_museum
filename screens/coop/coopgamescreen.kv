@@ -36,8 +36,12 @@
     pos_hint: {'right': 1}
 
     Button:
+        id: button_id
         size_hint: (.8, 1)
         pos_hint: {"right": .9, "top": 1}
+        background_normal: "images/background_normal_white.png"
+        background_color: config.colors['light_grey']
+        on_release: root.use_powerup()
 
         StackLayout:
             #text: root.name
@@ -84,13 +88,13 @@
             size: self.size
 
     ImageButton:
-        source: root.get_left_picture()
+        source: root.left_picture_url
         size_hint: (1, 1)
         pos_hint: {'left': 1}
         on_press: root.left_pressed()
 
     Label:
-        text: root.get_text()
+        text: root.text
         size_hint_y: None
         text_size: self.width, None
         height: self.texture_size[1]
@@ -98,7 +102,7 @@
         pos_hint: {'top': 1}
 
     ImageButton:
-        source: root.get_right_picture()
+        source: root.right_picture_url
         size_hint: (1, 1)
         pos_hint: {'right': 1}
         on_press: root.right_pressed()
