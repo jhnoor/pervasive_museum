@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a7a63fd5-3594-44e3-8f3b-69c5a9bbd7db" name="Default" comment="this kv stuff is difficult to grasp">
+    <list default="true" id="a7a63fd5-3594-44e3-8f3b-69c5a9bbd7db" name="Default" comment="Scorescreen almost complete">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/images/progressbar_bg.PNG" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/images/time_progressbar_foreground.PNG" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/images/xp_progressbar_foreground.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config.py" afterPath="$PROJECT_DIR$/config.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screens/player/playerscreen.kv" afterPath="$PROJECT_DIR$/screens/player/playerscreen.kv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screens/score/scorescreen.kv" afterPath="$PROJECT_DIR$/screens/score/scorescreen.kv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/screens/score/scorescreen.py" afterPath="$PROJECT_DIR$/screens/score/scorescreen.py" />
     </list>
     <ignored path="pervasive_museum.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -59,11 +58,9 @@
           <file leaf-file-name="scorescreen.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/screens/score/scorescreen.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="378">
-                  <caret line="23" column="28" selection-start-line="23" selection-start-column="28" selection-end-line="23" selection-end-column="28" />
-                  <folding>
-                    <element signature="e#0#9#0" expanded="true" />
-                  </folding>
+                <state relative-caret-position="336">
+                  <caret line="21" column="27" selection-start-line="21" selection-start-column="27" selection-end-line="21" selection-end-column="27" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -121,9 +118,7 @@
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="189">
                   <caret line="21" column="21" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="21" />
-                  <folding>
-                    <element signature="e#0#15#0" expanded="true" />
-                  </folding>
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -175,8 +170,8 @@
         <option value="$PROJECT_DIR$/screens/player/playerscreen.kv" />
         <option value="$PROJECT_DIR$/screens/player/playerscreen.py" />
         <option value="$PROJECT_DIR$/screens/coop/coopgamescreen.py" />
-        <option value="$PROJECT_DIR$/screens/score/scorescreen.py" />
         <option value="$PROJECT_DIR$/screens/score/scorescreen.kv" />
+        <option value="$PROJECT_DIR$/screens/score/scorescreen.py" />
       </list>
     </option>
   </component>
@@ -722,7 +717,14 @@
       <option name="project" value="LOCAL" />
       <updated>1476540458877</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Scorescreen almost complete">
+      <created>1476559164728</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1476559164728</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -736,9 +738,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12846482" sideWeight="0.49371633" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12846482" sideWeight="0.49371633" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32864866" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28324324" sideWeight="0.5042644" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -781,7 +783,8 @@
     <MESSAGE value="Two of three powerups functional!" />
     <MESSAGE value="scorescreen being implemented" />
     <MESSAGE value="this kv stuff is difficult to grasp" />
-    <option name="LAST_COMMIT_MESSAGE" value="this kv stuff is difficult to grasp" />
+    <MESSAGE value="Scorescreen almost complete" />
+    <option name="LAST_COMMIT_MESSAGE" value="Scorescreen almost complete" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -1041,9 +1044,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="189">
           <caret line="21" column="21" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1103,11 +1104,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/screens/score/scorescreen.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="23" column="28" selection-start-line="23" selection-start-column="28" selection-end-line="23" selection-end-column="28" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="336">
+          <caret line="21" column="27" selection-start-line="21" selection-start-column="27" selection-end-line="21" selection-end-column="27" />
+          <folding />
         </state>
       </provider>
     </entry>
