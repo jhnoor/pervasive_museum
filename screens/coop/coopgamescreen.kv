@@ -1,3 +1,5 @@
+#:import config config
+
 <CoopGameScreen>
     canvas.before:
         Color:
@@ -27,8 +29,42 @@
     rows: 3
     padding: 30, 10
 
-<PowerupGridLayout>
+<PowerupsGridLayout>
     cols: root.cols
+
+<PowerupLayout>
+    pos_hint: {'right': 1}
+
+    Button:
+        size_hint: (.8, 1)
+        pos_hint: {"right": .9, "top": 1}
+
+        StackLayout:
+            #text: root.name
+
+            pos: self.parent.pos
+            size: self.parent.size
+            orientation: 'lr-tb'
+            AsyncImage:
+                source: root.icon_url
+                size_hint_x: None
+                width: 74
+            Label:
+                size_hint_x: None
+                width: 100
+                text: root.name
+
+    Label:
+        text: str(root.quantity)
+        color: (0, 0, 0, 1)
+        size_hint: (0.1, 0.4)
+        pos_hint: {"right": .85, "top": 0.35}
+        canvas.before:
+            Color:
+                rgba: config.colors['grey']
+            Rectangle:
+                pos: self.pos
+                size: self.size
 
 <PlayerXpProgressBar>
     max: 100 #Always get percentage from config method

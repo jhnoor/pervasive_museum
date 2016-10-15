@@ -20,19 +20,25 @@ Builder.load_file(os.path.join(os.path.dirname(__file__), 'coopgamescreen.kv'))
 
 
 class PowerupLayout(FloatLayout):
+    name = StringProperty()
     quantity = NumericProperty()
+    icon_url = StringProperty()
 
     def __init__(self, powerup, **kwargs):
         super(PowerupLayout, self).__init__(**kwargs)
         print powerup
+
+        self.name = powerup['name']
+        self.quantity = powerup['quantity']
+        self.icon_url = config.filename_to_url(powerup['icon_url'])
         # TODO
 
 
-class PowerupGridLayout(GridLayout):
+class PowerupsGridLayout(GridLayout):
     cols = NumericProperty()
 
     def __init__(self, number_of_powerups, **kwargs):
-        super(PowerupGridLayout, self).__init__(**kwargs)
+        super(PowerupsGridLayout, self).__init__(**kwargs)
         self.cols = number_of_powerups
 
 
@@ -44,10 +50,10 @@ class PlayerLayout(GridLayout):
     def __init__(self, player, **kwargs):
         super(PlayerLayout, self).__init__(**kwargs)
         # Set initial data
-        self.level = Label(text="lvl "+str(player.get_level()))
+        self.level = Label(text="lvl " + str(player.get_level()))
         self.xp_progress_bar = PlayerXpProgressBar()
         self.xp_progress_bar.value = config.get_level_progress_percentage(player.get_level(), player.get_xp())
-        self.powerups_grid = PowerupGridLayout(len(player.powerups))
+        self.powerups_grid = PowerupsGridLayout(len(player.powerups))
 
         for powerup in player.powerups:
             self.powerups_grid.add_widget(PowerupLayout(powerup))  # Add powerup to grid
@@ -59,6 +65,7 @@ class PlayerLayout(GridLayout):
 
 class ImageButton(ButtonBehavior, AsyncImage):
     pass
+
 
 class PlayersGridLayout(GridLayout):
     background_color = config.colors['dark_grey']
@@ -128,13 +135,19 @@ class CoopGameScreen(Screen):
     def __init__(self, sm, **kwargs):
         super(CoopGameScreen, self).__init__(**kwargs)
         self.sm = sm
-        self.countdown_progressbar = TimeProgressBar()
-        self.question_grid = QuestionGrid()
         self.main_layout = MainLayout()  # This layout will contain everything
+        self.question_grid = QuestionGrid()
+        self.countdown_progressbar = TimeProgressBar()
+        self.player_layouts = []
+
         self.players_grid = PlayersGridLayout()  # This holds the two players layouts at the bottom
 
     def on_enter(self, *args):
         self.player_boxes = self.sm.get_screen("player_screen").players
+        self.player_layouts = [
+            PlayerLayout(self.player_boxes[0].player_object),
+            PlayerLayout(self.player_boxes[1].player_object)
+        ]
 
         self.draw_screen()
         self.play()
@@ -144,10 +157,8 @@ class CoopGameScreen(Screen):
         self.main_layout.add_widget(self.question_grid)
         self.main_layout.add_widget(self.countdown_progressbar)
 
-        self.player_1_layout = PlayerLayout(self.player_boxes[0].player_object)
-        self.player_2_layout = PlayerLayout(self.player_boxes[1].player_object)
-        self.players_grid.add_widget(self.player_1_layout)
-        self.players_grid.add_widget(self.player_2_layout)
+        self.players_grid.add_widget(self.player_layouts[0])  # Player 1
+        self.players_grid.add_widget(self.player_layouts[1])  # Player 2
 
         self.main_layout.add_widget(self.players_grid)
 
