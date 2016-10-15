@@ -19,7 +19,7 @@ api = dict(
 question_time_seconds = 1
 score_screen_time_seconds = 600
 time_progressbar_height = 12
-xp_progressbar_height = 3
+xp_progressbar_height = 12
 
 colors = dict(
     brand=[0.18, 0.77, 0.71, 1],
@@ -32,6 +32,8 @@ colors = dict(
     light_grey=[0.6, 0.6, 0.6, 1],
     dark_grey=[0.2, 0.2, 0.2, 1],
     orange=[1, 0.6, 0, 1],
+    black=[0, 0, 0, 1],
+    white=[1, 1, 1, 1]
 )
 
 DEFAULT_ADD_XP = 200

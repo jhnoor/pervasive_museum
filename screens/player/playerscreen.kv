@@ -29,7 +29,7 @@
         AsyncImage:
             source: root.icon_url
             size_hint_y: None  # Tells the layout to ignore the size_hint in y dir
-            height: dp(80)  # The fixed height you want
+            height: dp(100)  # The fixed height you want
 
         Button:
             text: root.ready_button_text
@@ -54,31 +54,40 @@
         padding: 30
         spacing: 30
 
-        Label:
-            font_size: '%s sp' % (self.width*.05)
-            text: "Level "+root.level
+        FloatLayout:
 
-        # XP bar
-        ProgressBar:
-            max: 100
-            size_hint_x: 1
-            size_hint_y: 1
-            height: '48dp'
-            value: root.progress
+            Label:
+                text: "Level "+root.level
+                font_size: '%s sp' % (root.width*.03)
+                size_hint: (None, None)
+                pos_hint: {"center_x": 0.1, "center_y": 1}
 
-            canvas:
-                Color:
-                    rgb: 1, 1, 1
-                BorderImage:
-                    border: (12, 12, 12, 12)
-                    pos: self.x, self.center_y - config.xp_progressbar_height/2
-                    size: self.width, config.xp_progressbar_height
-                    source: 'images/progressbar_bg.PNG'
-                BorderImage:
-                    border: [int(min(self.width * (self.value / float(self.max)) if self.max else 0, 12))] * 4
-                    pos: self.x, self.center_y - config.xp_progressbar_height/2
-                    size: self.width * (self.value / float(self.max)) if self.max else 0, config.xp_progressbar_height
-                    source: 'images/xp_progressbar_foreground.png'
+            Label:
+                text: "300/1000 xp"
+                font_size: '%s sp' % (root.width*.02)
+                size_hint: (None, None)
+                pos_hint: {"center_x": 0.8, "center_y": 0.5}
+
+            ProgressBar:
+                max: 100
+                value: root.progress
+                size_hint: (1, None)
+                pos_hint: {"center_x": 0.5, "center_y": 0.7}
+
+                canvas:
+                    Color:
+                        rgb: 1, 1, 1
+                    BorderImage:
+                        border: (12, 12, 12, 12)
+                        pos: self.x, self.center_y - config.xp_progressbar_height/2
+                        size: self.width, config.xp_progressbar_height
+                        source: 'images/progressbar_bg.PNG'
+                    BorderImage:
+                        border: [int(min(self.width * (self.value / float(self.max)) if self.max else 0, 12))] * 4
+                        pos: self.x, self.center_y - config.xp_progressbar_height/2
+                        size: self.width * (self.value / float(self.max)) if self.max else 0, config.xp_progressbar_height
+                        source: 'images/xp_progressbar_foreground.png'
+
 
     Label:
         font_size: '%s sp' % (self.width*.03)
@@ -187,3 +196,6 @@
 
 <MainGridLayout>
     cols: 2
+
+<PowerupsGridLayout>
+    cols: root.cols

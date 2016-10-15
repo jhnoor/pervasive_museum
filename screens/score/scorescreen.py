@@ -17,26 +17,33 @@ class PlayersScoreGridLayout(GridLayout):
     pass
 
 
-class PlayerScoreBoxLayout(FloatLayout):
+class PlayerScoreFloatLayout(FloatLayout):
     background_color = ListProperty()
     name = StringProperty()
     icon_url = StringProperty()
     level = StringProperty()
     xp = NumericProperty()
+    answer_feedback = StringProperty()
+    answer_color = ListProperty([])
+    progress = NumericProperty()
 
     def __init__(self, player_box, correct):
-        super(PlayerScoreBoxLayout, self).__init__()
+        super(PlayerScoreFloatLayout, self).__init__()
         if correct:
             self.background_color = config.colors['green']
+            self.answer_feedback = "Korrekt"
+            self.answer_color = config.colors['white']
             # TODO you get points
         else:
             self.background_color = config.colors['red']
+            self.answer_feedback = "Feil"
+            self.answer_color = config.colors['black']
 
         self.name = player_box.name
         self.icon_url = player_box.icon_url
         self.level = player_box.level
         self.xp = player_box.xp
-
+        self.progress = player_box.progress
 
 class ScoreScreen(Screen):
     player_1_box = None
@@ -52,8 +59,8 @@ class ScoreScreen(Screen):
     def on_enter(self, *args):
         previous_screen = self.sm.get_screen(self.sm.previous())
         player_boxes = previous_screen.player_boxes
-        self.player_1_box = PlayerScoreBoxLayout(player_boxes[0], self.player_scores[player_boxes[0]])
-        self.player_2_box = PlayerScoreBoxLayout(player_boxes[1], self.player_scores[player_boxes[1]])
+        self.player_1_box = PlayerScoreFloatLayout(player_boxes[0], self.player_scores[player_boxes[0]])
+        self.player_2_box = PlayerScoreFloatLayout(player_boxes[1], self.player_scores[player_boxes[1]])
 
         self.players_grid = PlayersScoreGridLayout()
         self.players_grid.add_widget(self.player_1_box)
