@@ -29,10 +29,11 @@
         size_hint: (None, None)
         pos_hint: {"center_x": 0.5, "top": 1}
 
+
     ProgressBar:
         max: 100
         size_hint: (0.8, None)
-        pos_hint: {"center_x": 0.5, "top": 0.8}
+        pos_hint: {"center_x": 0.5, "top": 0.7}
         value: root.progress
 
         canvas:
@@ -48,6 +49,14 @@
                 pos: self.x, self.center_y - config.xp_progressbar_height/2
                 size: self.width * (self.value / float(self.max)) if self.max else 0, config.xp_progressbar_height
                 source: 'images/xp_progressbar_foreground.png'
+
+    Label:
+        text: "lvl "+root.level
+        font_size: '%s sp' % (self.width*.2)
+        color: root.answer_color
+        size_hint: (None, None)
+        pos_hint: {"center_x": 0.5, "top": 0.8}
+
 
     AsyncImage:
         source: root.icon_url

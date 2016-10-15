@@ -33,7 +33,7 @@ class PlayerScoreFloatLayout(FloatLayout):
             self.background_color = config.colors['green']
             self.answer_feedback = "Korrekt"
             self.answer_color = config.colors['white']
-            # TODO you get points
+            self.allocate_points()
         else:
             self.background_color = config.colors['red']
             self.answer_feedback = "Feil"
@@ -44,6 +44,18 @@ class PlayerScoreFloatLayout(FloatLayout):
         self.level = player_box.level
         self.xp = player_box.xp
         self.progress = player_box.progress
+
+    def allocate_points(self):
+        """Fill self.xp gradually with DEFAULT_ADD_XP"""
+        self.prev_xp = self.xp
+        self.event = Clock.schedule_interval(self.inc_xp, 1 / 100)
+
+    def inc_xp(self, dt=None):
+        if self.xp - self.prev_xp >= config.DEFAULT_ADD_XP:
+            self.event.cancel()
+            return
+        self.xp += 1
+
 
 class ScoreScreen(Screen):
     player_1_box = None

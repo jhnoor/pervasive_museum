@@ -20,6 +20,7 @@ Builder.load_file(os.path.join(os.path.dirname(__file__), 'coopgamescreen.kv'))
 
 ALLOWED_POWERUPS = ['Ice age', 'Double XP', 'Hint']
 
+
 class PowerupLayout(FloatLayout):
     name = StringProperty()
     quantity = NumericProperty()
@@ -129,6 +130,8 @@ class QuestionGrid(GridLayout):
             self.current_index += 1
             self.set_question_properties(self.questions[self.current_index])
         else:
+            self.parent.parent.sm.transition = SlideTransition()
+            self.parent.parent.sm.current = "player_screen"  # TODO placeholder
             return False
 
     def set_question_properties(self, question):
@@ -185,7 +188,6 @@ class CoopGameScreen(Screen):
 
         self.draw_screen()
         self.play()
-        self.allocate_points()
 
     def draw_screen(self):
         self.main_layout.add_widget(self.question_grid)
@@ -210,11 +212,7 @@ class CoopGameScreen(Screen):
     def time_out(self):
         print "Time out!"
         # TODO go to scoring screen?
-        self.score({self.player_boxes[0]: False, self.player_boxes[1]: False})
-
-    def allocate_points(self):
-        """Allocate points and return none"""
-
+        self.score({self.player_boxes[0]: True, self.player_boxes[1]: False})
 
     def use_powerup(self, player_powerup):
         """Powerup logic is defined below, feel free to add a powerup in the backend and define proper method
