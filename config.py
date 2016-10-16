@@ -48,11 +48,12 @@ TERMINALS = 'terminals/'
 
 current_terminal = Terminal
 
+
 def check_progress_level_up(current_level, xp):
     next_level = (math.sqrt(625 + 100 * xp) - 25) / 50
-    delta = float(next_level)-float(current_level)
+    delta = float(next_level) - float(current_level)
 
-    return {"progress" : delta*100, "level_up": delta*100>=100}
+    return {"progress": delta * 100, "level_up": delta * 100 >= 100}
 
 
 def request(request_method, request_verb, **kwargs):

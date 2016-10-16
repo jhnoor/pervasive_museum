@@ -4,6 +4,7 @@ from model import Player, Terminal
 current_terminal = Terminal
 current_players = []
 
+
 def update_player(**kwargs):
     """Updates player, kwargs holds any attributes that need to be updated"""
     print kwargs
@@ -13,6 +14,7 @@ def update_player(**kwargs):
                 setattr(player, key, value)
 
             return
+
 
 def remove_player(player_box):
     for player in current_players:

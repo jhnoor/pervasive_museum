@@ -243,9 +243,9 @@ class CoopGameScreen(Screen):
         self.countdown_progressbar.countdown()
 
     def score(self):
-        if self.question_grid.next_question(): # There is a next question
+        if self.question_grid.next_question():  # There is a next question
             self.sm.transition = SlideTransition()
-        else: # Final score
+        else:  # Final score
             self.sm.transition = SlideTransition(direction="up")
             self.sm.get_screen("score_screen").final = True
 
@@ -260,11 +260,12 @@ class CoopGameScreen(Screen):
 
         for player in players:
             player.questions_answered.append({"player": player,
-                                  "question_id": self.question_grid.question_id,
-                                  "is_correct": (not(left) or self.question_grid.is_left_correct)}) # Implication operator
+                                              "question_id": self.question_grid.question_id,
+                                              "is_correct": (not (
+                                              left) or self.question_grid.is_left_correct)})  # Implication operator
 
         if all(players_answered < config.MAX_PLAYERS
-               for players_answered in [len(players),self.number_of_players_answered_current_question]):
+               for players_answered in [len(players), self.number_of_players_answered_current_question]):
             print "Not all players answered current question"
             self.number_of_players_answered_current_question += 1
         else:

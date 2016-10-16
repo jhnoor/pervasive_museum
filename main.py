@@ -46,7 +46,6 @@ class MuseumGameApp(App):
     def on_stop(self):
         config.request(config.PUT_SET_OFFLINE(config.current_terminal.id), "PUT", data={'data': 'None'})
 
-
     def success(self, request):
         print "success getting terminals"
         # Find offline terminal and activate
@@ -55,7 +54,7 @@ class MuseumGameApp(App):
             if not result['online']:
                 config.current_terminal = Terminal(result)
                 config.request(config.PUT_SET_ONLINE(config.current_terminal.id), "PUT", data={'data': 'None'})
-                print "success setting "+str(config.current_terminal)
+                print "success setting " + str(config.current_terminal)
                 return
         print "No available terminals! Deactivate using Django Rest framework interface"
         self.stop()
@@ -63,6 +62,7 @@ class MuseumGameApp(App):
     def error(self, request):
         print "error setting terminal online"
         print request.json()
+
 
 if __name__ == '__main__':
     MuseumGameApp().run()

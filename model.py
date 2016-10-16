@@ -1,6 +1,7 @@
 import config
 from pprint import pprint
 
+
 class Terminal():
     questions = []
 
@@ -11,6 +12,7 @@ class Terminal():
 
     def __str__(self):
         return str(pprint(vars(self)))
+
 
 class Player():
     name = ""
