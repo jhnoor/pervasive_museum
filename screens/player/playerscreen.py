@@ -74,16 +74,16 @@ class MainGridLayout(GridLayout):
 
 class PlayerScreen(Screen):
     background_color = ListProperty(config.colors['brand'])
-    start_screen_layout = StartScreenBoxLayout()
-    main_grid_layout = MainGridLayout()
-    events = []
 
     def __init__(self, sm, **kwargs):
         super(PlayerScreen, self).__init__(**kwargs)
         self.sm = sm
+        self.start_screen_layout = StartScreenBoxLayout()
+        self.main_grid_layout = MainGridLayout()
         self.main_grid_layout.add_widget(self.start_screen_layout)
         self.add_widget(self.main_grid_layout)
         self.players_boxes = []
+        self.events = []
 
     def on_enter(self):
         refresh_time = 1  # poll arduino at this rate
@@ -91,19 +91,21 @@ class PlayerScreen(Screen):
         self.refresh_main_grid_layout()
 
     def on_leave(self, *args):
-        print "Leaving playerscreen!"
         map(lambda event: event.cancel(), self.events)
+        del self.events[:]
 
     def read_rfid(self, event):
         read_uid = str(config.arduino.readline()).strip()
-        print "player_screen: " + read_uid
+        print "reading rfid... " + read_uid
 
         if len(read_uid) != 8 or len(persistence.current_players) == config.MAX_PLAYERS:
+            print persistence.current_players
             return
         elif any(player.badge_uid == read_uid for player in persistence.current_players):  # if badge already registered
+            print "Du er allerede innlogget"
             self.start_screen_layout.msg = "Du er allerede innlogget"
         else:
-            print "UID: " + read_uid
+            print "Valid UID: " + read_uid
             self.start_screen_layout.msg = "Logger deg inn! Vent"
             request = config.request(config.GET_BADGES(), 'GET')
             if request.status_code == 200:
@@ -115,7 +117,6 @@ class PlayerScreen(Screen):
         if result['active_player'] is None:
             request = config.request(config.POST_NEW_PLAYER(result['id']), 'POST', data={'data': 'None'})
             if request.status_code == 200:
-                print "New player: "
                 active_player_pk = request.json()
                 print "player_" + str(active_player_pk)
             else:
@@ -137,6 +138,11 @@ class PlayerScreen(Screen):
     def refresh_main_grid_layout(self):
         self.main_grid_layout.clear_widgets()
         self.players_boxes = []
+        print "players_boxes"
+        print self.players_boxes
+
+        print "MAIN GRID LAYOUT"
+        print self.main_grid_layout
 
         for index, player in enumerate(persistence.current_players):
             self.players_boxes.append(PlayerBoxLayout(player, index + 1))

@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import os, persistence
 
 from kivy.app import App
@@ -6,8 +9,8 @@ from kivy.lang import Builder
 from kivy.properties import ListProperty, StringProperty, NumericProperty
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.label import Label
 from kivy.uix.screenmanager import Screen, SlideTransition
-from model import Player
 
 import config
 
@@ -70,14 +73,18 @@ class PlayerScoreFloatLayout(FloatLayout):
 
 
 class ScoreScreen(Screen):
-    player_boxes = []
-    players_grid = None
+    final = False
 
     def __init__(self, sm, **kwargs):
         super(ScoreScreen, self).__init__(**kwargs)
+        self.player_boxes = []
+        self.players_grid = None
         self.sm = sm
 
     def on_enter(self, *args):
+        if self.final:
+            self.add_widget(Label(text="Final score"))
+
         for player in persistence.current_players:
             self.player_boxes.append(PlayerScoreFloatLayout(player))
 
@@ -89,8 +96,16 @@ class ScoreScreen(Screen):
 
     def back(self, dt=None):
         self.sm.transition = SlideTransition(direction="right")
+        if self.final:
+            # TODO update powerups, trophies, level and xp to backend
+            self.save()
+            config.main.reset()
+            return
+
         self.sm.current = self.sm.get_screen('menu_screen').game_type_screen.name
 
+    def save(self):
+        pass
 
 class ScoreScreenApp(App):
     def build(self):

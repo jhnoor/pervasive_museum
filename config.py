@@ -3,6 +3,7 @@ import requests, serial, math
 from model import Terminal
 
 port = "COM3"
+main = None
 # Arduino hook
 try:
     arduino = serial.Serial(port, 9600, timeout=0)
@@ -15,7 +16,7 @@ api = dict(
     end_url=""
 )
 
-question_time_seconds = 15
+question_time_seconds = 400
 score_screen_time_seconds = 3
 xp_progressbar_height = 12
 
@@ -23,13 +24,14 @@ colors = dict(
     brand=[0.18, 0.77, 0.71, 1],
     player1_bg=[0.301, 0.239, 0.239, 1],
     player2_bg=[0.160, 0.211, 0.356, 1],
+    left_choice_button=[0.72, 0.88, 1.00, 1],
+    right_choice_button=[1, 0.6, 0, 1],
     red=[0.93, 0.04, 0.26, 1],
     green=[0.321, 1, 0.721, 1],
-    blue=[0.72, 0.88, 1.00, 1],
+    blue=[0.537, 0.721, 0.941, 1],
     grey=[0.87, 0.91, 0.95, 1],
     light_grey=[0.6, 0.6, 0.6, 1],
     dark_grey=[0.2, 0.2, 0.2, 1],
-    orange=[1, 0.6, 0, 1],
     black=[0, 0, 0, 1],
     white=[1, 1, 1, 1]
 )

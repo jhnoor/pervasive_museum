@@ -1,8 +1,6 @@
 #!/usr/bin/kivy
 
-import kivy
-
-import config
+import kivy, config, persistence
 
 kivy.require('1.9.1')
 
@@ -23,11 +21,21 @@ class MuseumGameApp(App):
         else:
             self.error(request)
 
-        sm = ScreenManager()
-        sm.add_widget(PlayerScreen(sm, name="player_screen"))
-        sm.add_widget(MenuScreen(sm, name="menu_screen"))
+        self.sm = ScreenManager()
+        self.sm.add_widget(PlayerScreen(self.sm, name="player_screen"))
+        self.sm.add_widget(MenuScreen(self.sm, name="menu_screen"))
+        config.main = self
+        return self.sm
 
-        return sm
+    def reset(self):
+        """Resets everything"""
+        for screen_name in self.sm.screen_names:
+            self.sm.remove_widget(self.sm.get_screen(screen_name))
+
+        del persistence.current_players[:]
+        self.sm.add_widget(PlayerScreen(self.sm, name="player_screen"))
+        self.sm.add_widget(MenuScreen(self.sm, name="menu_screen"))
+        self.sm.current = "player_screen"
 
     def on_pause(self):
         return True

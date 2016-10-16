@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import os
 
 from kivy.lang import Builder
@@ -6,7 +9,7 @@ from kivy.uix.screenmanager import Screen, SlideTransition
 import config, persistence
 # For the app
 from kivy.app import App
-from kivy.uix.button import ButtonBehavior
+from kivy.uix.button import ButtonBehavior, Button
 from kivy.uix.image import AsyncImage
 from kivy.uix.progressbar import ProgressBar
 from kivy.uix.gridlayout import GridLayout
@@ -61,11 +64,13 @@ class PlayerXpProgressBar(ProgressBar):
         super(PlayerXpProgressBar, self).__init__(**kwargs)
         self.progress = player.get_level_progress()
 
+
 class PlayerLayout(GridLayout):
     def __init__(self, player, **kwargs):
         super(PlayerLayout, self).__init__(**kwargs)
         # Set initial data
-        self.level = Label(text="lvl " + str(player.get_level()))
+        self.player = player
+        self.level = Label(id="level_id", text="lvl " + str(player.get_level()))
         self.xp_progress_bar = PlayerXpProgressBar(player)
         self.powerups_grid = PowerupsGridLayout(len(player.powerups))
 
@@ -75,6 +80,10 @@ class PlayerLayout(GridLayout):
         self.add_widget(self.powerups_grid)
         self.add_widget(self.level)
         self.add_widget(self.xp_progress_bar)
+
+    def update(self):
+        self.level.text = "lvl " + str(self.player.level)
+        self.xp_progress_bar.value = self.player.get_level_progress()
 
 
 class ImageButton(ButtonBehavior, AsyncImage):
@@ -114,16 +123,16 @@ class TimeProgressBar(ProgressBar):
 # Three column grid that that has left_picture, question_text and right_picture
 class QuestionGrid(GridLayout):
     background_color = config.colors['player1_bg']
-    questions = []
-    current_index = 0
     left_picture_url = StringProperty("")
     right_picture_url = StringProperty("")
     text = StringProperty("")
     hint = StringProperty("")
+    is_left_correct = None
     question_id = None
 
     def __init__(self, **kwargs):
         super(QuestionGrid, self).__init__(**kwargs)
+        self.current_index = 0
         self.questions = config.current_terminal.questions
         self.set_question_properties(self.questions[0])
         print self.questions
@@ -132,9 +141,8 @@ class QuestionGrid(GridLayout):
         if len(self.questions) > self.current_index + 2:  # TODO this is maybe wrong
             self.current_index += 1
             self.set_question_properties(self.questions[self.current_index])
+            return True
         else:
-            self.parent.parent.sm.transition = SlideTransition()
-            self.parent.parent.sm.current = "player_screen"  # TODO placeholder
             return False
 
     def set_question_properties(self, question):
@@ -143,12 +151,13 @@ class QuestionGrid(GridLayout):
         self.text = question['text']
         self.hint = question['hint']
         self.question_id = question['id']  # For analytics
+        self.is_left_correct = question['is_left_correct']
 
     def left_pressed(self):
-        print "Left button pressed"
+        self.parent.parent.choice_buttons_grid.left_choice()
 
     def right_pressed(self):
-        print "Right button pressed"
+        self.parent.parent.choice_buttons_grid.right_choice()
 
     def show_hint(self):
         popup = Popup(
@@ -161,6 +170,29 @@ class QuestionGrid(GridLayout):
         popup.open()
 
 
+class ChoiceButtonsGrid(GridLayout):
+    left_color = config.colors['left_choice_button']
+    right_color = config.colors['right_choice_button']
+
+    def __init__(self, **kwargs):
+        super(ChoiceButtonsGrid, self).__init__(**kwargs)
+        self.players = kwargs['players']
+        self.size_hint = (0.2, 0.1)
+        self.pos_hint = {'y': 0.3, 'center_x': 0.5}
+        self.add_widget(Button(text="<< Venstre", on_press=self.left_choice,
+                               background_color=config.colors['left_choice_button']))
+        self.add_widget(Button(text="Høyre >>", on_press=self.right_choice,
+                               background_color=config.colors['right_choice_button']))
+
+    def left_choice(self, button=None):
+        print "Left choice"
+        self.parent.parent.answer_submitted(self.players, left=True)
+
+    def right_choice(self, button=None):
+        print "Right choice"
+        self.parent.parent.answer_submitted(self.players, left=False)
+
+
 class MainLayout(FloatLayout):
     def __init__(self, **kwargs):
         super(MainLayout, self).__init__(**kwargs)
@@ -168,25 +200,27 @@ class MainLayout(FloatLayout):
 
 class CoopGameScreen(Screen):
     background_color = config.colors['player2_bg']
-    player_boxes = []
     entered = False  # Screen previously entered flag
+    number_of_players_answered_current_question = 0
 
     def __init__(self, sm, **kwargs):
         super(CoopGameScreen, self).__init__(**kwargs)
+        self.player_boxes = []
         self.sm = sm
         self.main_layout = MainLayout()  # This layout will contain everything
         self.question_grid = QuestionGrid()
         self.countdown_progressbar = TimeProgressBar()
+        self.choice_buttons_grid = ChoiceButtonsGrid(players=persistence.current_players)
         self.players_grid = PlayersGridLayout()  # This holds the two players layouts at the bottom
-        self.player_layouts = []
 
     def on_enter(self, *args):
         if self.entered:
+            self.update_players()
             return
         self.entered = True
 
         for player in persistence.current_players:
-            self.player_layouts.append(PlayerLayout(player))
+            self.player_boxes.append(PlayerLayout(player))
 
         self.draw_screen()
         self.play()
@@ -195,8 +229,11 @@ class CoopGameScreen(Screen):
         self.main_layout.add_widget(self.question_grid)
         self.main_layout.add_widget(self.countdown_progressbar)
 
-        self.players_grid.add_widget(self.player_layouts[0])  # Player 1
-        self.players_grid.add_widget(self.player_layouts[1])  # Player 2
+        # TODO make check here for game-type instead of writing another file
+        self.main_layout.add_widget(self.choice_buttons_grid)
+
+        self.players_grid.add_widget(self.player_boxes[0])  # Player 1
+        self.players_grid.add_widget(self.player_boxes[1])  # Player 2
 
         self.main_layout.add_widget(self.players_grid)
 
@@ -206,18 +243,46 @@ class CoopGameScreen(Screen):
         self.countdown_progressbar.countdown()
 
     def score(self):
-        self.sm.transition = SlideTransition()
+        if self.question_grid.next_question(): # There is a next question
+            self.sm.transition = SlideTransition()
+        else: # Final score
+            self.sm.transition = SlideTransition(direction="up")
+            self.sm.get_screen("score_screen").final = True
+
         self.sm.current = "score_screen"
+
+    def answer_submitted(self, players, left):
+        """One of the players has answered"""
+        print "answer submitted from:"
+        print left
+        print self.question_grid.is_left_correct
+        print players
+
+        for player in players:
+            player.questions_answered.append({"player": player,
+                                  "question_id": self.question_grid.question_id,
+                                  "is_correct": (not(left) or self.question_grid.is_left_correct)}) # Implication operator
+
+        if all(players_answered < config.MAX_PLAYERS
+               for players_answered in [len(players),self.number_of_players_answered_current_question]):
+            print "Not all players answered current question"
+            self.number_of_players_answered_current_question += 1
+        else:
+            self.number_of_players_answered_current_question = 0
+            self.score()
 
     def time_out(self):
         """Question wasn't answered in time, no one gets points TODO different for versus"""
         print "Time out!"
         for player in persistence.current_players:
             player.questions_answered.append({"player": player,
-                                 "question_id": self.question_grid.question_id,
-                                 "is_correct": True})
+                                              "question_id": self.question_grid.question_id,
+                                              "is_correct": True})
 
         self.score()
+
+    def update_players(self):
+        [player_box.update() for player_box in self.player_boxes]
 
     def use_powerup(self, player_powerup):
         """Powerup logic is defined below, feel free to add a powerup in the backend and define proper method
