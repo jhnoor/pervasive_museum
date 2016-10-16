@@ -1,13 +1,28 @@
 import config
 from pprint import pprint
-from kivy.event import EventDispatcher
-from kivy.properties import StringProperty, NumericProperty, ListProperty
-# TODO create trophy and powerup models as well and inhertic eventdispatcher
 
-class Player(EventDispatcher):
-    name = StringProperty('')
-    icon_url = StringProperty('')
-    # TODO fill in rest
+class Terminal():
+    questions = []
+
+    def __init__(self, terminal):
+        self.id = terminal['id']
+        self.questions = terminal['questions']
+        self.name = terminal['name']
+
+    def __str__(self):
+        return str(pprint(vars(self)))
+
+class Player():
+    name = ""
+    icon_url = ""
+    badge_uid = ""
+    xp = 0
+    level = ""
+    url = ""
+    trophies = []
+    powerups = []
+
+    questions_answered = []
 
     def __init__(self, player, badge_uid):
         self.name = player['name']
@@ -20,8 +35,16 @@ class Player(EventDispatcher):
         self.trophies = player['trophies']
         self.powerups = player['powerups']
 
+    def update(self, player_box):
+        self.name = player_box.name
+        # TODO fill in rest
+
     def __str__(self):
         return str(pprint(vars(self)))
+
+    def get_level_progress(self):
+        """Gets level progress in percentage for this player"""
+        return config.check_progress_level_up(self.level, self.xp)['progress']
 
     def get_xp(self):
         return self.xp

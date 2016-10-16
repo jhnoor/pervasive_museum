@@ -1,7 +1,6 @@
-import requests
-import serial
+import requests, serial, math
 
-from terminal import Terminal
+from model import Terminal
 
 port = "COM3"
 # Arduino hook
@@ -16,9 +15,8 @@ api = dict(
     end_url=""
 )
 
-question_time_seconds = 1
-score_screen_time_seconds = 600
-time_progressbar_height = 12
+question_time_seconds = 15
+score_screen_time_seconds = 3
 xp_progressbar_height = 12
 
 colors = dict(
@@ -36,6 +34,7 @@ colors = dict(
     white=[1, 1, 1, 1]
 )
 
+MAX_PLAYERS = 2
 DEFAULT_ADD_XP = 200
 
 STATIC = 'static/'
@@ -47,9 +46,11 @@ TERMINALS = 'terminals/'
 
 current_terminal = Terminal
 
+def check_progress_level_up(current_level, xp):
+    next_level = (math.sqrt(625 + 100 * xp) - 25) / 50
+    delta = float(next_level)-float(current_level)
 
-def get_level_progress_percentage(level, xp):
-    return 30  # TODO calculate based on xp and level
+    return {"progress" : delta*100, "level_up": delta*100>=100}
 
 
 def request(request_method, request_verb, **kwargs):

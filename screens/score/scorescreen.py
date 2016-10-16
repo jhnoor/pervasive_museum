@@ -1,4 +1,4 @@
-import os
+import os, persistence
 
 from kivy.app import App
 from kivy.clock import Clock
@@ -7,6 +7,7 @@ from kivy.properties import ListProperty, StringProperty, NumericProperty
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.screenmanager import Screen, SlideTransition
+from model import Player
 
 import config
 
@@ -27,23 +28,23 @@ class PlayerScoreFloatLayout(FloatLayout):
     answer_color = ListProperty([])
     progress = NumericProperty()
 
-    def __init__(self, player_box, correct):
+    def __init__(self, player):  # TODO extra argument pass xp for double xp powerup
         super(PlayerScoreFloatLayout, self).__init__()
-        if correct:
+        if player.questions_answered[-1]['is_correct']:
             self.background_color = config.colors['green']
             self.answer_feedback = "Korrekt"
-            self.answer_color = config.colors['white']
+            self.answer_color = config.colors['light_grey']
             self.allocate_points()
         else:
             self.background_color = config.colors['red']
             self.answer_feedback = "Feil"
             self.answer_color = config.colors['black']
 
-        self.name = player_box.name
-        self.icon_url = player_box.icon_url
-        self.level = player_box.level
-        self.xp = player_box.xp
-        self.progress = player_box.progress
+        self.name = player.name
+        self.icon_url = player.icon_url
+        self.level = str(player.level)
+        self.xp = player.xp
+        self.progress = config.check_progress_level_up(player.level, player.xp)['progress']
 
     def allocate_points(self):
         """Fill self.xp gradually with DEFAULT_ADD_XP"""
@@ -53,33 +54,38 @@ class PlayerScoreFloatLayout(FloatLayout):
     def inc_xp(self, dt=None):
         if self.xp - self.prev_xp >= config.DEFAULT_ADD_XP:
             self.event.cancel()
+            self.event = Clock.schedule_once(self.parent.parent.back, config.score_screen_time_seconds)
+            self.update_model()
             return
         self.xp += 1
+        level_progress = config.check_progress_level_up(self.level, self.xp)
+        if level_progress['level_up']:
+            self.level = str(int(self.level) + 1)
+            self.progress = 0
+        else:
+            self.progress = level_progress['progress']
+
+    def update_model(self):
+        persistence.update_player(name=self.name, xp=self.xp, level=self.level)
 
 
 class ScoreScreen(Screen):
-    player_1_box = None
-    player_2_box = None
-    player_scores = {}
+    player_boxes = []
     players_grid = None
 
     def __init__(self, sm, **kwargs):
         super(ScoreScreen, self).__init__(**kwargs)
         self.sm = sm
-        print self.player_scores
 
     def on_enter(self, *args):
-        previous_screen = self.sm.get_screen(self.sm.previous())
-        player_boxes = previous_screen.player_boxes
-        self.player_1_box = PlayerScoreFloatLayout(player_boxes[0], self.player_scores[player_boxes[0]])
-        self.player_2_box = PlayerScoreFloatLayout(player_boxes[1], self.player_scores[player_boxes[1]])
+        for player in persistence.current_players:
+            self.player_boxes.append(PlayerScoreFloatLayout(player))
 
         self.players_grid = PlayersScoreGridLayout()
-        self.players_grid.add_widget(self.player_1_box)
-        self.players_grid.add_widget(self.player_2_box)
-        self.add_widget(self.players_grid)
+        for player_box in self.player_boxes:
+            self.players_grid.add_widget(player_box)
 
-        self.event = Clock.schedule_once(self.back, config.score_screen_time_seconds)
+        self.add_widget(self.players_grid)
 
     def back(self, dt=None):
         self.sm.transition = SlideTransition(direction="right")

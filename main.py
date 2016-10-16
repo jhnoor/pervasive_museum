@@ -11,7 +11,7 @@ from kivy.uix.screenmanager import ScreenManager
 
 from screens.player.playerscreen import PlayerScreen
 from screens.menu.menuscreen import MenuScreen
-from terminal import Terminal
+from model import Terminal
 
 
 class MuseumGameApp(App):

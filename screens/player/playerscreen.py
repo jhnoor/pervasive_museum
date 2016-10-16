@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
+import os, persistence
 
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen, SlideTransition
@@ -12,18 +12,20 @@ from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.clock import Clock
-from player import Player
+from model import Player
 from kivy.properties import StringProperty, NumericProperty, ListProperty
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), 'playerscreen.kv'))
 
 
 class StartScreenBoxLayout(BoxLayout):
+    """Splash screen"""
     background_color = ListProperty(config.colors['brand'])
     msg = StringProperty()
 
 
 class PlayerBoxLayout(BoxLayout):
+    """Each player's box showing stats, level, ready button etc."""
     background_color = ListProperty([])
     ready_color = ListProperty(config.colors['green'])
     cancel_color = ListProperty(config.colors['red'])
@@ -40,14 +42,14 @@ class PlayerBoxLayout(BoxLayout):
     trophies = ListProperty([])
     powerups = ListProperty([])
 
-    def __init__(self, player, player2_bg):
+    def __init__(self, player, player_number):
         super(PlayerBoxLayout, self).__init__()
         self.name = player.name
         self.uid = player.badge_uid
         self.icon_url = player.icon_url
-        self.progress = config.get_level_progress_percentage(player.level, player.xp)
+        self.progress = config.check_progress_level_up(player.level, player.xp)['progress']
         self.level = str(player.level)
-        self.background_color = config.colors['player1_bg'] if player2_bg else config.colors['player2_bg']
+        self.background_color = config.colors['player1_bg'] if player_number == 1 else config.colors['player2_bg']
         self.player_object = player
 
     def toggle_ready(self):
@@ -62,13 +64,11 @@ class PlayerBoxLayout(BoxLayout):
 
     def cancel(self, *args):
         self.is_ready = False
-        if hasattr(self, "ready_modal_view"):
-            self.ready_modal_view.dismiss()
-        else:
-            self.parent.parent.remove_player(self)  # parent.parent because of Gridlayout
+        self.parent.parent.remove_player(self)  # parent.parent because of MainGridLayout
 
 
 class MainGridLayout(GridLayout):
+    """The main grid with columns for each player"""
     pass
 
 
@@ -83,11 +83,12 @@ class PlayerScreen(Screen):
         self.sm = sm
         self.main_grid_layout.add_widget(self.start_screen_layout)
         self.add_widget(self.main_grid_layout)
-        self.players = []
+        self.players_boxes = []
 
     def on_enter(self):
         refresh_time = 1  # poll arduino at this rate
         self.events.append(Clock.schedule_interval(self.read_rfid, refresh_time))
+        self.refresh_main_grid_layout()
 
     def on_leave(self, *args):
         print "Leaving playerscreen!"
@@ -97,9 +98,9 @@ class PlayerScreen(Screen):
         read_uid = str(config.arduino.readline()).strip()
         print "player_screen: " + read_uid
 
-        if len(read_uid) != 8:
+        if len(read_uid) != 8 or len(persistence.current_players) == config.MAX_PLAYERS:
             return
-        elif any(player.uid == read_uid for player in self.players):  # if badge already registered
+        elif any(player.badge_uid == read_uid for player in persistence.current_players):  # if badge already registered
             self.start_screen_layout.msg = "Du er allerede innlogget"
         else:
             print "UID: " + read_uid
@@ -124,8 +125,8 @@ class PlayerScreen(Screen):
             active_player_pk = result['active_player']
 
         request = config.request(config.GET_PLAYERS(active_player_pk), 'GET')
-        self.players.append(PlayerBoxLayout(Player(request.json(), uid), (len(self.players) % 2 == 0)))
-        print self.players[-1]
+        persistence.current_players.append(Player(request.json(), uid))
+
 
         self.refresh_main_grid_layout()
 
@@ -135,15 +136,17 @@ class PlayerScreen(Screen):
 
     def refresh_main_grid_layout(self):
         self.main_grid_layout.clear_widgets()
+        self.players_boxes = []
 
-        for player in self.players:
-            self.main_grid_layout.add_widget(player)  # get last item in list
+        for index, player in enumerate(persistence.current_players):
+            self.players_boxes.append(PlayerBoxLayout(player, index + 1))
+            self.main_grid_layout.add_widget(self.players_boxes[-1])
 
-        if len(self.players) < 2:
+        if len(persistence.current_players) < 2:
             self.main_grid_layout.add_widget(self.start_screen_layout)
 
-    def remove_player(self, player):
-        self.players.remove(player)
+    def remove_player(self, player_box):
+        persistence.remove_player(player_box)
         self.refresh_main_grid_layout()
 
     def success(self, request, uid):
@@ -163,7 +166,7 @@ class PlayerScreen(Screen):
         self.on_enter()
 
     def poll_players_ready(self, event):
-        if len(self.players) == 2 and all(player.is_ready for player in self.players):
+        if len(self.players_boxes) == 2 and all(player.is_ready for player in self.players_boxes):
             self.sm.transition = SlideTransition()
             self.sm.current = "menu_screen"
 

@@ -3,7 +3,7 @@ import os
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen, SlideTransition
 
-import config
+import config, persistence
 # For the app
 from kivy.app import App
 from kivy.uix.button import ButtonBehavior
@@ -55,16 +55,18 @@ class PowerupsGridLayout(GridLayout):
 
 
 class PlayerXpProgressBar(ProgressBar):
-    value = NumericProperty()
+    progress = NumericProperty()
 
+    def __init__(self, player, **kwargs):
+        super(PlayerXpProgressBar, self).__init__(**kwargs)
+        self.progress = player.get_level_progress()
 
 class PlayerLayout(GridLayout):
     def __init__(self, player, **kwargs):
         super(PlayerLayout, self).__init__(**kwargs)
         # Set initial data
         self.level = Label(text="lvl " + str(player.get_level()))
-        self.xp_progress_bar = PlayerXpProgressBar()
-        self.xp_progress_bar.value = config.get_level_progress_percentage(player.get_level(), player.get_xp())
+        self.xp_progress_bar = PlayerXpProgressBar(player)
         self.powerups_grid = PowerupsGridLayout(len(player.powerups))
 
         for powerup in player.powerups:
@@ -118,6 +120,7 @@ class QuestionGrid(GridLayout):
     right_picture_url = StringProperty("")
     text = StringProperty("")
     hint = StringProperty("")
+    question_id = None
 
     def __init__(self, **kwargs):
         super(QuestionGrid, self).__init__(**kwargs)
@@ -139,6 +142,7 @@ class QuestionGrid(GridLayout):
         self.right_picture_url = config.filename_to_url(question['right_picture_url'])
         self.text = question['text']
         self.hint = question['hint']
+        self.question_id = question['id']  # For analytics
 
     def left_pressed(self):
         print "Left button pressed"
@@ -180,11 +184,9 @@ class CoopGameScreen(Screen):
         if self.entered:
             return
         self.entered = True
-        self.player_boxes = self.sm.get_screen("player_screen").players
-        self.player_layouts = [
-            PlayerLayout(self.player_boxes[0].player_object),
-            PlayerLayout(self.player_boxes[1].player_object)
-        ]
+
+        for player in persistence.current_players:
+            self.player_layouts.append(PlayerLayout(player))
 
         self.draw_screen()
         self.play()
@@ -203,16 +205,19 @@ class CoopGameScreen(Screen):
     def play(self):
         self.countdown_progressbar.countdown()
 
-    def score(self, player_scores):
+    def score(self):
         self.sm.transition = SlideTransition()
-        self.sm.get_screen("score_screen").player_scores = player_scores
         self.sm.current = "score_screen"
 
-    # Question wasn't answered in time, no one gets points TODO different for versus
     def time_out(self):
+        """Question wasn't answered in time, no one gets points TODO different for versus"""
         print "Time out!"
-        # TODO go to scoring screen?
-        self.score({self.player_boxes[0]: True, self.player_boxes[1]: False})
+        for player in persistence.current_players:
+            player.questions_answered.append({"player": player,
+                                 "question_id": self.question_grid.question_id,
+                                 "is_correct": True})
+
+        self.score()
 
     def use_powerup(self, player_powerup):
         """Powerup logic is defined below, feel free to add a powerup in the backend and define proper method
