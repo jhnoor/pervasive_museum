@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os, persistence
+import os, persistence, config
 
 from kivy.app import App
 from kivy.clock import Clock
@@ -12,14 +12,11 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
 from kivy.uix.screenmanager import Screen, SlideTransition
 
-import config
-
 Builder.load_file(os.path.join(os.path.dirname(__file__), 'scorescreen.kv'))
 
-
 class PlayersScoreGridLayout(GridLayout):
-    pass
-
+    def reset(self):
+        self.clear_widgets()
 
 class PlayerScoreFloatLayout(FloatLayout):
     background_color = ListProperty()
@@ -43,6 +40,7 @@ class PlayerScoreFloatLayout(FloatLayout):
             self.answer_feedback = "Feil"
             self.answer_color = config.colors['black']
 
+        print "in playerscorefloatlayout constructor"
         self.name = player.name
         self.icon_url = player.icon_url
         self.level = str(player.level)
@@ -51,13 +49,17 @@ class PlayerScoreFloatLayout(FloatLayout):
 
     def allocate_points(self):
         """Fill self.xp gradually with DEFAULT_ADD_XP"""
+        print "in playerscorefloatlayout allocate_points"
+
         self.prev_xp = self.xp
-        self.event = Clock.schedule_interval(self.inc_xp, 1 / 100)
+        self.event = Clock.schedule_interval(self.inc_xp, 1 / 60)
 
     def inc_xp(self, dt=None):
+        print "in playerscorefloatlayout inc_xp"
+
         if self.xp - self.prev_xp >= config.DEFAULT_ADD_XP:
             self.event.cancel()
-            self.event = Clock.schedule_once(self.parent.parent.back, config.score_screen_time_seconds)
+            self.back_event = Clock.schedule_once(self.parent.parent.back, config.score_screen_time_seconds)
             self.update_model()
             return
         self.xp += 1
@@ -69,7 +71,11 @@ class PlayerScoreFloatLayout(FloatLayout):
             self.progress = level_progress['progress']
 
     def update_model(self):
+        print "in playerscorefloatlayout update_model"
         persistence.update_player(name=self.name, xp=self.xp, level=self.level)
+
+    def reset(self):
+        pass
 
 
 class ScoreScreen(Screen):
@@ -78,23 +84,38 @@ class ScoreScreen(Screen):
     def __init__(self, sm, **kwargs):
         super(ScoreScreen, self).__init__(**kwargs)
         self.player_boxes = []
-        self.players_grid = None
+        self.players_grid = PlayersScoreGridLayout()
         self.sm = sm
 
     def on_enter(self, *args):
-        if self.final:
-            self.add_widget(Label(text="Final score"))
+        print "scorescreen on_enter"
+        # TODO too much iteration starts here
 
-        for player in persistence.current_players:
-            self.player_boxes.append(PlayerScoreFloatLayout(player))
+        if self.final:
+            final_score_label = Label(text="Final score", pos_hint={"top": 1, "center_y": .95}, size_hint=(1, 1),
+                                      font_size=str(self.width * 0.05) + "sp")
+            final_score_label.bind(texture_size=final_score_label.setter('size'))
+            self.add_widget(final_score_label)
+
+        # for player in persistence.current_players:
+        #    self.player_boxes.append(PlayerScoreFloatLayout(player))
 
         self.players_grid = PlayersScoreGridLayout()
-        for player_box in self.player_boxes:
-            self.players_grid.add_widget(player_box)
+        for player in persistence.current_players:
+            self.players_grid.add_widget(PlayerScoreFloatLayout(player))
 
-        self.add_widget(self.players_grid)
+        self.get_or_add_widget(self.players_grid)
+
+    def get_or_add_widget(self, reference_to_widget):
+        if reference_to_widget in self.children:
+            print "Already has widget!"
+            print reference_to_widget
+        else:
+            self.add_widget(reference_to_widget)
 
     def back(self, dt=None):
+        print "scorescreen back"
+
         self.sm.transition = SlideTransition(direction="right")
         if self.final:
             # TODO update powerups, trophies, level and xp to backend
@@ -102,10 +123,15 @@ class ScoreScreen(Screen):
             config.main.reset()
             return
 
-        self.sm.current = self.sm.get_screen('menu_screen').game_type_screen.name
+        self.sm.current = self.sm.get_screen('player_screen').game_type_screen.name
 
     def save(self):
         pass
+
+    def reset(self):
+        print "Resetting scorescreen"
+        del self.player_boxes[:]
+        self.players_grid.reset()
 
 
 class ScoreScreenApp(App):

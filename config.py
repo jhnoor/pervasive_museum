@@ -2,7 +2,7 @@ import requests, serial, math
 
 from model import Terminal
 
-port = "COM3"
+port = "COM7"
 main = None
 # Arduino hook
 try:
@@ -16,7 +16,7 @@ api = dict(
     end_url=""
 )
 
-question_time_seconds = 400
+question_time_seconds = 15
 score_screen_time_seconds = 3
 xp_progressbar_height = 12
 
@@ -37,7 +37,7 @@ colors = dict(
 )
 
 MAX_PLAYERS = 2
-DEFAULT_ADD_XP = 200
+DEFAULT_ADD_XP = 200  # Must be even number due to optimization
 
 STATIC = 'static/'
 BADGES = 'badges/'

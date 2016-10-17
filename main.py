@@ -29,12 +29,13 @@ class MuseumGameApp(App):
 
     def reset(self):
         """Resets everything"""
-        for screen_name in self.sm.screen_names:
-            self.sm.remove_widget(self.sm.get_screen(screen_name))
-
         del persistence.current_players[:]
-        self.sm.add_widget(PlayerScreen(self.sm, name="player_screen"))
-        self.sm.add_widget(MenuScreen(self.sm, name="menu_screen"))
+
+        for screen_name in self.sm.screen_names:
+            self.sm.get_screen(screen_name).reset()
+
+        #self.sm.add_widget(PlayerScreen(self.sm, name="player_screen"))
+        #self.sm.add_widget(MenuScreen(self.sm, name="menu_screen"))
         self.sm.current = "player_screen"
 
     def on_pause(self):

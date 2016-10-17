@@ -75,25 +75,33 @@ class MainGridLayout(GridLayout):
 class PlayerScreen(Screen):
     background_color = ListProperty(config.colors['brand'])
 
-
     def __init__(self, sm, **kwargs):
         super(PlayerScreen, self).__init__(**kwargs)
         self.sm = sm
         self.start_screen_layout = StartScreenBoxLayout()
         self.main_grid_layout = MainGridLayout()
         self.players_boxes = []
-        self.events = []
+        self.poll_players_event = None
+        self.rfid_event = None
 
     def on_enter(self):
         refresh_time = 1  # poll arduino at this rate
-        self.clear_widgets()
-        self.add_widget(self.main_grid_layout)
-        self.events.append(Clock.schedule_interval(self.read_rfid, refresh_time))
+        #self.clear_widgets()
+        self.get_or_add_widget(self.main_grid_layout)
+        #self.add_widget(self.main_grid_layout)
+        self.rfid_event = Clock.schedule_interval(self.read_rfid, refresh_time)
         self.refresh_main_grid_layout()
 
+    def get_or_add_widget(self, reference_to_widget):
+        if reference_to_widget in self.children:
+            print "Terminal already has widget!"
+            print reference_to_widget
+        else:
+            self.add_widget(reference_to_widget)
+
     def on_leave(self, *args):
-        map(lambda event: event.cancel(), self.events)
-        del self.events[:]
+        self.poll_players_event.cancel()
+        self.rfid_event.cancel()
 
     def read_rfid(self, event):
         read_uid = str(config.arduino.readline()).strip()
@@ -130,8 +138,11 @@ class PlayerScreen(Screen):
         self.refresh_main_grid_layout()
 
         # Poll both players for ready or cancel changes
-        refresh_time = 1
-        self.events.append(Clock.schedule_interval(self.poll_players_ready, refresh_time))
+        if len(persistence.current_players) == config.MAX_PLAYERS:  # All players here, lets see if they're ready
+            refresh_time = 1
+            self.poll_players_event = Clock.schedule_interval(self.poll_players_ready, refresh_time)
+            self.rfid_event.cancel()
+
 
     def refresh_main_grid_layout(self):
         self.main_grid_layout.clear_widgets()
@@ -147,6 +158,8 @@ class PlayerScreen(Screen):
     def remove_player(self, player_box):
         persistence.remove_player(player_box)
         self.refresh_main_grid_layout()
+        self.poll_players_event.cancel()  # Player has left so lets not check for ready
+        self.rfid_event()  # Lets read for new player
 
     def success(self, request, uid):
         print "Success!"
@@ -168,6 +181,10 @@ class PlayerScreen(Screen):
         if len(self.players_boxes) == 2 and all(player.is_ready for player in self.players_boxes):
             self.sm.transition = SlideTransition()
             self.sm.current = "menu_screen"
+
+    def reset(self):
+        print "Resetting playerscreen"
+        self.refresh_main_grid_layout()
 
 
 class PlayerScreenApp(App):

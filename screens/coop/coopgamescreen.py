@@ -57,6 +57,10 @@ class PowerupsGridLayout(GridLayout):
         self.cols = number_of_powerups
 
 
+class ImageButton(ButtonBehavior, AsyncImage):
+    pass
+
+
 class PlayerXpProgressBar(ProgressBar):
     progress = NumericProperty()
 
@@ -86,15 +90,15 @@ class PlayerLayout(GridLayout):
         self.xp_progress_bar.value = self.player.get_level_progress()
 
 
-class ImageButton(ButtonBehavior, AsyncImage):
-    pass
-
 
 class PlayersGridLayout(GridLayout):
     background_color = config.colors['dark_grey']
 
     def __init__(self, **kwargs):
         super(PlayersGridLayout, self).__init__(**kwargs)
+
+    def reset(self): # TODO should this guy add widgets himself?
+        self.clear_widgets()
 
 
 class TimeProgressBar(ProgressBar):
@@ -103,9 +107,10 @@ class TimeProgressBar(ProgressBar):
 
     def __init__(self, **kwargs):
         super(TimeProgressBar, self).__init__(**kwargs)
+        self.event = None
 
     def countdown(self, dt=None):
-        refresh_time = 1 / 100  # in seconds
+        refresh_time = 1 / 30  # in seconds
         self.event = Clock.schedule_interval(self.decrement_clock, refresh_time)
 
     def decrement_clock(self, dt):
@@ -118,6 +123,10 @@ class TimeProgressBar(ProgressBar):
     def pause(self, seconds_to_pause):
         self.event.cancel()
         self.pause_event = Clock.schedule_once(self.countdown, seconds_to_pause)
+
+    def reset(self):
+        self.event.cancel()
+        self.value = config.question_time_seconds * 30
 
 
 # Three column grid that that has left_picture, question_text and right_picture
@@ -169,6 +178,11 @@ class QuestionGrid(GridLayout):
         )
         popup.open()
 
+    def reset(self):
+        self.current_index = 0
+        self.questions = config.current_terminal.questions
+        self.set_question_properties(self.questions[0])
+
 
 class ChoiceButtonsGrid(GridLayout):
     left_color = config.colors['left_choice_button']
@@ -177,11 +191,11 @@ class ChoiceButtonsGrid(GridLayout):
     def __init__(self, **kwargs):
         super(ChoiceButtonsGrid, self).__init__(**kwargs)
         self.players = kwargs['players']
-        self.size_hint = (0.2, 0.1)
+        self.size_hint = (0.3, 0.15)
         self.pos_hint = {'y': 0.3, 'center_x': 0.5}
-        self.add_widget(Button(text="<< Venstre", on_press=self.left_choice,
+        self.add_widget(Button(text="<< Venstre", on_press=self.left_choice, font_size="14sp",
                                background_color=config.colors['left_choice_button']))
-        self.add_widget(Button(text="Høyre >>", on_press=self.right_choice,
+        self.add_widget(Button(text="Høyre >>", on_press=self.right_choice, font_size="14sp",
                                background_color=config.colors['right_choice_button']))
 
     def left_choice(self, button=None):
@@ -192,54 +206,55 @@ class ChoiceButtonsGrid(GridLayout):
         print "Right choice"
         self.parent.parent.answer_submitted(self.players, left=False)
 
+    def reset(self):
+        pass
+
 
 class MainLayout(FloatLayout):
     def __init__(self, **kwargs):
         super(MainLayout, self).__init__(**kwargs)
 
+    def reset(self):
+        for widget in self.children:
+            widget.reset()
+
 
 class CoopGameScreen(Screen):
     background_color = config.colors['player2_bg']
-    entered = False  # Screen previously entered flag
-    number_of_players_answered_current_question = 0
 
     def __init__(self, sm, **kwargs):
         super(CoopGameScreen, self).__init__(**kwargs)
-        self.player_boxes = []
         self.sm = sm
+        self.player_boxes = []
         self.main_layout = MainLayout()  # This layout will contain everything
         self.question_grid = QuestionGrid()
         self.countdown_progressbar = TimeProgressBar()
         self.choice_buttons_grid = ChoiceButtonsGrid(players=persistence.current_players)
         self.players_grid = PlayersGridLayout()  # This holds the two players layouts at the bottom
+        self.number_of_players_answered_current_question = 0
+        self.draw_screen()
 
     def on_enter(self, *args):
-        if self.entered:
-            self.update_players()
-            return
-        self.entered = True
-
-        for player in persistence.current_players:
-            self.player_boxes.append(PlayerLayout(player))
-
-        self.draw_screen()
         self.play()
 
     def draw_screen(self):
         self.main_layout.add_widget(self.question_grid)
         self.main_layout.add_widget(self.countdown_progressbar)
 
-        # TODO make check here for game-type instead of writing another file
+        # Add this widget for each player in versus, in coop just one choice_buttons_grid is enough
         self.main_layout.add_widget(self.choice_buttons_grid)
-
-        self.players_grid.add_widget(self.player_boxes[0])  # Player 1
-        self.players_grid.add_widget(self.player_boxes[1])  # Player 2
 
         self.main_layout.add_widget(self.players_grid)
 
         self.add_widget(self.main_layout)
 
     def play(self):
+        for player in persistence.current_players:
+            self.player_boxes.append(PlayerLayout(player))
+
+        for player_box in self.player_boxes:
+            self.players_grid.add_widget(player_box)
+
         self.countdown_progressbar.countdown()
 
     def score(self):
@@ -253,16 +268,13 @@ class CoopGameScreen(Screen):
 
     def answer_submitted(self, players, left):
         """One of the players has answered"""
-        print "answer submitted from:"
-        print left
-        print self.question_grid.is_left_correct
-        print players
+        print "answer submitted"
+        self.countdown_progressbar.event.cancel()
 
         for player in players:
             player.questions_answered.append({"player": player,
                                               "question_id": self.question_grid.question_id,
-                                              "is_correct": (not (
-                                              left) or self.question_grid.is_left_correct)})  # Implication operator
+                                              "is_correct": (not (left) or self.question_grid.is_left_correct)})
 
         if all(players_answered < config.MAX_PLAYERS
                for players_answered in [len(players), self.number_of_players_answered_current_question]):
@@ -278,12 +290,13 @@ class CoopGameScreen(Screen):
         for player in persistence.current_players:
             player.questions_answered.append({"player": player,
                                               "question_id": self.question_grid.question_id,
-                                              "is_correct": True})
+                                              "is_correct": False})
 
         self.score()
 
     def update_players(self):
-        [player_box.update() for player_box in self.player_boxes]
+        for player_box in self.player_boxes:
+            player_box.update()
 
     def use_powerup(self, player_powerup):
         """Powerup logic is defined below, feel free to add a powerup in the backend and define proper method
@@ -305,6 +318,20 @@ class CoopGameScreen(Screen):
 
         print "Used " + str(player_powerup.name)
         player_powerup.quantity -= 1
+
+    def reset(self):
+        print "Resetting coopgamescreen"
+        del self.player_boxes[:]
+        for widget in self.children:
+            widget.reset()
+        """
+        self.main_layout = MainLayout()  # This layout will contain everything
+        self.question_grid = QuestionGrid()
+        self.countdown_progressbar = TimeProgressBar()
+        self.choice_buttons_grid = ChoiceButtonsGrid(players=persistence.current_players)
+        self.players_grid = PlayersGridLayout()  # This holds the two players layouts at the bottom
+        self.number_of_players_answered_current_question = 0
+        """
 
 
 class CoopGameScreenApp(App):

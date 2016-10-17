@@ -34,6 +34,8 @@ class MenuScreen(Screen):
         self.sm.add_widget(game_type_screen)
         self.sm.add_widget(ScoreScreen(self.sm, name="score_screen"))
 
+    def reset(self):
+        pass
 
 class MenuScreenApp(App):
     def on_pause(self):
