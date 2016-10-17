@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os, persistence, config
+import os, persistence, config, random
 
 from kivy.app import App
 from kivy.clock import Clock
@@ -11,6 +11,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
 from kivy.uix.screenmanager import Screen, SlideTransition
+from screens.coop.coopgamescreen import PowerupLayout
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), 'scorescreen.kv'))
 
@@ -46,6 +47,7 @@ class PlayerScoreFloatLayout(FloatLayout):
         self.level = str(player.level)
         self.xp = player.xp
         self.progress = config.check_progress_level_up(player.level, player.xp)['progress']
+        self.player = player
 
     def allocate_points(self):
         """Fill self.xp gradually with DEFAULT_ADD_XP"""
@@ -65,10 +67,22 @@ class PlayerScoreFloatLayout(FloatLayout):
         self.xp += 1
         level_progress = config.check_progress_level_up(self.level, self.xp)
         if level_progress['level_up']:
-            self.level = str(int(self.level) + 1)
-            self.progress = 0
+            self.level_up()
         else:
             self.progress = level_progress['progress']
+
+    def level_up(self):
+        """Leveling up gives you a free powerup!"""
+        powerup_index = random.randrange(len(self.player.powerups))
+        self.player.powerups[powerup_index]['quantity'] += 1
+        powerup_widget = PowerupLayout(self.player.powerups[powerup_index])
+        powerup_widget.pos_hint = {"center_x": 0.5, "top": 0.5}
+        powerup_widget.size_hint = (0.8, None)
+        powerup_widget.on_press = config.do_nothing
+        # TODO do animation
+        self.add_widget(powerup_widget)
+        self.level = str(int(self.level) + 1)
+        self.progress = 0
 
     def update_model(self):
         print "in playerscorefloatlayout update_model"
@@ -92,13 +106,9 @@ class ScoreScreen(Screen):
         # TODO too much iteration starts here
 
         if self.final:
-            final_score_label = Label(text="Final score", pos_hint={"top": 1, "center_y": .95}, size_hint=(1, 1),
-                                      font_size=str(self.width * 0.05) + "sp")
-            final_score_label.bind(texture_size=final_score_label.setter('size'))
+            final_score_label = Label(text="Final score", pos_hint={"top": 1, "center_x": 0.5},
+                                      font_size=str(self.width * 0.05) + "sp", size_hint=(None, None))
             self.add_widget(final_score_label)
-
-        # for player in persistence.current_players:
-        #    self.player_boxes.append(PlayerScoreFloatLayout(player))
 
         self.players_grid = PlayersScoreGridLayout()
         for player in persistence.current_players:

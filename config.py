@@ -137,3 +137,6 @@ def POST_NEW_BADGE():
 
 headers = {'Content-type': 'application/json',
            'Accept': 'application/json; charset=UTWF-8'}
+
+def do_nothing(*args):
+    pass
