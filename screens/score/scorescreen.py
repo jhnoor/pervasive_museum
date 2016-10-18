@@ -11,7 +11,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
 from kivy.uix.screenmanager import Screen, SlideTransition
-from screens.coop.coopgamescreen import PowerupLayout
+from screens.game.gamescreen import PowerupLayout
 
 Builder.load_file(os.path.join(os.path.dirname(__file__), 'scorescreen.kv'))
 
@@ -35,12 +35,11 @@ class PlayerScoreFloatLayout(FloatLayout):
             self.background_color = config.colors['green']
             self.answer_feedback = "Korrekt"
             self.answer_color = config.colors['light_grey']
-            self.allocate_points()
+            ##self.allocate_points()
         else:
             self.background_color = config.colors['red']
             self.answer_feedback = "Feil"
             self.answer_color = config.colors['black']
-            self.back_event = Clock.schedule_once(self.parent.parent.back, config.score_screen_time_seconds)
 
         self.name = player.name
         self.icon_url = player.icon_url
@@ -51,13 +50,14 @@ class PlayerScoreFloatLayout(FloatLayout):
 
     def allocate_points(self):
         """Fill self.xp gradually with DEFAULT_ADD_XP"""
-        self.prev_xp = self.xp
-        self.event = Clock.schedule_interval(self.inc_xp, 1 / 60)
+        if self.player.questions_answered[-1]['is_correct']:
+            self.prev_xp = self.xp
+            self.event = Clock.schedule_interval(self.inc_xp, 1 / 60)
 
     def inc_xp(self, dt=None):
         if self.xp - self.prev_xp >= config.DEFAULT_ADD_XP:
             self.event.cancel()
-            self.back_event = Clock.schedule_once(self.parent.parent.back, config.score_screen_time_seconds)
+            #self.back()
             self.update_model()
             return
         self.xp += 1
@@ -89,13 +89,14 @@ class PlayerScoreFloatLayout(FloatLayout):
 
 
 class ScoreScreen(Screen):
-    final = False
+
 
     def __init__(self, sm, **kwargs):
         super(ScoreScreen, self).__init__(**kwargs)
         self.player_boxes = []
         self.players_grid = PlayersScoreGridLayout()
         self.sm = sm
+        self.final = False
 
     def on_enter(self, *args):
         print "scorescreen on_enter"
@@ -111,6 +112,9 @@ class ScoreScreen(Screen):
             self.players_grid.add_widget(PlayerScoreFloatLayout(player))
 
         self.get_or_add_widget(self.players_grid)
+        for player_box in self.players_grid.children:
+            player_box.allocate_points()
+
 
     def get_or_add_widget(self, reference_to_widget):
         if reference_to_widget in self.children:
@@ -137,6 +141,7 @@ class ScoreScreen(Screen):
     def reset(self):
         print "Resetting scorescreen"
         del self.player_boxes[:]
+        self.final = False
         self.players_grid.reset()
 
 

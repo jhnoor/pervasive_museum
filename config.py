@@ -38,6 +38,10 @@ colors = dict(
 
 MAX_PLAYERS = 2
 DEFAULT_ADD_XP = 200  # Must be even number due to optimization
+REFRESH_RATE = 60  # 60 fps refresh rate
+
+class GameType:
+    COOP, VERSUS, NONE = range(3)
 
 STATIC = 'static/'
 BADGES = 'badges/'

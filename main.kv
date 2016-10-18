@@ -1,0 +1,462 @@
+#: import config config
+
+<PlayerScreen>
+    canvas.before:
+        Color:
+            rgba: root.background_color
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<PlayerBoxLayout>
+    orientation: 'vertical'
+    canvas.before:
+        Color:
+            rgba: root.background_color
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    Label:
+        font_size: '%s sp' % (self.width*.05)
+        text: root.name
+
+    BoxLayout:
+        orientation: 'horizontal'
+        padding: 30
+        spacing: 30
+
+        AsyncImage:
+            source: root.icon_url
+            size_hint_y: None  # Tells the layout to ignore the size_hint in y dir
+            height: dp(100)  # The fixed height you want
+
+        Button:
+            text: root.ready_button_text
+            color: (0,0,0,1)
+            font_size: '%s sp' % (self.width*.1)
+            background_normal: "images/background_normal_white.png"
+            background_color: root.ready_color
+            on_press: root.toggle_ready()
+            size_hint_y: 1
+
+        Button:
+            text: "Tilbake"
+            color: (1,1,1,1)
+            font_size: '%s sp' % (self.width*.1)
+            background_normal: "images/background_normal_white.png"
+            background_color: root.cancel_color
+            on_press: root.cancel()
+            size_hint_y: 1
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 30
+        spacing: 30
+
+        FloatLayout:
+
+            Label:
+                text: "Level "+root.level
+                font_size: '%s sp' % (root.width*.03)
+                size_hint: (None, None)
+                pos_hint: {"center_x": 0.1, "center_y": 1}
+
+            Label:
+                text: "300/1000 xp"
+                font_size: '%s sp' % (root.width*.02)
+                size_hint: (None, None)
+                pos_hint: {"center_x": 0.8, "center_y": 0.5}
+
+            ProgressBar:
+                max: 100
+                value: root.progress
+                size_hint: (1, None)
+                pos_hint: {"center_x": 0.5, "center_y": 0.7}
+
+                canvas:
+                    Color:
+                        rgb: 1, 1, 1
+                    BorderImage:
+                        border: (12, 12, 12, 12)
+                        pos: self.x, self.center_y - config.xp_progressbar_height/2
+                        size: self.width, config.xp_progressbar_height
+                        source: 'images/progressbar_bg.PNG'
+                    BorderImage:
+                        border: [int(min(self.width * (self.value / float(self.max)) if self.max else 0, 12))] * 4
+                        pos: self.x, self.center_y - config.xp_progressbar_height/2
+                        size: self.width * (self.value / float(self.max)) if self.max else 0, config.xp_progressbar_height
+                        source: 'images/xp_progressbar_foreground.png'
+
+
+    Label:
+        font_size: '%s sp' % (self.width*.03)
+        text: "Power-ups"
+
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: 3
+
+        Label:
+            font_size: '%s sp' % (self.width*.03)
+            text: "pow1"
+            canvas.before:
+                Color:
+                    rgba: config.colors['light_grey']
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+        Label:
+            font_size: '%s sp' % (self.width*.03)
+            text: "pow2"
+            canvas.before:
+                Color:
+                    rgba: config.colors['light_grey']
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+        Label:
+            font_size: '%s sp' % (self.width*.03)
+            text: "pow3"
+            canvas.before:
+                Color:
+                    rgba: config.colors['light_grey']
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+    Label:
+        font_size: '%s sp' % (self.width*.03)
+        text: "Troféer"
+
+
+
+    BoxLayout:
+        orientation: 'horizontal'
+        padding: 4
+        spacing: 4
+
+        # Three types of powerups
+
+        Label:
+            font_size: '%s sp' % (self.width*.05)
+            text: "tro1"
+
+        Label:
+            font_size: '%s sp' % (self.width*.05)
+            text: "tro2"
+
+        Label:
+            font_size: '%s sp' % (self.width*.05)
+            text: "tro3"
+
+
+<StartScreenBoxLayout>:
+    id: start_screen_id
+    orientation: 'vertical'
+
+    canvas.before:
+        Color:
+            rgba: root.background_color
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    Label:
+        font_size: '%s sp' % (self.width*.1)
+        text: "[b][color=cbf3f0]Pe[/color]Muse[/b]"
+        markup: True
+        size_hint_y: 4
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 30
+        spacing: 30
+        size_hint_y: 3
+
+        Image:
+            id: rfid_image_id
+            source: 'images/rfid_login.png'
+            halign: 'center'
+            size_hint_y: 4
+
+        Label:
+            text: 'Skann rfid brikken din'
+            font_size: '%s sp' % (self.width*.05)
+            background_color: (0.80, 0.95, 0.94, 0.5)
+
+        GridLayout:
+            id: grid_msgbox
+            rows: 1
+
+            Label:
+                text: root.msg
+
+<MainGridLayout>
+    cols: config.MAX_PLAYERS
+
+#: import config config
+
+<MenuScreen>
+    canvas.before:
+        Color:
+            rgba: config.colors['brand']
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10, 2
+        spacing: 10
+
+        Label:
+            font_size: '%s sp' % (self.width*.05)
+            text: "[b][color=ff9f1c]Velg spillmodus[/color][/b]"
+            markup: True
+            halign: 'center'
+            valign: 'middle'
+            size_hint_y: 1
+
+
+        GridLayout:
+            rows: 2
+            padding: 30
+            spacing: 30
+            size_hint_y: 5
+
+            Button:
+                text: "[color=000]Co-op[/color]"
+                markup: True
+                font_size: '%s sp' % (self.width*.04)
+                on_press: root.open_game(config.GameType.COOP)
+                background_normal: "images/background_normal_white.png"
+                background_color: (0.80, 0.95, 0.94, 1)
+                size_hint_y: 1
+
+            Button:
+                text: '[color=000]Versus[/color]'
+                markup: True
+                font_size: '%s sp' % (self.width*.04)
+                background_normal: "images/background_normal_white.png"
+                background_color: (0.80, 0.95, 0.94, 1)
+                on_press: root.open_game(config.GameType.VERSUS)
+                size_hint_y: 1
+
+#:import config config
+
+<GameScreen>
+    canvas.before:
+        Color:
+            rgba: root.background_color
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<TimeProgressBar>
+    max: root.max
+    value: root.value
+    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+    # Can't get two custom progressbars on same kv page apparently?
+    #canvas:
+    #    Color:
+    #        rgb: 1, 1, 1
+    #    BorderImage:
+    #        border: (12, 12, 12, 12)
+    #        pos: self.x, self.center_y - config.time_progressbar_height/2
+    #        size: self.width, config.time_progressbar_height
+    #        source: 'images/progressbar_bg.PNG'
+    #    BorderImage:
+    #        border: [int(min(self.width * (self.value / float(self.max)) if self.max else 0, 12))] * 4
+    #        pos: self.x, self.center_y - config.time_progressbar_height/2
+    #        size: self.width * (self.value / float(self.max)) if self.max else 0, config.time_progressbar_height
+    #        source: 'images/time_progressbar_foreground.PNG'
+
+
+<PlayerXpProgressBar>
+    max: 100
+    value: root.progress
+    size_hint: (1, None)
+    pos_hint: {"center_x": 0.5, "center_y": 0.7}
+
+    canvas:
+        Color:
+            rgb: 1, 1, 1
+        BorderImage:
+            border: (12, 12, 12, 12)
+            pos: self.x, self.center_y - config.xp_progressbar_height/2
+            size: self.width, config.xp_progressbar_height
+            source: 'images/progressbar_bg.PNG'
+        BorderImage:
+            border: [int(min(self.width * (self.value / float(self.max)) if self.max else 0, 12))] * 4
+            pos: self.x, self.center_y - config.xp_progressbar_height/2
+            size: self.width * (self.value / float(self.max)) if self.max else 0, config.xp_progressbar_height
+            source: 'images/xp_progressbar_foreground.png'
+
+
+<PlayersGridLayout>
+    cols: 2
+    size_hint: (1, 0.2)
+    pos_hint: {'bottom': 1}
+
+    canvas.before:
+        Color:
+            rgba: root.background_color
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<PlayerLayout>
+    rows: 3
+    padding: 30, 10
+
+<PowerupsGridLayout>
+    cols: root.cols
+
+<PowerupLayout>
+    pos_hint: {'right': 1}
+
+    Button:
+        id: button_id
+        size_hint: (.8, 1)
+        pos_hint: {"right": .9, "top": 1}
+        background_color: config.colors['blue']
+        on_press: root.use_powerup()
+
+        StackLayout:
+            pos: self.parent.pos
+            size: self.parent.size
+            orientation: 'lr-tb'
+            AsyncImage:
+                source: root.icon_url
+                size_hint_x: None
+                width: 74
+            Label:
+                size_hint_x: None
+                width: 100
+                text: root.name
+
+    Label:
+        text: str(root.quantity)
+        color: (0, 0, 0, 1)
+        size_hint: (0.1, 0.4)
+        pos_hint: {"right": .85, "top": 0.35}
+        canvas.before:
+            Color:
+                rgba: config.colors['grey']
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+
+<QuestionGrid>
+    cols: 3
+    size_hint: (1, 0.5)
+    pos_hint: {'top': 1}
+
+    canvas.before:
+        Color:
+            rgba: root.background_color
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    ImageButton:
+        source: root.left_picture_url
+        size_hint: (1, 1)
+        pos_hint: {'left': 1}
+        on_press: root.left_pressed()
+
+    Label:
+        text: root.text
+        size_hint_y: None
+        text_size: self.width, None
+        height: self.texture_size[1]
+        font_size: '%s sp' % (self.width*.07)
+        pos_hint: {'top': 1}
+
+    ImageButton:
+        source: root.right_picture_url
+        size_hint: (1, 1)
+        pos_hint: {'right': 1}
+        on_press: root.right_pressed()
+
+
+<ChoiceButtonsGrid>
+    cols: 2
+
+#: import config config
+
+<ScoreScreen>
+    canvas.before:
+        Color:
+            rgba: config.colors['player1_bg']
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    Button:
+        text: "Tilbake"
+        font_size: '%s sp' % (self.width*.09)
+        size_hint: (0.2, 0.1)
+        pos_hint: {"bottom": 1, "center_x": 0.5}
+        on_press: root.back()
+
+<PlayersScoreGridLayout>
+    cols: 2
+    spacing: (30, 30)
+    padding: (120, 120)
+
+<PlayerScoreFloatLayout>:
+    pos_hint: {'top': 1}
+    canvas.before:
+        Color:
+            rgba: root.background_color
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    Label:
+        text: root.answer_feedback
+        font_size: '%s sp' % (self.width*.8)
+        color: root.answer_color
+        size_hint: (None, None)
+        pos_hint: {"center_x": 0.5, "top": 1}
+
+
+    ProgressBar:
+        max: 100
+        size_hint: (0.8, None)
+        pos_hint: {"center_x": 0.5, "top": 0.7}
+        value: root.progress
+
+        canvas:
+            Color:
+                rgb: 1, 1, 1
+            BorderImage:
+                border: (12, 12, 12, 12)
+                pos: self.x, self.center_y - config.xp_progressbar_height/2
+                size: self.width, config.xp_progressbar_height
+                source: 'images/progressbar_bg.PNG'
+            BorderImage:
+                border: [int(min(self.width * (self.value / float(self.max)) if self.max else 0, 12))] * 4
+                pos: self.x, self.center_y - config.xp_progressbar_height/2
+                size: self.width * (self.value / float(self.max)) if self.max else 0, config.xp_progressbar_height
+                source: 'images/xp_progressbar_foreground.png'
+
+    Label:
+        text: "lvl "+root.level
+        font_size: '%s sp' % (self.width*.2)
+        color: root.answer_color
+        size_hint: (None, None)
+        pos_hint: {"center_x": 0.5, "top": 0.8}
+
+    Label:
+
+
+    AsyncImage:
+        source: root.icon_url
+        size_hint: (1, 1)
+        pos_hint: {"center_x": 0.5, "top": 0.5}

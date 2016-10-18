@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
+import os, config, persistence
 
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen, SlideTransition
 
-import config, persistence
 # For the app
 from kivy.app import App
 from kivy.uix.button import ButtonBehavior, Button
@@ -19,7 +18,7 @@ from kivy.uix.popup import Popup
 from kivy.properties import NumericProperty, StringProperty
 from kivy.clock import Clock
 
-Builder.load_file(os.path.join(os.path.dirname(__file__), 'coopgamescreen.kv'))
+Builder.load_file(os.path.join(os.path.dirname(__file__), 'gamescreen.kv'))
 
 ALLOWED_POWERUPS = ['Ice age', 'Double XP', 'Hint']
 
@@ -94,10 +93,14 @@ class PlayerLayout(GridLayout):
 class PlayersGridLayout(GridLayout):
     background_color = config.colors['dark_grey']
 
-    def __init__(self, **kwargs):
+    def __init__(self, game_type, **kwargs):
         super(PlayersGridLayout, self).__init__(**kwargs)
+        if game_type == config.GameType.VERSUS:
+            self.size_hint = (1, 0.4)
+        else:
+            self.size_hint = (1, 0.2)
 
-    def reset(self): # TODO should this guy add widgets himself?
+    def reset(self):
         self.clear_widgets()
 
 
@@ -110,7 +113,7 @@ class TimeProgressBar(ProgressBar):
         self.event = None
 
     def countdown(self, dt=None):
-        refresh_time = 1 / 30  # in seconds
+        refresh_time = 1 / config.REFRESH_RATE  # in seconds
         self.event = Clock.schedule_interval(self.decrement_clock, refresh_time)
 
     def decrement_clock(self, dt):
@@ -126,7 +129,7 @@ class TimeProgressBar(ProgressBar):
 
     def reset(self):
         self.event.cancel()
-        self.value = config.question_time_seconds * 30
+        self.value = config.question_time_seconds * 100
 
 
 # Three column grid that that has left_picture, question_text and right_picture
@@ -219,31 +222,43 @@ class MainLayout(FloatLayout):
             widget.reset()
 
 
-class CoopGameScreen(Screen):
+class GameScreen(Screen):
     background_color = config.colors['player2_bg']
 
     def __init__(self, sm, **kwargs):
-        super(CoopGameScreen, self).__init__(**kwargs)
+        super(GameScreen, self).__init__(**kwargs)
         self.sm = sm
         self.player_boxes = []
         self.main_layout = MainLayout()  # This layout will contain everything
         self.question_grid = QuestionGrid()
         self.countdown_progressbar = TimeProgressBar()
-        self.choice_buttons_grid = ChoiceButtonsGrid(players=persistence.current_players)
-        self.players_grid = PlayersGridLayout()  # This holds the two players layouts at the bottom
+        self.choice_buttons_grid = None
+        self.players_grid = None  # This holds the two players layouts at the bottom
         self.number_of_players_answered_current_question = 0
-        self.draw_screen()
+        self.game_type = config.GameType.NONE
+        self.entered = False
+        #self.draw_screen()
 
     def on_enter(self, *args):
+        if not self.entered:
+            self.entered = True
+            self.draw_screen()
         self.play()
 
     def draw_screen(self):
         self.main_layout.add_widget(self.question_grid)
         self.main_layout.add_widget(self.countdown_progressbar)
 
-        # Add this widget for each player in versus, in coop just one choice_buttons_grid is enough
-        self.main_layout.add_widget(self.choice_buttons_grid)
+        # Add this widget for each player in versus, in game just one choice_buttons_grid is enough
+        if self.game_type == config.GameType.COOP:
+            self.choice_buttons_grid = ChoiceButtonsGrid(players=persistence.current_players)
+            self.main_layout.add_widget(self.choice_buttons_grid)
+        elif self.game_type == config.GameType.VERSUS:
+            pass
+        else:
+            raise RuntimeError("Invalid gametype: '"+str(self.game_type)+"'")
 
+        self.players_grid = PlayersGridLayout(self.game_type)
         self.main_layout.add_widget(self.players_grid)
 
         self.add_widget(self.main_layout)
@@ -324,21 +339,16 @@ class CoopGameScreen(Screen):
         player_powerup.quantity -= 1
 
     def reset(self):
-        print "Resetting coopgamescreen"
+        print "Resetting gamescreen"
         del self.player_boxes[:]
+        self.entered = False
+        self.game_type = ""
+        self.number_of_players_answered_current_question = 0
         for widget in self.children:
             widget.reset()
-        """
-        self.main_layout = MainLayout()  # This layout will contain everything
-        self.question_grid = QuestionGrid()
-        self.countdown_progressbar = TimeProgressBar()
-        self.choice_buttons_grid = ChoiceButtonsGrid(players=persistence.current_players)
-        self.players_grid = PlayersGridLayout()  # This holds the two players layouts at the bottom
-        self.number_of_players_answered_current_question = 0
-        """
 
 
-class CoopGameScreenApp(App):
+class GameScreenApp(App):
     def build(self):
         pass
 
@@ -350,4 +360,4 @@ class CoopGameScreenApp(App):
 
 
 if __name__ == '__main__':
-    CoopGameScreenApp().run()
+    GameScreenApp().run()

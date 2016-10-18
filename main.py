@@ -9,6 +9,8 @@ from kivy.uix.screenmanager import ScreenManager
 
 from screens.player.playerscreen import PlayerScreen
 from screens.menu.menuscreen import MenuScreen
+from screens.game.gamescreen import GameScreen
+from screens.score.scorescreen import ScoreScreen
 from model import Terminal
 
 
@@ -20,10 +22,13 @@ class MuseumGameApp(App):
             self.success(request)
         else:
             self.error(request)
+            raise RuntimeError(str(request.status_code)+" Error getting terminals, check connection: "+str(request.json()))
 
         self.sm = ScreenManager()
         self.sm.add_widget(PlayerScreen(self.sm, name="player_screen"))
         self.sm.add_widget(MenuScreen(self.sm, name="menu_screen"))
+        self.sm.add_widget(GameScreen(self.sm, name="game_screen"))
+        self.sm.add_widget(ScoreScreen(self.sm, name="score_screen"))
         config.main = self
         return self.sm
 
@@ -55,8 +60,7 @@ class MuseumGameApp(App):
                 config.request(config.PUT_SET_ONLINE(config.current_terminal.id), "PUT", data={'data': 'None'})
                 print "success setting " + str(config.current_terminal)
                 return
-        print "No available terminals! Deactivate using Django Rest framework interface"
-        self.stop()
+        raise RuntimeError("No available terminals! Deactivate using Django Rest framework interface")
 
     def error(self, request):
         print "error setting terminal online"
