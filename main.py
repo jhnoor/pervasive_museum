@@ -34,8 +34,6 @@ class MuseumGameApp(App):
         for screen_name in self.sm.screen_names:
             self.sm.get_screen(screen_name).reset()
 
-        #self.sm.add_widget(PlayerScreen(self.sm, name="player_screen"))
-        #self.sm.add_widget(MenuScreen(self.sm, name="menu_screen"))
         self.sm.current = "player_screen"
 
     def on_pause(self):

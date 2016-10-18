@@ -40,8 +40,8 @@ class PlayerScoreFloatLayout(FloatLayout):
             self.background_color = config.colors['red']
             self.answer_feedback = "Feil"
             self.answer_color = config.colors['black']
+            self.back_event = Clock.schedule_once(self.parent.parent.back, config.score_screen_time_seconds)
 
-        print "in playerscorefloatlayout constructor"
         self.name = player.name
         self.icon_url = player.icon_url
         self.level = str(player.level)
@@ -51,14 +51,10 @@ class PlayerScoreFloatLayout(FloatLayout):
 
     def allocate_points(self):
         """Fill self.xp gradually with DEFAULT_ADD_XP"""
-        print "in playerscorefloatlayout allocate_points"
-
         self.prev_xp = self.xp
         self.event = Clock.schedule_interval(self.inc_xp, 1 / 60)
 
     def inc_xp(self, dt=None):
-        print "in playerscorefloatlayout inc_xp"
-
         if self.xp - self.prev_xp >= config.DEFAULT_ADD_XP:
             self.event.cancel()
             self.back_event = Clock.schedule_once(self.parent.parent.back, config.score_screen_time_seconds)

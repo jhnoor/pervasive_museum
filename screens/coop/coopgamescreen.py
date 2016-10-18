@@ -269,12 +269,16 @@ class CoopGameScreen(Screen):
     def answer_submitted(self, players, left):
         """One of the players has answered"""
         print "answer submitted"
+        print "testing if then"
+        print left
+        print self.question_grid.is_left_correct
+        print left == self.question_grid.is_left_correct
         self.countdown_progressbar.event.cancel()
 
         for player in players:
             player.questions_answered.append({"player": player,
                                               "question_id": self.question_grid.question_id,
-                                              "is_correct": (not (left) or self.question_grid.is_left_correct)})
+                                              "is_correct": left == self.question_grid.is_left_correct})
 
         if all(players_answered < config.MAX_PLAYERS
                for players_answered in [len(players), self.number_of_players_answered_current_question]):
