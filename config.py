@@ -1,9 +1,20 @@
 import requests, serial, math
-
+from requests.packages.urllib3.util.retry import Retry
+from requests.adapters import HTTPAdapter
 from model import Terminal
 
-port = "COM7"
-main = None
+s = requests.Session()
+
+Retry.BACKOFF_MAX = 2
+retries = Retry(total=1000,
+                backoff_factor=1,
+                status_forcelist=[ 500, 502, 503, 504 ])
+
+s.mount('http://', HTTPAdapter(max_retries=retries))
+
+port = "COM3"
+BASE_URL="http://127.0.0.1:8000/"
+
 # Arduino hook
 try:
     arduino = serial.Serial(port, 9600, timeout=0)
@@ -11,14 +22,6 @@ except:
     print "Arduino busy or not plugged in. Use port: " + port + " or change in config"
     exit()
 
-api = dict(
-    base_url="http://127.0.0.1:8000/",
-    end_url=""
-)
-
-question_time_seconds = 15
-score_screen_time_seconds = 3
-xp_progressbar_height = 12
 
 colors = dict(
     brand=[0.18, 0.77, 0.71, 1],
@@ -36,6 +39,8 @@ colors = dict(
     white=[1, 1, 1, 1]
 )
 
+xp_progressbar_height = 12
+DEFAULT_QUESTION_TIME = 3
 MAX_PLAYERS = 2
 DEFAULT_ADD_XP = 200  # Must be even number due to optimization
 REFRESH_RATE = 60  # 60 fps refresh rate
@@ -50,8 +55,9 @@ TROPHIES = 'trophies/'
 POWERUPS = 'powerups/'
 TERMINALS = 'terminals/'
 
+main = None
 current_terminal = Terminal
-
+current_gamescreen = None
 
 def check_progress_level_up(current_level, xp):
     next_level = (math.sqrt(625 + 100 * xp) - 25) / 50
@@ -61,7 +67,9 @@ def check_progress_level_up(current_level, xp):
 
 
 def request(request_method, request_verb, **kwargs):
-    url = api['base_url'] + request_method + api['end_url']
+    url = BASE_URL + request_method
+    if not url.endswith('/'):
+        url += '/'
     print request_verb + ": " + str(url) + ", verb: " + request_verb
 
     if request_verb == 'GET':
@@ -77,7 +85,7 @@ def request(request_method, request_verb, **kwargs):
 
 
 def filename_to_url(icon_filename):
-    return api['base_url'] + STATIC + str(icon_filename)
+    return BASE_URL + STATIC + str(icon_filename)
 
 
 # GET
@@ -128,6 +136,10 @@ def PUT_ADD_XP(player_pk, xp=DEFAULT_ADD_XP):
 
 def PUT_PLAYER_FINISHED(badge_pk):
     return BADGES + str(badge_pk) + '/player_finished'
+
+
+def PUT_UPDATE_PLAYER(player_pk):
+    return PLAYERS + str(player_pk) + '/update_player'
 
 
 # POST

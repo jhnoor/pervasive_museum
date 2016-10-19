@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os, persistence
+import os, persistence, config
 
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen, SlideTransition
+from screens.menu.menuscreen import MenuScreen
 
-import config
 # For the app
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
@@ -15,8 +15,7 @@ from kivy.clock import Clock
 from model import Player
 from kivy.properties import StringProperty, NumericProperty, ListProperty
 
-Builder.load_file(os.path.join(os.path.dirname(__file__), 'playerscreen.kv'))
-
+#BUILDER_FILE = os.path.join(os.path.dirname(__file__), 'playerscreen.kv')
 
 class StartScreenBoxLayout(BoxLayout):
     """Splash screen"""
@@ -48,6 +47,8 @@ class PlayerBoxLayout(BoxLayout):
         self.uid = player.badge_uid
         self.icon_url = player.icon_url
         self.progress = config.check_progress_level_up(player.level, player.xp)['progress']
+        print "Player level: "+str(player.level)
+        print "Progress: "+str(config.check_progress_level_up(player.level, player.xp)['progress'])
         self.level = str(player.level)
         self.background_color = config.colors['player1_bg'] if player_number == 1 else config.colors['player2_bg']
         self.player_object = player
@@ -83,12 +84,14 @@ class PlayerScreen(Screen):
         self.players_boxes = []
         self.poll_players_event = None
         self.rfid_event = None
+        self.entered = False
 
     def on_enter(self):
+        self.entered = True
         refresh_time = 1  # poll arduino at this rate
-        #self.clear_widgets()
+        # self.clear_widgets()
         self.get_or_add_widget(self.main_grid_layout)
-        #self.add_widget(self.main_grid_layout)
+        # self.add_widget(self.main_grid_layout)
         self.rfid_event = Clock.schedule_interval(self.read_rfid, refresh_time)
         self.refresh_main_grid_layout()
 
@@ -142,7 +145,6 @@ class PlayerScreen(Screen):
             refresh_time = 1
             self.poll_players_event = Clock.schedule_interval(self.poll_players_ready, refresh_time)
             self.rfid_event.cancel()
-
 
     def refresh_main_grid_layout(self):
         self.main_grid_layout.clear_widgets()

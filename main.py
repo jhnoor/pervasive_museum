@@ -1,18 +1,20 @@
 #!/usr/bin/kivy
 
-import kivy, config, persistence
+import os, kivy, config, persistence
 
 kivy.require('1.9.1')
 
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager
 
+from kivy.lang import Builder
 from screens.player.playerscreen import PlayerScreen
 from screens.menu.menuscreen import MenuScreen
-from screens.game.gamescreen import GameScreen
+#from screens.game.gamescreen import GameScreen
 from screens.score.scorescreen import ScoreScreen
 from model import Terminal
 
+BUILDER_FILE = os.path.join(os.path.dirname(__file__), 'main.kv')
 
 class MuseumGameApp(App):
     def build(self):
@@ -24,10 +26,12 @@ class MuseumGameApp(App):
             self.error(request)
             raise RuntimeError(str(request.status_code)+" Error getting terminals, check connection: "+str(request.json()))
 
+        Builder.load_file(BUILDER_FILE)
+
         self.sm = ScreenManager()
         self.sm.add_widget(PlayerScreen(self.sm, name="player_screen"))
         self.sm.add_widget(MenuScreen(self.sm, name="menu_screen"))
-        self.sm.add_widget(GameScreen(self.sm, name="game_screen"))
+        #self.sm.add_widget(GameScreen(self.sm, name="game_screen"))
         self.sm.add_widget(ScoreScreen(self.sm, name="score_screen"))
         config.main = self
         return self.sm
@@ -36,10 +40,12 @@ class MuseumGameApp(App):
         """Resets everything"""
         del persistence.current_players[:]
 
+        self.sm.current = "player_screen"
         for screen_name in self.sm.screen_names:
             self.sm.get_screen(screen_name).reset()
+            if screen_name == "game_screen":
+                self.sm.remove_widget(self.sm.get_screen(screen_name))
 
-        self.sm.current = "player_screen"
 
     def on_pause(self):
         return True

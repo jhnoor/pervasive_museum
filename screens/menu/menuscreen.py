@@ -3,9 +3,10 @@ import os
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen, SlideTransition
+from screens.game.gamescreen import GameScreen
 
-Builder.load_file(os.path.join(os.path.dirname(__file__), 'menuscreen.kv'))
 
+#Builder.load_file(os.path.join(os.path.dirname(__file__), 'menuscreen.kv'))
 
 class MenuScreen(Screen):
     game_screen = None
@@ -16,8 +17,9 @@ class MenuScreen(Screen):
 
     def open_game(self, game_type):
         self.sm.transition = SlideTransition(direction="left")
-        self.game_screen = self.sm.get_screen("game_screen")
-        self.game_screen.game_type = game_type
+        # not created in main.py because need current_players in persistence when creating game screen
+        self.game_screen = GameScreen(self.sm, game_type, name="game_screen")
+        self.sm.add_widget(self.game_screen)
         self.sm.current = "game_screen"
 
     def reset(self):

@@ -18,9 +18,12 @@ from kivy.uix.popup import Popup
 from kivy.properties import NumericProperty, StringProperty
 from kivy.clock import Clock
 
-Builder.load_file(os.path.join(os.path.dirname(__file__), 'gamescreen.kv'))
+#Builder.load_file(os.path.join(os.path.dirname(__file__), 'gamescreen.kv'))
 
-ALLOWED_POWERUPS = ['Ice age', 'Double XP', 'Hint']
+ALLOWED_POWERUPS = {
+    config.GameType.COOP: ['Ice age', 'Double XP', 'Hint'],
+    config.GameType.VERSUS: ['Ice age', 'Double XP']
+}
 
 
 class PowerupLayout(FloatLayout):
@@ -31,8 +34,6 @@ class PowerupLayout(FloatLayout):
 
     def __init__(self, powerup, **kwargs):
         super(PowerupLayout, self).__init__(**kwargs)
-        if (powerup['name'] not in ALLOWED_POWERUPS):
-            raise ValueError("Powerup " + powerup['name'] + " not allowed")
 
         self.name = powerup['name']
         self.quantity = powerup['quantity']
@@ -78,7 +79,10 @@ class PlayerLayout(GridLayout):
         self.powerups_grid = PowerupsGridLayout(len(player.powerups))
 
         for powerup in player.powerups:
-            self.powerups_grid.add_widget(PowerupLayout(powerup))  # Add powerup to grid
+            if (powerup['name'] in ALLOWED_POWERUPS[config.current_gamescreen.game_type]):
+                self.powerups_grid.add_widget(PowerupLayout(powerup))  # Add powerup to grid
+            else:
+                print "Ignoring "+powerup['name']+" as its not allowed in this game mode"
 
         self.add_widget(self.powerups_grid)
         self.add_widget(self.level)
@@ -89,7 +93,6 @@ class PlayerLayout(GridLayout):
         self.xp_progress_bar.value = self.player.get_level_progress()
 
 
-
 class PlayersGridLayout(GridLayout):
     background_color = config.colors['dark_grey']
 
@@ -97,6 +100,7 @@ class PlayersGridLayout(GridLayout):
         super(PlayersGridLayout, self).__init__(**kwargs)
         if game_type == config.GameType.VERSUS:
             self.size_hint = (1, 0.4)
+            self.rows = 3
         else:
             self.size_hint = (1, 0.2)
 
@@ -105,8 +109,8 @@ class PlayersGridLayout(GridLayout):
 
 
 class TimeProgressBar(ProgressBar):
-    max = NumericProperty(config.question_time_seconds * 100)
-    value = NumericProperty(config.question_time_seconds * 100)
+    max = NumericProperty(config.DEFAULT_QUESTION_TIME * 100)
+    value = NumericProperty(config.DEFAULT_QUESTION_TIME * 100)
 
     def __init__(self, **kwargs):
         super(TimeProgressBar, self).__init__(**kwargs)
@@ -129,7 +133,7 @@ class TimeProgressBar(ProgressBar):
 
     def reset(self):
         self.event.cancel()
-        self.value = config.question_time_seconds * 100
+        self.value = config.DEFAULT_QUESTION_TIME * 100
 
 
 # Three column grid that that has left_picture, question_text and right_picture
@@ -225,7 +229,7 @@ class MainLayout(FloatLayout):
 class GameScreen(Screen):
     background_color = config.colors['player2_bg']
 
-    def __init__(self, sm, **kwargs):
+    def __init__(self, sm, game_type, **kwargs):
         super(GameScreen, self).__init__(**kwargs)
         self.sm = sm
         self.player_boxes = []
@@ -235,15 +239,18 @@ class GameScreen(Screen):
         self.choice_buttons_grid = None
         self.players_grid = None  # This holds the two players layouts at the bottom
         self.number_of_players_answered_current_question = 0
-        self.game_type = config.GameType.NONE
-        self.entered = False
-        #self.draw_screen()
+        self.game_type = game_type
+        self.draw_screen()
+        config.current_gamescreen = self
 
     def on_enter(self, *args):
-        if not self.entered:
-            self.entered = True
-            self.draw_screen()
-        self.play()
+        for player in persistence.current_players:
+            self.player_boxes.append(PlayerLayout(player))
+
+        for player_box in self.player_boxes:
+            self.players_grid.add_widget(player_box)
+
+        self.countdown_progressbar.countdown()
 
     def draw_screen(self):
         self.main_layout.add_widget(self.question_grid)
@@ -256,21 +263,12 @@ class GameScreen(Screen):
         elif self.game_type == config.GameType.VERSUS:
             pass
         else:
-            raise RuntimeError("Invalid gametype: '"+str(self.game_type)+"'")
+            raise RuntimeError("Invalid gametype: '" + str(self.game_type) + "'")
 
         self.players_grid = PlayersGridLayout(self.game_type)
         self.main_layout.add_widget(self.players_grid)
 
         self.add_widget(self.main_layout)
-
-    def play(self):
-        for player in persistence.current_players:
-            self.player_boxes.append(PlayerLayout(player))
-
-        for player_box in self.player_boxes:
-            self.players_grid.add_widget(player_box)
-
-        self.countdown_progressbar.countdown()
 
     def score(self):
         if self.question_grid.next_question():  # There is a next question
@@ -291,9 +289,14 @@ class GameScreen(Screen):
         self.countdown_progressbar.event.cancel()
 
         for player in players:
-            player.questions_answered.append({"player": player,
-                                              "question_id": self.question_grid.question_id,
-                                              "is_correct": left == self.question_grid.is_left_correct})
+            player_ids = []
+            all(player_ids.append(player.id) for player in persistence.current_players)
+            player.questions_answered.append({
+                "player_ids": player_ids,
+                "question_id": self.question_grid.question_id,
+                "is_correct": left == self.question_grid.is_left_correct,
+                "elapsed_time": self.countdown_progressbar.value/100
+            })
 
         if all(players_answered < config.MAX_PLAYERS
                for players_answered in [len(players), self.number_of_players_answered_current_question]):
@@ -307,15 +310,14 @@ class GameScreen(Screen):
         """Question wasn't answered in time, no one gets points TODO different for versus"""
         print "Time out!"
         for player in persistence.current_players:
-            player.questions_answered.append({"player": player,
-                                              "question_id": self.question_grid.question_id,
-                                              "is_correct": False})
+            player.questions_answered.append({
+                "player": player,
+                "question_id": self.question_grid.question_id,
+                "is_correct": False,
+                "elapsed_time": config.DEFAULT_QUESTION_TIME
+            })
 
         self.score()
-
-    def update_players(self):
-        for player_box in self.player_boxes:
-            player_box.update()
 
     def use_powerup(self, player_powerup):
         """Powerup logic is defined below, feel free to add a powerup in the backend and define proper method
@@ -325,7 +327,7 @@ class GameScreen(Screen):
         """
         if player_powerup.name == 'Ice age':
             # Pause timer for half of question_time_seconds (e.g. 30 seconds / 2 = 15 seconds)
-            self.countdown_progressbar.pause(config.question_time_seconds / 2)
+            self.countdown_progressbar.pause(config.DEFAULT_QUESTION_TIME / 2)
         elif player_powerup.name == 'Hint':
             # Popup a question_hint
             self.question_grid.show_hint()

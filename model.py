@@ -15,27 +15,20 @@ class Terminal():
 
 
 class Player():
-    name = ""
-    icon_url = ""
-    badge_uid = ""
-    xp = 0
-    level = ""
-    url = ""
-    trophies = []
-    powerups = []
-
-    questions_answered = []
 
     def __init__(self, player, badge_uid):
+        print player
         self.name = player['name']
+        self.id = player['id']
         self.icon_url = config.filename_to_url(player['icon_filename'])
         self.badge_uid = badge_uid
         self.xp = player['xp']
         self.level = player['level']
         self.url = player['url']
-
         self.trophies = player['trophies']
         self.powerups = player['powerups']
+        self.questions_answered = []
+
 
     def update(self, player_box):
         self.name = player_box.name

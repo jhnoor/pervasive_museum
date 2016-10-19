@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os, persistence, config, random
+import os, persistence, config, random, json, time
 
 from kivy.app import App
 from kivy.clock import Clock
@@ -13,7 +13,7 @@ from kivy.uix.label import Label
 from kivy.uix.screenmanager import Screen, SlideTransition
 from screens.game.gamescreen import PowerupLayout
 
-Builder.load_file(os.path.join(os.path.dirname(__file__), 'scorescreen.kv'))
+#Builder.load_file(os.path.join(os.path.dirname(__file__), 'scorescreen.kv'))
 
 class PlayersScoreGridLayout(GridLayout):
     def reset(self):
@@ -82,7 +82,8 @@ class PlayerScoreFloatLayout(FloatLayout):
 
     def update_model(self):
         print "in playerscorefloatlayout update_model"
-        persistence.update_player(name=self.name, xp=self.xp, level=self.level)
+        persistence.update_player(name=self.name, xp=self.xp, level=self.level,
+                                  powerups=self.player.powerups)
 
     def reset(self):
         pass
@@ -125,18 +126,24 @@ class ScoreScreen(Screen):
 
     def back(self, dt=None):
         print "scorescreen back"
+        self.save()
 
         self.sm.transition = SlideTransition(direction="right")
         if self.final:
-            # TODO update powerups, trophies, level and xp to backend
-            self.save()
             config.main.reset()
             return
 
         self.sm.current = self.sm.get_screen('player_screen').game_type_screen.name
 
     def save(self):
-        pass
+        """Send persistence models to backend and save progress"""
+        while 1:
+            for player in persistence.current_players:
+                print json.dumps(player.__dict__)
+                request = config.request(config.PUT_UPDATE_PLAYER(player.id), "PUT", data={"player": json.dumps(player.__dict__)})
+                if request.status_code != 200:
+                    print ("Failed to save player "+str(player.name))
+            time.sleep(3)
 
     def reset(self):
         print "Resetting scorescreen"
