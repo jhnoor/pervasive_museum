@@ -137,13 +137,12 @@ class ScoreScreen(Screen):
 
     def save(self):
         """Send persistence models to backend and save progress"""
-        while 1:
-            for player in persistence.current_players:
-                print json.dumps(player.__dict__)
-                request = config.request(config.PUT_UPDATE_PLAYER(player.id), "PUT", data={"player": json.dumps(player.__dict__)})
-                if request.status_code != 200:
-                    print ("Failed to save player "+str(player.name))
-            time.sleep(3)
+        for player in persistence.current_players:
+            print json.dumps(player.__dict__)
+            request = config.request(config.PUT_UPDATE_PLAYER(player.id), "PUT", data={"player": json.dumps(player.__dict__)})
+            if request.status_code != 200:
+                print ("Failed to save player "+str(player.name))
+
 
     def reset(self):
         print "Resetting scorescreen"
