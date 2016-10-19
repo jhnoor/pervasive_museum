@@ -3,7 +3,7 @@ import os
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen, SlideTransition
-from screens.game.gamescreen import GameScreen
+from screens.game.coopgamescreen import CoopGameScreen
 
 
 #Builder.load_file(os.path.join(os.path.dirname(__file__), 'menuscreen.kv'))
@@ -18,7 +18,7 @@ class MenuScreen(Screen):
     def open_game(self, game_type):
         self.sm.transition = SlideTransition(direction="left")
         # not created in main.py because need current_players in persistence when creating game screen
-        self.game_screen = GameScreen(self.sm, game_type, name="game_screen")
+        self.game_screen = CoopGameScreen(self.sm, game_type, name="game_screen")
         self.sm.add_widget(self.game_screen)
         self.sm.current = "game_screen"
 

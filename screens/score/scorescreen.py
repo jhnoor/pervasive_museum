@@ -12,7 +12,7 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.screenmanager import Screen, SlideTransition
-from screens.game.gamescreen import PowerupLayout
+from screens.game.coopgamescreen import PowerupLayout
 
 #Builder.load_file(os.path.join(os.path.dirname(__file__), 'scorescreen.kv'))
 
