@@ -46,7 +46,7 @@ class PowerupLayout(FloatLayout):
         # disable button since its used now (a powerup can only be used once) TODO maybe no powerups after first?
         # also change color to show user this powerup is in play
         self.ids.button_id.disabled = True
-        self.parent.parent.parent.parent.parent.use_powerup(self)
+        self.parent.parent.use_powerup(self)
 
 
 class PowerupsGridLayout(GridLayout):
@@ -70,9 +70,9 @@ class PlayerXpProgressBar(ProgressBar):
 
 
 class PlayerLayout(GridLayout):
-    def __init__(self, player, **kwargs):
+    def __init__(self, player, game_type, **kwargs):
         super(PlayerLayout, self).__init__(**kwargs)
-        # Set initial data
+        self.rows = 3 if game_type == config.GameType.COOP else 4
         self.player = player
         self.level = Label(id="level_id", text="lvl " + str(player.get_level()))
         self.xp_progress_bar = PlayerXpProgressBar(player)
@@ -84,6 +84,9 @@ class PlayerLayout(GridLayout):
             else:
                 print "Ignoring "+powerup['name']+" as its not allowed in this game mode"
 
+        if game_type == config.GameType.VERSUS:
+            self.choice_buttons_grid = ChoiceButtonsGrid(players=[self.player])
+            self.add_widget(self.choice_buttons_grid)
         self.add_widget(self.powerups_grid)
         self.add_widget(self.level)
         self.add_widget(self.xp_progress_bar)
@@ -91,6 +94,10 @@ class PlayerLayout(GridLayout):
     def update(self):
         self.level.text = "lvl " + str(self.player.level)
         self.xp_progress_bar.value = self.player.get_level_progress()
+
+    def use_powerup(self, player_powerup):
+        self.double_xp = True  # TODO never used?
+        self.parent.parent.parent.use_powerup(self, player_powerup)
 
 
 class PlayersGridLayout(GridLayout):
@@ -116,7 +123,9 @@ class TimeProgressBar(ProgressBar):
         super(TimeProgressBar, self).__init__(**kwargs)
         self.event = None
 
-    def countdown(self, dt=None):
+    def countdown(self, **kwargs):
+        if kwargs.get('reset', False):
+            self.value = config.DEFAULT_QUESTION_TIME * 100
         refresh_time = 1 / config.REFRESH_RATE  # in seconds
         self.event = Clock.schedule_interval(self.decrement_clock, refresh_time)
 
@@ -232,6 +241,7 @@ class GameScreen(Screen):
     def __init__(self, sm, game_type, **kwargs):
         super(GameScreen, self).__init__(**kwargs)
         self.sm = sm
+        config.current_gamescreen = self
         self.player_boxes = []
         self.main_layout = MainLayout()  # This layout will contain everything
         self.question_grid = QuestionGrid()
@@ -240,35 +250,41 @@ class GameScreen(Screen):
         self.players_grid = None  # This holds the two players layouts at the bottom
         self.number_of_players_answered_current_question = 0
         self.game_type = game_type
-        self.draw_screen()
-        config.current_gamescreen = self
+
+        # Must be last
+        if self.game_type == config.GameType.COOP:
+            self.draw_coop_screen()
+        elif self.game_type == config.GameType.VERSUS:
+            self.draw_versus_screen()
+        else:
+            raise RuntimeError("Invalid gametype: '" + str(self.game_type) + "'")
 
     def on_enter(self, *args):
+        for player_box in self.player_boxes:
+            player_box.update()
+        self.countdown_progressbar.countdown(reset=True)
+
+    def draw_coop_screen(self):
+        self.main_layout.add_widget(self.question_grid)
+        self.main_layout.add_widget(self.countdown_progressbar)
+
+        self.choice_buttons_grid = ChoiceButtonsGrid(players=persistence.current_players)
+        self.main_layout.add_widget(self.choice_buttons_grid)
+
+        self.players_grid = PlayersGridLayout(self.game_type)
+
         for player in persistence.current_players:
-            self.player_boxes.append(PlayerLayout(player))
+            self.player_boxes.append(PlayerLayout(player, self.game_type))
 
         for player_box in self.player_boxes:
             self.players_grid.add_widget(player_box)
 
-        self.countdown_progressbar.countdown()
-
-    def draw_screen(self):
-        self.main_layout.add_widget(self.question_grid)
-        self.main_layout.add_widget(self.countdown_progressbar)
-
-        # Add this widget for each player in versus, in game just one choice_buttons_grid is enough
-        if self.game_type == config.GameType.COOP:
-            self.choice_buttons_grid = ChoiceButtonsGrid(players=persistence.current_players)
-            self.main_layout.add_widget(self.choice_buttons_grid)
-        elif self.game_type == config.GameType.VERSUS:
-            pass
-        else:
-            raise RuntimeError("Invalid gametype: '" + str(self.game_type) + "'")
-
-        self.players_grid = PlayersGridLayout(self.game_type)
         self.main_layout.add_widget(self.players_grid)
-
         self.add_widget(self.main_layout)
+
+    def draw_versus_screen(self):
+        self.main_layout.add_widget(self.question_grid)
+        self.players_grid = PlayersGridLayout()
 
     def score(self):
         if self.question_grid.next_question():  # There is a next question
@@ -281,11 +297,6 @@ class GameScreen(Screen):
 
     def answer_submitted(self, players, left):
         """One of the players has answered"""
-        print "answer submitted"
-        print "testing if then"
-        print left
-        print self.question_grid.is_left_correct
-        print left == self.question_grid.is_left_correct
         self.countdown_progressbar.event.cancel()
 
         for player in players:
@@ -301,7 +312,7 @@ class GameScreen(Screen):
         if all(players_answered < config.MAX_PLAYERS
                for players_answered in [len(players), self.number_of_players_answered_current_question]):
             print "Not all players answered current question"
-            self.number_of_players_answered_current_question += 1
+            self.number_of_players_answered_current_question += len(players)
         else:
             self.number_of_players_answered_current_question = 0
             self.score()
@@ -319,7 +330,7 @@ class GameScreen(Screen):
 
         self.score()
 
-    def use_powerup(self, player_powerup):
+    def use_powerup(self, player_box, player_powerup):
         """Powerup logic is defined below, feel free to add a powerup in the backend and define proper method
 
         Keyword argument:
@@ -332,7 +343,7 @@ class GameScreen(Screen):
             # Popup a question_hint
             self.question_grid.show_hint()
         elif player_powerup.name == 'Double XP':
-            pass  # TODO when allocate_points is implemented
+            player_box.player.active_powerups.append('Double XP')
         else:
             print "Powerup not recognized!"
             return  # Error

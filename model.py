@@ -14,10 +14,11 @@ class Terminal():
         return str(pprint(vars(self)))
 
 
-class Player():
+class Player(dict):
 
     def __init__(self, player, badge_uid):
-        print player
+        super(Player, self).__init__()
+        self.__dict__ = self
         self.name = player['name']
         self.id = player['id']
         self.icon_url = config.filename_to_url(player['icon_filename'])
@@ -28,6 +29,7 @@ class Player():
         self.trophies = player['trophies']
         self.powerups = player['powerups']
         self.questions_answered = []
+        self.active_powerups = []
 
 
     def update(self, player_box):

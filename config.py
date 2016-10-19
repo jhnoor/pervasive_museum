@@ -12,7 +12,7 @@ retries = Retry(total=1000,
 
 s.mount('http://', HTTPAdapter(max_retries=retries))
 
-port = "COM3"
+port = "COM7"
 BASE_URL="http://127.0.0.1:8000/"
 
 # Arduino hook
@@ -40,7 +40,7 @@ colors = dict(
 )
 
 xp_progressbar_height = 12
-DEFAULT_QUESTION_TIME = 3
+DEFAULT_QUESTION_TIME = 10
 MAX_PLAYERS = 2
 DEFAULT_ADD_XP = 200  # Must be even number due to optimization
 REFRESH_RATE = 60  # 60 fps refresh rate
@@ -58,6 +58,7 @@ TERMINALS = 'terminals/'
 main = None
 current_terminal = Terminal
 current_gamescreen = None
+current_scorescreen = None
 
 def check_progress_level_up(current_level, xp):
     next_level = (math.sqrt(625 + 100 * xp) - 25) / 50
@@ -154,5 +155,5 @@ def POST_NEW_BADGE():
 headers = {'Content-type': 'application/json',
            'Accept': 'application/json; charset=UTWF-8'}
 
-def do_nothing(*args):
+def do_nothing(*args, **kwargs):
     pass

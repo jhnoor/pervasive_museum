@@ -309,7 +309,7 @@
             size: self.size
 
 <PlayerLayout>
-    rows: 3
+    rows: root.rows
     padding: 30, 10
 
 <PowerupsGridLayout>
@@ -397,13 +397,6 @@
             pos: self.pos
             size: self.size
 
-    Button:
-        text: "Tilbake"
-        font_size: '%s sp' % (self.width*.09)
-        size_hint: (0.2, 0.1)
-        pos_hint: {"bottom": 1, "center_x": 0.5}
-        on_press: root.back()
-
 <PlayersScoreGridLayout>
     cols: 2
     spacing: (30, 30)
@@ -454,7 +447,11 @@
         pos_hint: {"center_x": 0.5, "top": 0.8}
 
     Label:
-
+        text: "+ "+str(root.xp_to_be_added)
+        font_size: '%s sp' % (self.width*.2)
+        color: root.answer_color
+        size_hint: (None, None)
+        pos_hint: {"center_x": 0.5, "top": 0.6}
 
     AsyncImage:
         source: root.icon_url

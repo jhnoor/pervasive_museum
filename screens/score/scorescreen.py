@@ -10,6 +10,7 @@ from kivy.properties import ListProperty, StringProperty, NumericProperty
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
+from kivy.uix.button import Button
 from kivy.uix.screenmanager import Screen, SlideTransition
 from screens.game.gamescreen import PowerupLayout
 
@@ -28,6 +29,7 @@ class PlayerScoreFloatLayout(FloatLayout):
     answer_feedback = StringProperty()
     answer_color = ListProperty([])
     progress = NumericProperty()
+    xp_to_be_added = NumericProperty()
 
     def __init__(self, player):  # TODO extra argument pass xp for double xp powerup
         super(PlayerScoreFloatLayout, self).__init__()
@@ -35,7 +37,6 @@ class PlayerScoreFloatLayout(FloatLayout):
             self.background_color = config.colors['green']
             self.answer_feedback = "Korrekt"
             self.answer_color = config.colors['light_grey']
-            ##self.allocate_points()
         else:
             self.background_color = config.colors['red']
             self.answer_feedback = "Feil"
@@ -50,17 +51,25 @@ class PlayerScoreFloatLayout(FloatLayout):
 
     def allocate_points(self):
         """Fill self.xp gradually with DEFAULT_ADD_XP"""
+        if "Double XP" in self.player.active_powerups:
+            self.player.active_powerups.remove("Double XP")
+            self.xp_to_be_added = config.DEFAULT_ADD_XP*2
+        else:
+            self.xp_to_be_added = config.DEFAULT_ADD_XP
         if self.player.questions_answered[-1]['is_correct']:
-            self.prev_xp = self.xp
             self.event = Clock.schedule_interval(self.inc_xp, 1 / 60)
+        else:
+            self.xp_to_be_added = 0
+            self.update_model()
 
     def inc_xp(self, dt=None):
-        if self.xp - self.prev_xp >= config.DEFAULT_ADD_XP:
+
+        if self.xp_to_be_added <= 0:
             self.event.cancel()
-            #self.back()
             self.update_model()
             return
         self.xp += 1
+        self.xp_to_be_added -= 1
         level_progress = config.check_progress_level_up(self.level, self.xp)
         if level_progress['level_up']:
             self.level_up()
@@ -69,12 +78,12 @@ class PlayerScoreFloatLayout(FloatLayout):
 
     def level_up(self):
         """Leveling up gives you a free powerup!"""
+        # TODO should be inserted into a stackedBoxLayout or something
         powerup_index = random.randrange(len(self.player.powerups))
         self.player.powerups[powerup_index]['quantity'] += 1
-        powerup_widget = PowerupLayout(self.player.powerups[powerup_index])
+        powerup_widget = PowerupLayout(self.player.powerups[powerup_index], on_press=config.do_nothing)
         powerup_widget.pos_hint = {"center_x": 0.5, "top": 0.5}
         powerup_widget.size_hint = (0.8, None)
-        powerup_widget.on_press = config.do_nothing
         # TODO do animation
         self.add_widget(powerup_widget)
         self.level = str(int(self.level) + 1)
@@ -84,24 +93,28 @@ class PlayerScoreFloatLayout(FloatLayout):
         print "in playerscorefloatlayout update_model"
         persistence.update_player(name=self.name, xp=self.xp, level=self.level,
                                   powerups=self.player.powerups)
+        config.current_scorescreen.back_button.disabled = False
 
     def reset(self):
         pass
 
 
 class ScoreScreen(Screen):
-
-
     def __init__(self, sm, **kwargs):
         super(ScoreScreen, self).__init__(**kwargs)
+        config.current_scorescreen = self
+        self.sm = sm
         self.player_boxes = []
         self.players_grid = PlayersScoreGridLayout()
-        self.sm = sm
         self.final = False
+        self.back_button = Button(text="Tilbake", font_size=str(self.width*0.05)+'sp',
+                                  size_hint=(0.2, 0.1), pos_hint={"bottom":1, "center_x":0.5},
+                                  disabled=True, on_press=self.back)
+        self.add_widget(self.back_button)
 
     def on_enter(self, *args):
         print "scorescreen on_enter"
-        # TODO too much iteration starts here
+        self.back_button.disabled = True
 
         if self.final:
             final_score_label = Label(text="Final score", pos_hint={"top": 1, "center_x": 0.5},
@@ -133,12 +146,14 @@ class ScoreScreen(Screen):
             config.main.reset()
             return
 
-        self.sm.current = self.sm.get_screen('player_screen').game_type_screen.name
+        self.sm.current = "game_screen"
 
     def save(self):
         """Send persistence models to backend and save progress"""
         for player in persistence.current_players:
-            print json.dumps(player.__dict__)
+            print "Saving player: "
+            print player
+            print json.dumps(dict(player))
             request = config.request(config.PUT_UPDATE_PLAYER(player.id), "PUT", data={"player": json.dumps(player.__dict__)})
             if request.status_code != 200:
                 print ("Failed to save player "+str(player.name))
