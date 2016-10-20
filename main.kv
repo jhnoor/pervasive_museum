@@ -9,6 +9,7 @@
             size: self.size
 
 <PlayerBoxLayout>
+    padding: 50, 50
     orientation: 'vertical'
     canvas.before:
         Color:
@@ -92,6 +93,7 @@
     Label:
         font_size: '%s sp' % (self.width*.03)
         text: "Power-ups"
+        size_hint: (1, 0.2)
 
 <StartScreenBoxLayout>:
     id: start_screen_id

@@ -52,6 +52,7 @@ class PowerupLayout(FloatLayout):
             self.remove_widget(self.bubble)
             self.bubble = None
         else:
-            self.bubble = Bubble(orientation='horizontal', size=(400, 200), pos=(self.x, self.y+35))
+            self.bubble = Bubble(orientation='horizontal', size_hint=(1, 1),
+                                 pos=(self.x, self.y+self.size[1]))
             self.bubble.add_widget(Label(text=self.description))
             self.add_widget(self.bubble)

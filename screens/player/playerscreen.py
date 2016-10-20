@@ -52,7 +52,9 @@ class PlayerBoxLayout(BoxLayout):
         self.level = str(player.level)
         self.background_color = config.colors['player1_bg'] if player_number == 1 else config.colors['player2_bg']
         self.player_object = player  # TODO delete
-        self.powerups_grid = PowerupsGridLayout(rows=len(player.powerups))
+        self.powerups_grid = PowerupsGridLayout(rows=len(player.powerups),
+                                                size_hint=(1, 1),
+                                                pos_hint={"bot": 0.5})
 
         for powerup in player.powerups:
             self.powerups_grid.add_widget(PowerupLayout(powerup))  # Add powerup to grid
