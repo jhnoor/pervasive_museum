@@ -12,7 +12,7 @@ retries = Retry(total=1000,
 
 s.mount('http://', HTTPAdapter(max_retries=retries))
 
-port = "COM3"
+port = "COM7"
 BASE_URL="http://127.0.0.1:8000/"
 
 # Arduino hook
@@ -27,6 +27,8 @@ colors = dict(
     brand=[0.18, 0.77, 0.71, 1],
     player1_bg=[0.301, 0.239, 0.239, 1],
     player2_bg=[0.160, 0.211, 0.356, 1],
+    coop_bg=[0.160, 0.211, 0.356, 1],
+    versus_bg=[0.172, 0.356, 0.160, 1],
     left_choice_button=[0.72, 0.88, 1.00, 1],
     right_choice_button=[1, 0.6, 0, 1],
     red=[0.93, 0.04, 0.26, 1],
@@ -40,7 +42,7 @@ colors = dict(
 )
 
 xp_progressbar_height = 12
-DEFAULT_QUESTION_TIME = 30
+DEFAULT_QUESTION_TIME = 10
 MAX_PLAYERS = 2
 DEFAULT_ADD_XP = 200  # Must be even number due to optimization
 REFRESH_RATE = 60  # 60 fps refresh rate

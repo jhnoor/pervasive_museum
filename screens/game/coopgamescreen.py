@@ -16,10 +16,6 @@ from kivy.properties import NumericProperty, StringProperty
 from kivy.clock import Clock
 from common.commonclasses import PowerupLayout, PowerupsGridLayout
 
-# Builder.load_file(os.path.join(os.path.dirname(__file__), 'gamescreen.kv'))
-
-ALLOWED_POWERUPS = ['Frys klokka!', 'Dobbel XP', 'Hint']
-
 
 
 class ImageButton(ButtonBehavior, AsyncImage):
@@ -44,7 +40,7 @@ class PlayerLayout(GridLayout):
         self.powerups_grid = PowerupsGridLayout(cols=len(player.powerups))
 
         for powerup in player.powerups:
-            if (powerup['name'] in ALLOWED_POWERUPS):
+            if (powerup['name'] in config.current_gamescreen.ALLOWED_POWERUPS):
                 self.powerups_grid.add_widget(PowerupLayout(powerup, pressable=True))  # Add powerup to grid
             else:
                 print "Ignoring " + powerup['name'] + " as its not allowed in this game mode"
@@ -57,7 +53,6 @@ class PlayerLayout(GridLayout):
         self.level.text = "lvl " + str(self.player.level)
         self.xp_progress_bar.value = self.player.get_level_progress()
         self.powerups_grid.update_powerups(self.player)
-
 
     def use_powerup(self, player_powerup):
         """Powerup logic is defined below, feel free to add a powerup in the backend and define proper method
@@ -107,6 +102,8 @@ class TimeProgressBar(ProgressBar):
         if kwargs.get('reset', False):
             self.value = config.DEFAULT_QUESTION_TIME * 100
         refresh_time = 1 / config.REFRESH_RATE  # in seconds
+        if self.event:
+            self.event.cancel()
         self.event = Clock.schedule_interval(self.decrement_clock, refresh_time)
 
     def decrement_clock(self, dt):
@@ -114,16 +111,16 @@ class TimeProgressBar(ProgressBar):
             self.value -= 1
         else:
             self.event.cancel()
-            self.parent.parent.time_out()
+            config.current_gamescreen.answer_submitted(left="time_out")
 
     def pause(self, seconds_to_pause):
         self.event.cancel()
         self.pause_event = Clock.schedule_once(self.countdown, seconds_to_pause)
 
     def reset(self):
-        self.event.cancel()
+        if self.event:
+            self.event.cancel()
         self.value = config.DEFAULT_QUESTION_TIME * 100
-
 
 # Three column grid that that has left_picture, question_text and right_picture
 class QuestionGrid(GridLayout):
@@ -199,10 +196,12 @@ class ChoiceButtonsGrid(GridLayout):
     def left_choice(self, button=None):
         print "Left choice"
         config.current_gamescreen.answer_submitted(left=True)
+        config.current_gamescreen.countdown_progressbar.reset()
 
     def right_choice(self, button=None):
         print "Right choice"
         config.current_gamescreen.answer_submitted(left=False)
+        config.current_gamescreen.countdown_progressbar.reset()
 
     def reset(self):
         pass
@@ -218,7 +217,8 @@ class MainLayout(FloatLayout):
 
 
 class CoopGameScreen(Screen):
-    background_color = config.colors['player2_bg']
+    background_color = config.colors['coop_bg']
+    ALLOWED_POWERUPS = ['Frys klokka!', 'Dobbel XP', 'Hint']
 
     def __init__(self, sm, **kwargs):
         super(CoopGameScreen, self).__init__(**kwargs)
@@ -264,34 +264,24 @@ class CoopGameScreen(Screen):
 
         self.sm.current = "score_screen"
 
+    #  TODO refactor to submit_answer()
     def answer_submitted(self, left):
         print "answer_submitted!"
+        if left == 'time_out' and left == self.question_grid.is_left_correct:
+            raise RuntimeError("This should never happen lol") # TODO remove
+
         for player in persistence.current_players:
             player.questions_answered.append({
-                "player_ids": [player.id],
+                "player_ids": [player.id for player in persistence.current_players],
                 "question_id": self.question_grid.question_id,
                 "is_correct": left == self.question_grid.is_left_correct,
-                "elapsed_time": self.countdown_progressbar.value / 100
+                "elapsed_time": config.DEFAULT_QUESTION_TIME-(self.countdown_progressbar.value / 100)
             })
 
-        print "elapsed time: "+str(self.countdown_progressbar.value / 100)
+        print "elapsed time: " + str(config.DEFAULT_QUESTION_TIME-(self.countdown_progressbar.value / 100))
 
         self.countdown_progressbar.event.cancel()
         self.score()
-
-    def time_out(self):
-        """Question wasn't answered in time, no one gets points TODO different for versus"""
-        print "Time out!"
-        for player in persistence.current_players:
-            player.questions_answered.append({
-                "player": player,
-                "question_id": self.question_grid.question_id,
-                "is_correct": False,
-                "elapsed_time": config.DEFAULT_QUESTION_TIME
-            })
-
-        self.score()
-
 
     def reset(self):
         # TODO don't need as entire screen is deleted

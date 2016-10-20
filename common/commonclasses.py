@@ -23,7 +23,8 @@ class PowerupsGridLayout(GridLayout):
     def update_powerups(self, player):
         self.clear_widgets()
         for powerup in player.powerups:
-            self.add_widget(PowerupLayout(powerup, pressable=True))
+            if (powerup['name'] in config.current_gamescreen.ALLOWED_POWERUPS):
+                self.add_widget(PowerupLayout(powerup, pressable=True))
 
 class PowerupLayout(FloatLayout):
     name = StringProperty()

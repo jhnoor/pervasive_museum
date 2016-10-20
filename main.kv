@@ -196,6 +196,14 @@
             pos: self.pos
             size: self.size
 
+<VersusGameScreen>
+    canvas.before:
+        Color:
+            rgba: root.background_color
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
 <TimeProgressBar>
     max: root.max
     value: root.value

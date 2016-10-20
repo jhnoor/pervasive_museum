@@ -1,3 +1,5 @@
+from json import JSONEncoder
+
 import config
 from pprint import pprint
 
@@ -14,11 +16,25 @@ class Terminal():
         return str(pprint(vars(self)))
 
 
-class Player(dict):
+class PlayerEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Player):
+            return {
+                "name": obj.name,
+                "xp": obj.xp,
+                "level": obj.level,
+                "id": obj.id,
+                "icon_url": obj.icon_url,
+                "badge_uid": obj.badge_uid,
+                "url": obj.url,
+                "trophies": obj.trophies,
+                "powerups": obj.powerups,
+                "questions_answered": obj.questions_answered,
+            }
+        return JSONEncoder.default(self, obj)
 
+class Player():
     def __init__(self, player, badge_uid):
-        super(Player, self).__init__()
-        self.__dict__ = self
         self.name = player['name']
         self.id = player['id']
         self.icon_url = config.filename_to_url(player['icon_filename'])

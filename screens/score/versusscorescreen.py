@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os, persistence, config, random, json, time
-
+from model import PlayerEncoder
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.lang import Builder
@@ -153,11 +153,12 @@ class VersusScoreScreen(Screen):
 
     def save(self):
         """Send persistence models to backend and save progress"""
+        encoder = PlayerEncoder()
         for player in persistence.current_players:
             print "Saving player: "
             print player
-            print json.dumps(dict(player))
-            request = config.request(config.PUT_UPDATE_PLAYER(player.id), "PUT", data={"player": json.dumps(player.__dict__)})
+            print encoder.encode(player)
+            request = config.request(config.PUT_UPDATE_PLAYER(player.id), "PUT", data={"player": encoder.encode(player)})
             if request.status_code != 200:
                 print ("Failed to save player "+str(player.name))
 
