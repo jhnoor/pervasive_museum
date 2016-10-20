@@ -36,11 +36,9 @@ class PlayerScoreFloatLayout(FloatLayout):
         if player.questions_answered[-1]['is_correct']:
             self.background_color = config.colors['green']
             self.answer_feedback = "Korrekt"
-            self.answer_color = config.colors['light_grey']
         else:
             self.background_color = config.colors['red']
             self.answer_feedback = "Feil"
-            self.answer_color = config.colors['black']
 
         self.name = player.name
         self.icon_url = player.icon_url
@@ -48,6 +46,7 @@ class PlayerScoreFloatLayout(FloatLayout):
         self.xp = player.xp
         self.progress = config.check_progress_level_up(player.level, player.xp)['progress']
         self.player = player
+        self.answer_color = config.colors['black']
 
     def allocate_points(self):
         """Fill self.xp gradually with DEFAULT_ADD_XP"""
@@ -81,7 +80,7 @@ class PlayerScoreFloatLayout(FloatLayout):
         # TODO should be inserted into a stackedBoxLayout or something
         powerup_index = random.randrange(len(self.player.powerups))
         self.player.powerups[powerup_index]['quantity'] += 1
-        powerup_widget = PowerupLayout(self.player.powerups[powerup_index], on_press=config.do_nothing)
+        powerup_widget = PowerupLayout(self.player.powerups[powerup_index])
         powerup_widget.pos_hint = {"center_x": 0.5, "top": 0.5}
         powerup_widget.size_hint = (0.8, None)
         # TODO do animation
@@ -99,16 +98,18 @@ class PlayerScoreFloatLayout(FloatLayout):
         pass
 
 
-class ScoreScreen(Screen):
+class VersusScoreScreen(Screen):
     def __init__(self, sm, **kwargs):
-        super(ScoreScreen, self).__init__(**kwargs)
+        super(VersusScoreScreen, self).__init__(**kwargs)
         config.current_scorescreen = self
         self.sm = sm
         self.player_boxes = []
         self.players_grid = PlayersScoreGridLayout()
         self.final = False
-        self.back_button = Button(text="Tilbake", font_size=str(self.width*0.05)+'sp',
-                                  size_hint=(0.2, 0.1), pos_hint={"bottom":1, "center_x":0.5},
+        self.back_button = Button(text="Tilbake",
+                                  font_size='20sp',
+                                  size_hint=(0.2, 0.1),
+                                  pos_hint={"bottom":1, "center_x":0.5},
                                   disabled=True, on_press=self.back)
         self.add_widget(self.back_button)
 
@@ -117,8 +118,10 @@ class ScoreScreen(Screen):
         self.back_button.disabled = True
 
         if self.final:
-            final_score_label = Label(text="Final score", pos_hint={"top": 1, "center_x": 0.5},
-                                      font_size=str(self.width * 0.05) + "sp", size_hint=(None, None))
+            final_score_label = Label(text="Final score",
+                                      pos_hint={"top": 1, "center_x": 0.5},
+                                      font_size="24sp",
+                                      size_hint=(None, None))
             self.add_widget(final_score_label)
 
         self.players_grid = PlayersScoreGridLayout()
@@ -166,7 +169,7 @@ class ScoreScreen(Screen):
         self.players_grid.reset()
 
 
-class ScoreScreenApp(App):
+class VersusScoreScreenApp(App):
     def build(self):
         pass
 
@@ -178,4 +181,4 @@ class ScoreScreenApp(App):
 
 
 if __name__ == '__main__':
-    ScoreScreenApp().run()
+    VersusScoreScreenApp().run()

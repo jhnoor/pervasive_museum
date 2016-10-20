@@ -2,11 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import os, config, persistence
-
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen, SlideTransition
-
-# For the app
 from kivy.app import App
 from kivy.uix.button import ButtonBehavior, Button
 from kivy.uix.image import AsyncImage
@@ -17,41 +14,12 @@ from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.properties import NumericProperty, StringProperty
 from kivy.clock import Clock
+from common.commonclasses import PowerupLayout, PowerupsGridLayout
 
 # Builder.load_file(os.path.join(os.path.dirname(__file__), 'gamescreen.kv'))
 
 ALLOWED_POWERUPS = ['Ice age', 'Double XP', 'Hint']
 
-
-class PowerupLayout(FloatLayout):
-    name = StringProperty()
-    quantity = NumericProperty()
-    icon_url = StringProperty()
-    id = NumericProperty()
-
-    def __init__(self, powerup, **kwargs):
-        super(PowerupLayout, self).__init__(**kwargs)
-
-        self.name = powerup['name']
-        self.quantity = powerup['quantity']
-        self.icon_url = config.filename_to_url(powerup['icon_url'])
-        self.id = powerup['id']
-
-        self.ids.button_id.disabled = self.quantity <= 0  # Disable button if quantity is zero
-
-    def use_powerup(self):
-        # disable button since its used now (a powerup can only be used once) TODO maybe no powerups after first?
-        # also change color to show user this powerup is in play
-        self.ids.button_id.disabled = True
-        self.parent.parent.use_powerup(self)
-
-
-class PowerupsGridLayout(GridLayout):
-    cols = NumericProperty()
-
-    def __init__(self, number_of_powerups, **kwargs):
-        super(PowerupsGridLayout, self).__init__(**kwargs)
-        self.cols = number_of_powerups
 
 
 class ImageButton(ButtonBehavior, AsyncImage):
@@ -73,18 +41,14 @@ class PlayerLayout(GridLayout):
         self.player = player
         self.level = Label(id="level_id", text="lvl " + str(player.get_level()))
         self.xp_progress_bar = PlayerXpProgressBar(player)
-        self.powerups_grid = PowerupsGridLayout(len(player.powerups))
+        self.powerups_grid = PowerupsGridLayout(cols=len(player.powerups))
 
         for powerup in player.powerups:
-            if (powerup['name'] in ALLOWED_POWERUPS[config.current_gamescreen.game_type]):
-                self.powerups_grid.add_widget(PowerupLayout(powerup))  # Add powerup to grid
+            if (powerup['name'] in ALLOWED_POWERUPS):
+                self.powerups_grid.add_widget(PowerupLayout(powerup, pressable=True))  # Add powerup to grid
             else:
                 print "Ignoring " + powerup['name'] + " as its not allowed in this game mode"
 
-        if game_type == config.GameType.VERSUS:
-            self.choice_buttons_grid = ChoiceButtonsGrid(players=[self.player], size_hint=(1, None),
-                                                         pos_hint={"center_x": 0.5, "center_y": 0.7})
-            self.add_widget(self.choice_buttons_grid)
         self.add_widget(self.powerups_grid)
         self.add_widget(self.level)
         self.add_widget(self.xp_progress_bar)
@@ -199,7 +163,6 @@ class ChoiceButtonsGrid(GridLayout):
 
     def __init__(self, **kwargs):
         super(ChoiceButtonsGrid, self).__init__(**kwargs)
-        self.players = kwargs['players']
         self.size_hint = (0.3, 0.15)
         self.pos_hint = {'y': 0.3, 'center_x': 0.5}
         self.add_widget(Button(text="<< Venstre", on_press=self.left_choice, font_size="14sp",
@@ -209,11 +172,11 @@ class ChoiceButtonsGrid(GridLayout):
 
     def left_choice(self, button=None):
         print "Left choice"
-        config.current_gamescreen.answer_submitted(self.players, left=True)
+        config.current_gamescreen.answer_submitted(left=True)
 
     def right_choice(self, button=None):
         print "Right choice"
-        config.current_gamescreen.answer_submitted(self.players, left=False)
+        config.current_gamescreen.answer_submitted(left=False)
 
     def reset(self):
         pass
@@ -241,7 +204,6 @@ class CoopGameScreen(Screen):
         self.countdown_progressbar = TimeProgressBar()
         self.choice_buttons_grid = None
         self.players_grid = None  # This holds the two players layouts at the bottom
-        self.number_of_players_answered_current_question = 0  # TODO delete
         self.draw_screen()
 
     def on_enter(self, *args):
@@ -253,13 +215,13 @@ class CoopGameScreen(Screen):
         self.main_layout.add_widget(self.question_grid)
         self.main_layout.add_widget(self.countdown_progressbar)
 
-        self.choice_buttons_grid = ChoiceButtonsGrid(players=persistence.current_players)
+        self.choice_buttons_grid = ChoiceButtonsGrid()
         self.main_layout.add_widget(self.choice_buttons_grid)
 
-        self.players_grid = PlayersGridLayout(self.game_type)
+        self.players_grid = PlayersGridLayout()
 
         for player in persistence.current_players:
-            self.player_boxes.append(PlayerLayout(player, self.game_type))
+            self.player_boxes.append(PlayerLayout(player))
 
         for player_box in self.player_boxes:
             self.players_grid.add_widget(player_box)
@@ -277,9 +239,6 @@ class CoopGameScreen(Screen):
         self.sm.current = "score_screen"
 
     def answer_submitted(self, left):
-        """One of the players has answered"""
-        print "Time out!"
-
         for player in persistence.current_players:
             player.questions_answered.append({
                 "player_ids": [player.id],
@@ -326,11 +285,9 @@ class CoopGameScreen(Screen):
         player_powerup.quantity -= 1
 
     def reset(self):
+        # TODO don't need as entire screen is deleted
         print "Resetting gamescreen"
         del self.player_boxes[:]
-        self.entered = False
-        self.game_type = ""
-        self.number_of_players_answered_current_question = 0
         for widget in self.children:
             widget.reset()
 

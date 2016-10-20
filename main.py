@@ -11,7 +11,7 @@ from kivy.lang import Builder
 from screens.player.playerscreen import PlayerScreen
 from screens.menu.menuscreen import MenuScreen
 #from screens.game.gamescreen import GameScreen
-from screens.score.scorescreen import ScoreScreen
+#from screens.score.coopscorescreen import CoopScoreScreen
 from model import Terminal
 
 BUILDER_FILE = os.path.join(os.path.dirname(__file__), 'main.kv')
@@ -31,8 +31,7 @@ class MuseumGameApp(App):
         self.sm = ScreenManager()
         self.sm.add_widget(PlayerScreen(self.sm, name="player_screen"))
         self.sm.add_widget(MenuScreen(self.sm, name="menu_screen"))
-        #self.sm.add_widget(GameScreen(self.sm, name="game_screen"))
-        self.sm.add_widget(ScoreScreen(self.sm, name="score_screen"))
+        #self.sm.add_widget(CoopScoreScreen(self.sm, name="score_screen"))
         config.main = self
         return self.sm
 
@@ -43,7 +42,7 @@ class MuseumGameApp(App):
         self.sm.current = "player_screen"
         for screen_name in self.sm.screen_names:
             self.sm.get_screen(screen_name).reset()
-            if screen_name == "game_screen":
+            if screen_name in ["game_screen", "score_screen"]:
                 self.sm.remove_widget(self.sm.get_screen(screen_name))
 
 

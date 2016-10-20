@@ -11,9 +11,11 @@ from screens.menu.menuscreen import MenuScreen
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.label import Label
 from kivy.clock import Clock
 from model import Player
 from kivy.properties import StringProperty, NumericProperty, ListProperty
+from common.commonclasses import PowerupLayout, PowerupsGridLayout
 
 #BUILDER_FILE = os.path.join(os.path.dirname(__file__), 'playerscreen.kv')
 
@@ -47,11 +49,15 @@ class PlayerBoxLayout(BoxLayout):
         self.uid = player.badge_uid
         self.icon_url = player.icon_url
         self.progress = config.check_progress_level_up(player.level, player.xp)['progress']
-        print "Player level: "+str(player.level)
-        print "Progress: "+str(config.check_progress_level_up(player.level, player.xp)['progress'])
         self.level = str(player.level)
         self.background_color = config.colors['player1_bg'] if player_number == 1 else config.colors['player2_bg']
-        self.player_object = player
+        self.player_object = player  # TODO delete
+        self.powerups_grid = PowerupsGridLayout(rows=len(player.powerups))
+
+        for powerup in player.powerups:
+            self.powerups_grid.add_widget(PowerupLayout(powerup))  # Add powerup to grid
+
+        self.add_widget(self.powerups_grid)
 
     def toggle_ready(self):
         if self.is_ready:
@@ -160,7 +166,8 @@ class PlayerScreen(Screen):
     def remove_player(self, player_box):
         persistence.remove_player(player_box)
         self.refresh_main_grid_layout()
-        self.poll_players_event.cancel()  # Player has left so lets not check for ready
+        if self.poll_players_event:
+            self.poll_players_event.cancel()  # Player has left so lets not check for ready
         self.rfid_event()  # Lets read for new player
 
     def success(self, request, uid):

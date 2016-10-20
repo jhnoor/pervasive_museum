@@ -1,13 +1,38 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-def draw_versus_screen(self):
-    self.main_layout.add_widget(self.question_grid)
-    self.players_grid = PlayersGridLayout(self.game_type)
+import os, config, persistence
+from kivy.lang import Builder
+from kivy.uix.screenmanager import Screen, SlideTransition
+from kivy.app import App
+from kivy.uix.button import ButtonBehavior, Button
+from kivy.uix.image import AsyncImage
+from kivy.uix.progressbar import ProgressBar
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.label import Label
+from kivy.uix.popup import Popup
+from kivy.properties import NumericProperty, StringProperty
+from kivy.clock import Clock
 
-    for player in persistence.current_players:
-        self.player_boxes.append(PlayerLayout(player, self.game_type))
+ALLOWED_POWERUPS = ['Ice age', 'Double XP']
 
-    for player_box in self.player_boxes:
-        self.players_grid.add_widget(player_box)
+class VersusGameScreen(Screen):
+    background_color = config.colors['player1_bg']
 
-    self.main_layout.add_widget(self.players_grid)
-    self.add_widget(self.main_layout)
+    def __init__(self, sm, **kwargs):
+        super(VersusGameScreen, self).__init__(**kwargs)
+
+class VersusGameScreenApp(App):
+    def build(self):
+        pass
+
+    def on_pause(self):
+        return True
+
+    def on_resume(self):
+        pass
+
+
+if __name__ == '__main__':
+    VersusGameScreenApp().run()
