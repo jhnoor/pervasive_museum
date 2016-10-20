@@ -8,8 +8,8 @@ from kivy.clock import Clock
 
 
 class PowerupsGridLayout(GridLayout):
-    rows = NumericProperty()
-    cols = NumericProperty()
+    #rows = NumericProperty()
+    #cols = NumericProperty()
 
     def __init__(self, **kwargs):
         super(PowerupsGridLayout, self).__init__(**kwargs)
@@ -20,6 +20,10 @@ class PowerupsGridLayout(GridLayout):
         else:
             raise RuntimeError("PowerupsGridLayout must specify rows or cols!")
 
+    def update_powerups(self, player):
+        self.clear_widgets()
+        for powerup in player.powerups:
+            self.add_widget(PowerupLayout(powerup, pressable=True))
 
 class PowerupLayout(FloatLayout):
     name = StringProperty()
@@ -44,8 +48,15 @@ class PowerupLayout(FloatLayout):
             self.ids.button_id.on_press = self.toogle_bubble
 
     def use_powerup(self):
-        self.ids.button_id.disabled = True
+        self.disable_button()
         self.parent.parent.use_powerup(self)
+
+    def disable_button(self):
+        self.ids.button_id.disabled = True
+
+    def enable_button(self):
+        """Enables button - but only if enough quantity"""
+        self.ids.button_id.disabled = self.quantity <= 0
 
     def toogle_bubble(self):
         if self.bubble:

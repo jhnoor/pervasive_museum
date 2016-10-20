@@ -50,6 +50,7 @@ class PlayerBoxLayout(BoxLayout):
         self.icon_url = player.icon_url
         self.progress = config.check_progress_level_up(player.level, player.xp)['progress']
         self.level = str(player.level)
+        self.xp = player.xp
         self.background_color = config.colors['player1_bg'] if player_number == 1 else config.colors['player2_bg']
         self.player_object = player  # TODO delete
         self.powerups_grid = PowerupsGridLayout(rows=len(player.powerups),

@@ -64,7 +64,7 @@
                 pos_hint: {"center_x": 0.1, "center_y": 1}
 
             Label:
-                text: "300/1000 xp"
+                text: str(root.xp)+"xp"
                 font_size: '%s sp' % (root.width*.02)
                 size_hint: (None, None)
                 pos_hint: {"center_x": 0.8, "center_y": 0.5}

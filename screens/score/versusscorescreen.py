@@ -50,8 +50,8 @@ class PlayerScoreFloatLayout(FloatLayout):
 
     def allocate_points(self):
         """Fill self.xp gradually with DEFAULT_ADD_XP"""
-        if "Double XP" in self.player.active_powerups:
-            self.player.active_powerups.remove("Double XP")
+        if "Dobbel XP" in self.player.active_powerups:
+            self.player.active_powerups.remove("Dobbel XP")
             self.xp_to_be_added = config.DEFAULT_ADD_XP*2
         else:
             self.xp_to_be_added = config.DEFAULT_ADD_XP

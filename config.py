@@ -40,7 +40,7 @@ colors = dict(
 )
 
 xp_progressbar_height = 12
-DEFAULT_QUESTION_TIME = 10
+DEFAULT_QUESTION_TIME = 30
 MAX_PLAYERS = 2
 DEFAULT_ADD_XP = 200  # Must be even number due to optimization
 REFRESH_RATE = 60  # 60 fps refresh rate

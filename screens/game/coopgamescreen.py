@@ -18,7 +18,7 @@ from common.commonclasses import PowerupLayout, PowerupsGridLayout
 
 # Builder.load_file(os.path.join(os.path.dirname(__file__), 'gamescreen.kv'))
 
-ALLOWED_POWERUPS = ['Ice age', 'Double XP', 'Hint']
+ALLOWED_POWERUPS = ['Frys klokka!', 'Dobbel XP', 'Hint']
 
 
 
@@ -56,9 +56,32 @@ class PlayerLayout(GridLayout):
     def update(self):
         self.level.text = "lvl " + str(self.player.level)
         self.xp_progress_bar.value = self.player.get_level_progress()
+        self.powerups_grid.update_powerups(self.player)
+
 
     def use_powerup(self, player_powerup):
-        self.parent.parent.parent.use_powerup(self, player_powerup)
+        """Powerup logic is defined below, feel free to add a powerup in the backend and define proper method
+
+        Keyword argument:
+        player_powerup -- the powerup object with an id reference that can be used to update the server
+        """
+        if player_powerup.name == 'Frys klokka!':
+            # Pause timer for half of question_time_seconds (e.g. 30 seconds / 2 = 15 seconds)
+            config.current_gamescreen.countdown_progressbar.pause(config.DEFAULT_QUESTION_TIME / 2)
+        elif player_powerup.name == 'Hint':
+            # Popup a question_hint
+            config.current_gamescreen.question_grid.show_hint()
+        elif player_powerup.name == 'Dobbel XP':
+            self.player.active_powerups.append('Dobbel XP')
+        else:
+            print "Powerup not recognized!"
+            return  # Error
+
+        print "Used " + str(player_powerup.name)
+        for powerup in self.player.powerups:
+            if powerup['name'] == player_powerup.name:
+                powerup['quantity'] -= 1
+        player_powerup.quantity -= 1
 
 
 class PlayersGridLayout(GridLayout):
@@ -80,7 +103,7 @@ class TimeProgressBar(ProgressBar):
         super(TimeProgressBar, self).__init__(**kwargs)
         self.event = None
 
-    def countdown(self, **kwargs):
+    def countdown(self, dt=None, **kwargs):
         if kwargs.get('reset', False):
             self.value = config.DEFAULT_QUESTION_TIME * 100
         refresh_time = 1 / config.REFRESH_RATE  # in seconds
@@ -117,10 +140,13 @@ class QuestionGrid(GridLayout):
         self.current_index = 0
         self.questions = config.current_terminal.questions
         self.set_question_properties(self.questions[0])
+        for player in persistence.current_players:
+            print "player questions_answered"
+            print player.questions_answered
         print self.questions
 
     def next_question(self):
-        if len(self.questions) > self.current_index + 2:  # TODO this is maybe wrong
+        if len(self.questions) > self.current_index + 2:
             self.current_index += 1
             self.set_question_properties(self.questions[self.current_index])
             return True
@@ -165,9 +191,9 @@ class ChoiceButtonsGrid(GridLayout):
         super(ChoiceButtonsGrid, self).__init__(**kwargs)
         self.size_hint = (0.3, 0.15)
         self.pos_hint = {'y': 0.3, 'center_x': 0.5}
-        self.add_widget(Button(text="<< Venstre", on_press=self.left_choice, font_size="14sp",
+        self.add_widget(Button(text="<< Venstre", on_press=self.left_choice, font_size="20sp",
                                background_color=config.colors['left_choice_button']))
-        self.add_widget(Button(text="Høyre >>", on_press=self.right_choice, font_size="14sp",
+        self.add_widget(Button(text="Høyre >>", on_press=self.right_choice, font_size="20sp",
                                background_color=config.colors['right_choice_button']))
 
     def left_choice(self, button=None):
@@ -239,6 +265,7 @@ class CoopGameScreen(Screen):
         self.sm.current = "score_screen"
 
     def answer_submitted(self, left):
+        print "answer_submitted!"
         for player in persistence.current_players:
             player.questions_answered.append({
                 "player_ids": [player.id],
@@ -246,6 +273,8 @@ class CoopGameScreen(Screen):
                 "is_correct": left == self.question_grid.is_left_correct,
                 "elapsed_time": self.countdown_progressbar.value / 100
             })
+
+        print "elapsed time: "+str(self.countdown_progressbar.value / 100)
 
         self.countdown_progressbar.event.cancel()
         self.score()
@@ -263,26 +292,6 @@ class CoopGameScreen(Screen):
 
         self.score()
 
-    def use_powerup(self, player_box, player_powerup):
-        """Powerup logic is defined below, feel free to add a powerup in the backend and define proper method
-
-        Keyword argument:
-        player_powerup -- the powerup object with an id reference that can be used to update the server
-        """
-        if player_powerup.name == 'Ice age':
-            # Pause timer for half of question_time_seconds (e.g. 30 seconds / 2 = 15 seconds)
-            self.countdown_progressbar.pause(config.DEFAULT_QUESTION_TIME / 2)
-        elif player_powerup.name == 'Hint':
-            # Popup a question_hint
-            self.question_grid.show_hint()
-        elif player_powerup.name == 'Double XP':
-            player_box.player.active_powerups.append('Double XP')
-        else:
-            print "Powerup not recognized!"
-            return  # Error
-
-        print "Used " + str(player_powerup.name)
-        player_powerup.quantity -= 1
 
     def reset(self):
         # TODO don't need as entire screen is deleted

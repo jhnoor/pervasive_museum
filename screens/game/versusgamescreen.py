@@ -15,7 +15,7 @@ from kivy.uix.popup import Popup
 from kivy.properties import NumericProperty, StringProperty
 from kivy.clock import Clock
 
-ALLOWED_POWERUPS = ['Ice age', 'Double XP']
+ALLOWED_POWERUPS = ['Frys klokka!', 'Dobbel XP']
 
 class VersusGameScreen(Screen):
     background_color = config.colors['player1_bg']

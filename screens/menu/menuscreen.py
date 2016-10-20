@@ -18,6 +18,9 @@ class MenuScreen(Screen):
         super(MenuScreen, self).__init__(**kwargs)
         self.sm = sm
 
+    def on_enter(self, *args):
+        self.open_coop()
+
     def open_coop(self):
         self.sm.transition = SlideTransition(direction="left")
         self.sm.add_widget(CoopGameScreen(self.sm, name="game_screen"))
