@@ -12,7 +12,7 @@ retries = Retry(total=1000,
 
 s.mount('http://', HTTPAdapter(max_retries=retries))
 
-port = "COM7"
+port = "COM3"
 BASE_URL="http://127.0.0.1:8000/"
 
 # Arduino hook

@@ -50,8 +50,8 @@ class PlayerScoreFloatLayout(FloatLayout):
 
     def allocate_points(self):
         """Fill self.xp gradually with DEFAULT_ADD_XP"""
-        if "Dobbel XP" in self.player.active_powerups:
-            self.player.active_powerups.remove("Dobbel XP")
+        if "Double XP" in self.player.active_powerups:
+            self.player.active_powerups.remove("Double XP")
             self.xp_to_be_added = config.DEFAULT_ADD_XP*2
         else:
             self.xp_to_be_added = config.DEFAULT_ADD_XP
@@ -67,8 +67,8 @@ class PlayerScoreFloatLayout(FloatLayout):
             self.event.cancel()
             self.update_model()
             return
-        self.xp += 1
-        self.xp_to_be_added -= 1
+        self.xp += 5
+        self.xp_to_be_added -= 5
         level_progress = config.check_progress_level_up(self.level, self.xp)
         if level_progress['level_up']:
             self.level_up()
@@ -164,10 +164,7 @@ class VersusScoreScreen(Screen):
 
 
     def reset(self):
-        print "Resetting scorescreen"
-        del self.player_boxes[:]
-        self.final = False
-        self.players_grid.reset()
+        pass
 
 
 class VersusScoreScreenApp(App):

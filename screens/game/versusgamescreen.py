@@ -68,14 +68,14 @@ class PlayerLayout(GridLayout):
         Keyword argument:
         player_powerup -- the powerup object with an id reference that can be used to update the server
         """
-        if player_powerup.name == 'Frys klokka!':
+        if player_powerup.name == 'Freeze time!':
             # Pause timer for half of question_time_seconds (e.g. 30 seconds / 2 = 15 seconds)
             self.time_progress_bar.pause(config.DEFAULT_QUESTION_TIME / 2)
         elif player_powerup.name == 'Hint':
             # Popup a question_hint
             config.current_gamescreen.question_grid.show_hint()
-        elif player_powerup.name == 'Dobbel XP':
-            self.player.active_powerups.append('Dobbel XP')
+        elif player_powerup.name == 'Double XP':
+            self.player.active_powerups.append('Double XP')
         else:
             print "Powerup not recognized!"
             return  # Error
@@ -234,7 +234,7 @@ class MainLayout(FloatLayout):
 
 
 class VersusGameScreen(Screen):
-    ALLOWED_POWERUPS = ['Frys klokka!', 'Dobbel XP']
+    ALLOWED_POWERUPS = ['Freeze time!', 'Double XP']
     background_color = config.colors['versus_bg']
 
     def __init__(self, sm, **kwargs):
@@ -322,11 +322,7 @@ class VersusGameScreen(Screen):
 
 
     def reset(self):
-        # TODO don't need as entire screen is deleted
-        print "Resetting gamescreen"
-        del self.player_boxes[:]
-        for widget in self.children:
-            widget.reset()
+        pass
 
 
 class VersusGameScreenApp(App):

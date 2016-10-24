@@ -60,14 +60,14 @@ class PlayerLayout(GridLayout):
         Keyword argument:
         player_powerup -- the powerup object with an id reference that can be used to update the server
         """
-        if player_powerup.name == 'Frys klokka!':
+        if player_powerup.name == 'Freeze time!':
             # Pause timer for half of question_time_seconds (e.g. 30 seconds / 2 = 15 seconds)
             config.current_gamescreen.countdown_progressbar.pause(config.DEFAULT_QUESTION_TIME / 2)
         elif player_powerup.name == 'Hint':
             # Popup a question_hint
             config.current_gamescreen.question_grid.show_hint()
-        elif player_powerup.name == 'Dobbel XP':
-            self.player.active_powerups.append('Dobbel XP')
+        elif player_powerup.name == 'Double XP':
+            self.player.active_powerups.append('Double XP')
         else:
             print "Powerup not recognized!"
             return  # Error
@@ -188,9 +188,9 @@ class ChoiceButtonsGrid(GridLayout):
         super(ChoiceButtonsGrid, self).__init__(**kwargs)
         self.size_hint = (0.3, 0.15)
         self.pos_hint = {'y': 0.3, 'center_x': 0.5}
-        self.add_widget(Button(text="<< Venstre", on_press=self.left_choice, font_size="20sp",
+        self.add_widget(Button(text="<< Left", on_press=self.left_choice, font_size="20sp",
                                background_color=config.colors['left_choice_button']))
-        self.add_widget(Button(text="Høyre >>", on_press=self.right_choice, font_size="20sp",
+        self.add_widget(Button(text="Right >>", on_press=self.right_choice, font_size="20sp",
                                background_color=config.colors['right_choice_button']))
 
     def left_choice(self, button=None):
@@ -218,7 +218,7 @@ class MainLayout(FloatLayout):
 
 class CoopGameScreen(Screen):
     background_color = config.colors['coop_bg']
-    ALLOWED_POWERUPS = ['Frys klokka!', 'Dobbel XP', 'Hint']
+    ALLOWED_POWERUPS = ['Freeze time!', 'Double XP', 'Hint']
 
     def __init__(self, sm, **kwargs):
         super(CoopGameScreen, self).__init__(**kwargs)
@@ -284,11 +284,7 @@ class CoopGameScreen(Screen):
         self.score()
 
     def reset(self):
-        # TODO don't need as entire screen is deleted
-        print "Resetting gamescreen"
-        del self.player_boxes[:]
-        for widget in self.children:
-            widget.reset()
+        pass
 
 
 class CoopGameScreenApp(App):
